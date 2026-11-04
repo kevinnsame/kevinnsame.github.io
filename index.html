@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kevin Nsamè, chargé de marketing digital SEO, SEA et contenus</title>
+<title>Kevin Nsamè, chargé de marketing digital et d'acquisition : SEO, SEA, contenus</title>
 <meta name="description" content="Portfolio de Kevin Nsamè (Kevin Nsame), chargé de marketing digital : SEO, SEA, webanalyse GA4 et création de vidéos. Études de cas : +47 % de leads en SEA, 1re position Google sur 4 mots-clés.">
 <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
 <meta name="author" content="Kevin Nsamè">
@@ -44,7 +44,7 @@
 "inLanguage": "fr-FR",
 "isPartOf": {"@id": "https://kevinnsame.github.io/#website"},
 "mainEntity": {"@id": "https://kevinnsame.github.io/#person"},
-"dateModified": "2026-11-03"
+"dateModified": "2026-11-04"
 },
 {
 "@type": "Person",
@@ -53,7 +53,7 @@
 "alternateName": ["Kevin Nsame", "Kevin NSAME", "Kévin Nsamè"],
 "givenName": "Kevin",
 "familyName": "Nsamè",
-"jobTitle": "Chargé de marketing digital",
+"jobTitle": ["Chargé de marketing digital", "Chargé d'acquisition digitale", "Consultant SEO et SEA"],
 "description": "Chargé de marketing digital spécialisé en SEO, SEA, webanalyse et création de contenu.",
 "url": "https://kevinnsame.github.io/",
 "image": "https://kevinnsame.github.io/photo.jpg",
@@ -63,7 +63,12 @@
 "alumniOf": {"@type": "EducationalOrganization", "name": "Digital School of Paris"},
 "knowsLanguage": ["fr", "en"],
 "knowsAbout": ["SEO", "SEA", "Google Ads", "Meta Ads", "Google Analytics 4", "Google Tag Manager", "Google Search Console", "Looker Studio", "SEMrush", "Webmarketing", "Création de contenu", "Montage vidéo"],
-"sameAs": ["https://www.linkedin.com/in/kevin-nsame-89b61b1b2"]
+"sameAs": ["https://www.linkedin.com/in/kevin-nsame-89b61b1b2"],
+"makesOffer": [
+{"@type": "Offer", "itemOffered": {"@id": "https://kevinnsame.github.io/consultant-seo-yvelines.html#service"}},
+{"@type": "Offer", "itemOffered": {"@id": "https://kevinnsame.github.io/consultant-sea-google-ads-yvelines.html#service"}},
+{"@type": "Offer", "itemOffered": {"@id": "https://kevinnsame.github.io/creation-contenu-digital.html#service"}}
+]
 }
 ]
 }
@@ -193,6 +198,12 @@ content:""; position:absolute; left:0; top:8px;
 width:6px; height:6px; border-radius:50%; background:var(--accent);
 }
 
+/* SERVICES */
+.services-list p{font-size:18px; line-height:1.55; padding:18px 0; border-top:1px solid var(--line);}
+.services-list p:last-child{border-bottom:1px solid var(--line);}
+.services-list a{color:var(--accent); font-weight:600;}
+.services-list a:hover{text-decoration:underline;}
+
 /* PROJECTS */
 .projects-grid{
 display:grid; grid-template-columns:1fr 1fr; gap:28px;
@@ -283,7 +294,7 @@ transition:background .2s;
 .tl-date{display:none;}
 .tl-dot{left:1px; top:7px;}
 nav ul{gap:16px;}
-nav ul li:nth-child(1), nav ul li:nth-child(2){display:none;}
+nav ul li:nth-child(1), nav ul li:nth-child(2), nav ul li:nth-child(3){display:none;}
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -312,6 +323,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <ul>
 <li><a href="#about">À propos</a></li>
 <li><a href="#skills">Compétences</a></li>
+<li><a href="#services">Services</a></li>
 <li><a href="#projects">Projets</a></li>
 <li><a href="#experience">Expérience</a></li>
 <li><a href="#education">Formation</a></li>
@@ -342,6 +354,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="about-grid">
 <div>
 <p>Je gère l'acquisition et je crée les contenus qui vont avec. Je lance les campagnes SEO et SEA, je suis les résultats dans GA4 et Search Console, puis je produis moi-même les visuels, les vidéos et les newsletters dont elles ont besoin.</p>
+<p>Je cherche un CDI de chargé de marketing digital ou de chargé d'acquisition digitale, et je prends aussi des missions de consultant SEO et SEA, depuis Saint-Rémy-lès-Chevreuse (Yvelines).</p>
 <p>Je suis à l'aise autant avec les chiffres qu'avec la création : Google Analytics, Tag Manager et Ads côté performance, Photoshop, Première Pro et After Effects côté contenu.</p>
 </div>
 <div class="facts">
@@ -409,7 +422,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 </section>
 
-<section id="projects" aria-labelledby="projects-title">
+<section id="services" aria-labelledby="services-title">
+<div class="wrap-narrow">
+<div class="section-head">
+<h2 id="services-title">Services</h2>
+</div>
+<div class="services-list">
+<p><a href="consultant-seo-yvelines.html">Consultant SEO et référenceur naturel</a> : audit technique, mots-clés, optimisation des pages, contenus et netlinking.</p>
+<p><a href="consultant-sea-google-ads-yvelines.html">Consultant SEA Google Ads</a> : campagnes Search et remarketing, suivi des conversions dans GA4 et Tag Manager.</p>
+<p><a href="creation-contenu-digital.html">Création de contenu digital</a> : vidéos, visuels, brochures, newsletters et rédaction web.</p>
+</div>
+</div>
+</section>
+
+<section id="projects" class="soft" aria-labelledby="projects-title">
 <div class="wrap">
 <div class="section-head">
 <h2 id="projects-title">Projets</h2>
@@ -483,7 +509,7 @@ Votre navigateur ne supporte pas la lecture vidéo.
 </div>
 </section>
 
-<section id="experience" class="soft" aria-labelledby="experience-title">
+<section id="experience" aria-labelledby="experience-title">
 <div class="wrap-narrow">
 <div class="section-head">
 <h2 id="experience-title">Expérience professionnelle</h2>
@@ -565,7 +591,7 @@ Votre navigateur ne supporte pas la lecture vidéo.
 </div>
 </section>
 
-<section id="education" aria-labelledby="education-title">
+<section id="education" class="soft" aria-labelledby="education-title">
 <div class="wrap">
 <div class="section-head">
 <h2 id="education-title">Formation et certifications</h2>
@@ -595,13 +621,13 @@ Votre navigateur ne supporte pas la lecture vidéo.
 <footer class="contact" id="contact">
 <div class="wrap-narrow">
 <h2>Me contacter</h2>
-<p>Je suis disponible pour un poste en marketing digital.</p>
+<p>Disponible pour un poste en marketing digital ou une mission SEO, SEA ou contenu.</p>
 <div class="contact-links">
 <a href="mailto:kevinsame99@gmail.com">kevinsame99@gmail.com</a>
 <a href="https://www.linkedin.com/in/kevin-nsame-89b61b1b2" target="_blank" rel="noopener me">LinkedIn</a>
 <a href="tel:+33695822479">06 95 82 24 79</a>
 </div>
-<div class="fine">Kevin Nsamè</div>
+<div class="fine">Kevin Nsamè · <a href="consultant-seo-yvelines.html">Consultant SEO</a> · <a href="consultant-sea-google-ads-yvelines.html">Consultant SEA</a> · <a href="creation-contenu-digital.html">Création de contenu digital</a></div>
 </div>
 </footer>
 
