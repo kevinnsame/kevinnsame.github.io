@@ -1,30 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
 <url>
 <loc>https://kevinnsame.github.io/</loc>
-<lastmod>2026-11-04</lastmod>
-<video:video>
-<video:thumbnail_loc>https://kevinnsame.github.io/videos/biometrique_castles.jpg</video:thumbnail_loc>
-<video:title>Vidéo paiement biométrique, Castles Technology</video:title>
-<video:description>Vidéo promotionnelle réalisée par Kevin Nsamè pour Castles Technology, sur sa solution de paiement biométrique en point de vente.</video:description>
-<video:content_loc>https://kevinnsame.github.io/biometrique_castles.mp4</video:content_loc>
-</video:video>
-<video:video>
-<video:thumbnail_loc>https://kevinnsame.github.io/videos/ct_corporate.jpg</video:thumbnail_loc>
-<video:title>Vidéo corporate, Castles Technology</video:title>
-<video:description>Vidéo institutionnelle de Castles Technology réalisée par Kevin Nsamè en février 2026 : présentation de l'entreprise et de ses solutions de terminaux de paiement.</video:description>
-<video:content_loc>https://kevinnsame.github.io/ct_corporate.mp4</video:content_loc>
-</video:video>
-<video:video>
-<video:thumbnail_loc>https://kevinnsame.github.io/videos/s1u2_series.jpg</video:thumbnail_loc>
-<video:title>Vidéo série S1U2, Castles Technology</video:title>
-<video:description>Vidéo de présentation de la série S1U2 de Castles Technology, terminal de paiement en libre-service, réalisée par Kevin Nsamè.</video:description>
-<video:content_loc>https://kevinnsame.github.io/s1u2_series.mp4</video:content_loc>
-</video:video>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/en/</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/consultant-seo-yvelines.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/consultant-seo-yvelines.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/seo-consultant.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/consultant-seo-yvelines.html"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/en/seo-consultant.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/consultant-seo-yvelines.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/seo-consultant.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/consultant-seo-yvelines.html"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/consultant-sea-google-ads-yvelines.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/consultant-sea-google-ads-yvelines.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/google-ads-consultant.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/consultant-sea-google-ads-yvelines.html"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/en/google-ads-consultant.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/consultant-sea-google-ads-yvelines.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/google-ads-consultant.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/consultant-sea-google-ads-yvelines.html"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/creation-contenu-digital.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/creation-contenu-digital.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/digital-content-creation.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/creation-contenu-digital.html"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/en/digital-content-creation.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/creation-contenu-digital.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/digital-content-creation.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/creation-contenu-digital.html"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/etudes-de-cas/seo-amada-europe.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/etudes-de-cas/seo-amada-europe.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/case-studies/seo-amada-europe.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/etudes-de-cas/seo-amada-europe.html"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/en/case-studies/seo-amada-europe.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/etudes-de-cas/seo-amada-europe.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/case-studies/seo-amada-europe.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/etudes-de-cas/seo-amada-europe.html"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/etudes-de-cas/sea-castles-technology.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/etudes-de-cas/sea-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/case-studies/google-ads-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/etudes-de-cas/sea-castles-technology.html"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/en/case-studies/google-ads-castles-technology.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/etudes-de-cas/sea-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/case-studies/google-ads-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/etudes-de-cas/sea-castles-technology.html"/>
 </url>
 <url>
 <loc>https://kevinnsame.github.io/videos/paiement-biometrique-castles-technology.html</loc>
-<lastmod>2026-11-03</lastmod>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/videos/paiement-biometrique-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/videos/biometric-payment-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/videos/paiement-biometrique-castles-technology.html"/>
 <video:video>
 <video:thumbnail_loc>https://kevinnsame.github.io/videos/biometrique_castles.jpg</video:thumbnail_loc>
 <video:title>Vidéo paiement biométrique, Castles Technology</video:title>
@@ -36,12 +101,47 @@
 </video:video>
 </url>
 <url>
+<loc>https://kevinnsame.github.io/en/videos/biometric-payment-castles-technology.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/videos/paiement-biometrique-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/videos/biometric-payment-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/videos/paiement-biometrique-castles-technology.html"/>
+<video:video>
+<video:thumbnail_loc>https://kevinnsame.github.io/videos/biometrique_castles.jpg</video:thumbnail_loc>
+<video:title>Biometric payment video, Castles Technology</video:title>
+<video:description>Promotional video made by Kevin Nsamè for Castles Technology about its biometric payment solution for point of sale.</video:description>
+<video:content_loc>https://kevinnsame.github.io/biometrique_castles.mp4</video:content_loc>
+<video:duration>86</video:duration>
+<video:publication_date>2026-10-06T12:00:00+02:00</video:publication_date>
+<video:family_friendly>yes</video:family_friendly>
+</video:video>
+</url>
+<url>
 <loc>https://kevinnsame.github.io/videos/video-corporate-castles-technology.html</loc>
-<lastmod>2026-11-03</lastmod>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/videos/video-corporate-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/videos/corporate-video-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/videos/video-corporate-castles-technology.html"/>
 <video:video>
 <video:thumbnail_loc>https://kevinnsame.github.io/videos/ct_corporate.jpg</video:thumbnail_loc>
 <video:title>Vidéo corporate, Castles Technology</video:title>
-<video:description>Vidéo institutionnelle de Castles Technology réalisée par Kevin Nsamè en février 2026 : présentation de l'entreprise et de ses solutions de terminaux de paiement.</video:description>
+<video:description>Vidéo institutionnelle de Castles Technology réalisée par Kevin Nsamè en février 2026 : présentation de l&apos;entreprise et de ses solutions de terminaux de paiement.</video:description>
+<video:content_loc>https://kevinnsame.github.io/ct_corporate.mp4</video:content_loc>
+<video:duration>206</video:duration>
+<video:publication_date>2026-10-06T12:00:00+02:00</video:publication_date>
+<video:family_friendly>yes</video:family_friendly>
+</video:video>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/en/videos/corporate-video-castles-technology.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/videos/video-corporate-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/videos/corporate-video-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/videos/video-corporate-castles-technology.html"/>
+<video:video>
+<video:thumbnail_loc>https://kevinnsame.github.io/videos/ct_corporate.jpg</video:thumbnail_loc>
+<video:title>Corporate video, Castles Technology</video:title>
+<video:description>Castles Technology corporate video made by Kevin Nsamè in February 2026: an introduction to the company and its payment terminal solutions.</video:description>
 <video:content_loc>https://kevinnsame.github.io/ct_corporate.mp4</video:content_loc>
 <video:duration>206</video:duration>
 <video:publication_date>2026-10-06T12:00:00+02:00</video:publication_date>
@@ -50,7 +150,10 @@
 </url>
 <url>
 <loc>https://kevinnsame.github.io/videos/serie-s1u2-castles-technology.html</loc>
-<lastmod>2026-11-03</lastmod>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/videos/serie-s1u2-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/videos/s1u2-series-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/videos/serie-s1u2-castles-technology.html"/>
 <video:video>
 <video:thumbnail_loc>https://kevinnsame.github.io/videos/s1u2_series.jpg</video:thumbnail_loc>
 <video:title>Vidéo série S1U2, Castles Technology</video:title>
@@ -62,23 +165,19 @@
 </video:video>
 </url>
 <url>
-<loc>https://kevinnsame.github.io/etudes-de-cas/seo-amada-europe.html</loc>
-<lastmod>2026-11-03</lastmod>
-</url>
-<url>
-<loc>https://kevinnsame.github.io/etudes-de-cas/sea-castles-technology.html</loc>
-<lastmod>2026-11-03</lastmod>
-</url>
-<url>
-<loc>https://kevinnsame.github.io/consultant-seo-yvelines.html</loc>
-<lastmod>2026-11-04</lastmod>
-</url>
-<url>
-<loc>https://kevinnsame.github.io/consultant-sea-google-ads-yvelines.html</loc>
-<lastmod>2026-11-04</lastmod>
-</url>
-<url>
-<loc>https://kevinnsame.github.io/creation-contenu-digital.html</loc>
-<lastmod>2026-11-04</lastmod>
+<loc>https://kevinnsame.github.io/en/videos/s1u2-series-castles-technology.html</loc>
+<lastmod>2026-11-05</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/videos/serie-s1u2-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/videos/s1u2-series-castles-technology.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/videos/serie-s1u2-castles-technology.html"/>
+<video:video>
+<video:thumbnail_loc>https://kevinnsame.github.io/videos/s1u2_series.jpg</video:thumbnail_loc>
+<video:title>S1U2 series video, Castles Technology</video:title>
+<video:description>Presentation video of the Castles Technology S1U2 series, a self-service payment terminal, made by Kevin Nsamè.</video:description>
+<video:content_loc>https://kevinnsame.github.io/s1u2_series.mp4</video:content_loc>
+<video:duration>40</video:duration>
+<video:publication_date>2026-10-06T12:00:00+02:00</video:publication_date>
+<video:family_friendly>yes</video:family_friendly>
+</video:video>
 </url>
 </urlset>
