@@ -94,6 +94,23 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   nums.forEach(function(n){ io.observe(n); });
 })();
 
+/* 2b. Suivi des contacts et des vidéos (toutes les pages) */
+(function(){
+  document.addEventListener("click",function(e){
+    var a=e.target.closest && e.target.closest("a[href]"); if(!a || a.closest(".audit-contact")) return;
+    var h=a.getAttribute("href"), canal = /^mailto:/.test(h)?"email" : /^tel:/.test(h)?"telephone" : /linkedin\.com/.test(h)?"linkedin" : "";
+    if(!canal) return;
+    var zone = a.closest("footer")?"pied_de_page" : a.closest("header")?"haut_de_page" : "contenu";
+    push({event:"contact_click", canal:canal, emplacement:zone});
+  });
+  [].forEach.call(document.querySelectorAll("video"),function(v){
+    var done=false;
+    v.addEventListener("play",function(){ if(done) return; done=true;
+      var src=(v.querySelector("source")||v).getAttribute("src")||"";
+      push({event:"video_play", video:v.getAttribute("aria-label")||src.split("/").pop()}); });
+  });
+})();
+
 /* 3. Audit SEO en direct via l'API PageSpeed Insights */
 (function(){
   var form = document.getElementById("audit-form");
@@ -246,5 +263,79 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     run(u);
   });
   if(self) self.addEventListener("click",function(){ input.value="kevinnsame.github.io"; run("https://kevinnsame.github.io/"+(EN?"en/":"")); });
+
+  /* 4. Section « Ce site sous le capot » */
+  (function(){
+    var box=document.getElementById("capot-scores"); if(!box) return;
+    var L = EN ? {wait:"Measuring this page on a simulated phone (about 20 s)…", at:"Measured at {t} by the PageSpeed Insights API, mobile.", fail:"The live test is unavailable right now.",
+      ok:"OK", fix:"To fix", title:"Title tag", desc:"Meta description", chars:"characters", canon:"Canonical URL", hl:"hreflang versions", ld:"Structured data",
+      h1:"H1 headings", alt:"Images with alt text", lang:"Page language", idx:"Indexing allowed", vp:"Mobile viewport", llms:"llms.txt file"}
+    : {wait:"Mesure de cette page sur un mobile simulé (environ 20 s)…", at:"Mesuré à {t} par l'API PageSpeed Insights, sur mobile.", fail:"Le test en direct est indisponible pour le moment.",
+      ok:"Conforme", fix:"À revoir", title:"Balise title", desc:"Meta description", chars:"caractères", canon:"URL canonique", hl:"versions hreflang", ld:"Données structurées",
+      h1:"Titres H1", alt:"Images avec texte alternatif", lang:"Langue de la page", idx:"Indexation autorisée", vp:"Viewport mobile", llms:"Fichier llms.txt"};
+    var target=(document.querySelector('link[rel="canonical"]')||{}).href||location.href.split(/[?#]/)[0];
+
+    function show(d){
+      box.innerHTML="";
+      var sc=el("div","scores");
+      ["performance","seo","accessibility","best-practices"].forEach(function(k){
+        if(d.s[k]===null||d.s[k]===undefined) sc.appendChild(ringNA(T.cats[k])); else sc.appendChild(ring(d.s[k],T.cats[k]));
+      });
+      box.appendChild(sc);
+      var v=el("div","vitals");
+      if(d.lcp) v.appendChild(vital("LCP",d.lcp,d.lcpR));
+      if(d.tbt) v.appendChild(vital("TBT",d.tbt,d.tbtR));
+      if(d.cls) v.appendChild(vital("CLS",d.cls,d.clsR));
+      if(v.children.length) box.appendChild(v);
+      box.appendChild(el("p","capot-note",L.at.replace("{t}",d.t)));
+    }
+    function measure(force){
+      if(!force){ try{ var c=JSON.parse(sessionStorage.getItem("kn_lh")||"null"); if(c && Date.now()-c.ts<1800000 && c.u===target){ show(c); return; } }catch(e){} }
+      box.innerHTML="";
+      var st=el("div","audit-status"); st.appendChild(el("div",null,L.wait)); var bar=el("div","bar"); bar.appendChild(el("span")); st.appendChild(bar); box.appendChild(st);
+      var api="https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&locale="+(EN?"en":"fr")+
+        "&category=performance&category=seo&category=accessibility&category=best-practices&url="+encodeURIComponent(target)+(PSI_KEY?"&key="+PSI_KEY:"");
+      fetch(api).then(function(r){ return r.json(); }).then(function(j){
+        if(!j.lighthouseResult) throw new Error("x");
+        var lr=j.lighthouseResult, a=lr.audits, s={};
+        ["performance","seo","accessibility","best-practices"].forEach(function(k){ var c=lr.categories[k]; s[k]= c&&c.score!==null ? Math.round(c.score*100) : null; });
+        function r(id){ return a[id] ? cls(Math.round((a[id].score||0)*100)) : "mid"; }
+        var now=new Date();
+        var d={u:target, ts:Date.now(), t:now.toLocaleTimeString(EN?"en-GB":"fr-FR",{hour:"2-digit",minute:"2-digit"}), s:s,
+          lcp:a["largest-contentful-paint"]&&a["largest-contentful-paint"].displayValue, lcpR:r("largest-contentful-paint"),
+          tbt:a["total-blocking-time"]&&a["total-blocking-time"].displayValue, tbtR:r("total-blocking-time"),
+          cls:a["cumulative-layout-shift"]&&a["cumulative-layout-shift"].displayValue, clsR:r("cumulative-layout-shift")};
+        try{ sessionStorage.setItem("kn_lh",JSON.stringify(d)); }catch(e){}
+        show(d); push({event:"capot_lighthouse", score_perf:s.performance, score_seo:s.seo});
+      }).catch(function(){ box.innerHTML=""; box.appendChild(el("p","audit-err",L.fail)); });
+    }
+    if("IntersectionObserver" in window){
+      var io=new IntersectionObserver(function(es){ if(es[0].isIntersecting){ io.disconnect(); measure(false); } },{rootMargin:"200px"});
+      io.observe(box);
+    } else measure(false);
+    var rr=document.getElementById("capot-rerun"); if(rr) rr.addEventListener("click",function(){ measure(true); });
+
+    /* Contrôles SEO lus dans le code de la page */
+    var ul=document.getElementById("capot-checks");
+    if(ul){
+      function row(ok,label,val){ var li=el("li",ok?"ok":"ko"); li.appendChild(el("span","st",ok?L.ok:L.fix)); li.appendChild(el("span","lb",label)); li.appendChild(el("span","vl",val)); ul.appendChild(li); }
+      var t=document.title.length; row(t>=30&&t<=65, L.title, t+" "+L.chars);
+      var md=(document.querySelector('meta[name="description"]')||{}).content||""; row(md.length>=70&&md.length<=160, L.desc, md.length+" "+L.chars);
+      var cn=document.querySelector('link[rel="canonical"]'); row(!!cn, L.canon, cn?cn.getAttribute("href"):"–");
+      var hl=[].map.call(document.querySelectorAll('link[rel="alternate"][hreflang]'),function(x){return x.getAttribute("hreflang");}); row(hl.length>=2, L.hl, hl.join(", ")||"–");
+      var types=[]; [].forEach.call(document.querySelectorAll('script[type="application/ld+json"]'),function(sc){ try{ var j=JSON.parse(sc.textContent); (j["@graph"]||[j]).forEach(function(n){ if(n["@type"]) types.push(n["@type"]); }); }catch(e){} });
+      row(types.length>0, L.ld, types.join(", ")||"–");
+      var h1=document.querySelectorAll("h1").length; row(h1===1, L.h1, String(h1));
+      var im=document.images.length, ia=[].filter.call(document.images,function(i){ return i.hasAttribute("alt"); }).length; row(ia===im, L.alt, ia+" / "+im);
+      row(!!document.documentElement.lang, L.lang, document.documentElement.lang||"–");
+      var rb=(document.querySelector('meta[name="robots"]')||{}).content||"index"; row(!/noindex/i.test(rb), L.idx, rb.split(",")[0]);
+      row(!!document.querySelector('meta[name="viewport"]'), L.vp, "width=device-width");
+      fetch("/llms.txt").then(function(r){ return r.ok?r.text():Promise.reject(); }).then(function(txt){
+        row(true, L.llms, Math.round(txt.length/100)/10+(EN?" KB":" Ko"));
+        var pre=document.getElementById("capot-llms"); if(pre) pre.textContent=txt.split("\n").slice(0,9).join("\n")+"\n…";
+      }).catch(function(){ row(false, L.llms, "–"); });
+    }
+    [["ask-pplx","perplexity"],["ask-gpt","chatgpt"]].forEach(function(p){ var a=document.getElementById(p[0]); if(a) a.addEventListener("click",function(){ push({event:"geo_test", moteur:p[1]}); }); });
+  })();
 })();
 })();

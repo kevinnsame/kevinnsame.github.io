@@ -90,3 +90,49 @@ animation:rise linear both; animation-timeline:view(); animation-range:entry 0% 
 @keyframes rise{from{opacity:0; transform:translateY(28px);}to{opacity:1; transform:none;}}
 }
 }
+
+/* Section « Ce site sous le capot » */
+#capot{padding:104px 0;}
+.capot-head{max-width:640px; margin-bottom:64px;}
+.capot-head h2{font-size:clamp(30px,4vw,44px); font-weight:700; letter-spacing:-0.02em; line-height:1.1; margin-bottom:14px;}
+.capot-head p{font-size:18px; color:var(--text-soft); line-height:1.55;}
+.capot-row{display:grid; grid-template-columns:0.75fr 1.25fr; gap:48px; padding:44px 0; border-top:1px solid var(--line);}
+.capot-label h3{font-size:19px; font-weight:600; margin-bottom:8px;}
+.capot-label p{font-size:15px; color:var(--text-soft); line-height:1.55;}
+.capot-label a, .capot-head a{color:var(--accent);}
+.capot-link{margin-top:14px; background:none; border:0; padding:0; font:inherit; font-size:14px; color:var(--accent); cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
+.capot-scores{background:#111214; color:#f5f5f7; border-radius:16px; padding:26px 26px 18px; min-height:220px;}
+.capot-scores .vitals{border-color:#2c2c30;}
+.capot-scores .capot-note{color:#86868b; margin:0;}
+.capot-wait{color:#86868b; font-size:15px;}
+.capot-note{font-size:13px; color:var(--text-soft); line-height:1.5; margin-top:10px;}
+.capot-checks{list-style:none; display:flex; flex-direction:column;}
+.capot-checks li{display:grid; grid-template-columns:96px 1fr auto; gap:14px; align-items:baseline; padding:10px 0; border-bottom:1px solid var(--line); font-size:15px;}
+.capot-checks .st{font-size:12.5px; font-weight:600;}
+.capot-checks .ok .st{color:#1a7f45;} .capot-checks .ko .st{color:#c4320a;}
+.capot-checks .vl{color:var(--text-soft); font-size:13.5px; text-align:right; word-break:break-all; max-width:260px;}
+.capot-table-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+.capot-table{width:100%; border-collapse:collapse; font-size:14px; min-width:560px;}
+.capot-table th{text-align:left; font-size:12.5px; font-weight:600; color:var(--text-soft); padding:0 12px 10px 0; border-bottom:1px solid var(--text);}
+.capot-table td{padding:11px 12px 11px 0; border-bottom:1px solid var(--line); vertical-align:top; line-height:1.45;}
+.capot-table td:last-child{color:var(--text-soft);}
+.capot-table code, .capot-pre{font-family:ui-monospace, SFMono-Regular, Menlo, monospace;}
+.capot-table code{font-size:12.5px; background:var(--bg-soft); padding:2px 6px; border-radius:5px; white-space:nowrap;}
+.capot-pre{background:var(--bg-soft); border-radius:12px; padding:18px 20px; font-size:12.5px; line-height:1.6; white-space:pre-wrap; color:var(--text); margin-bottom:18px; max-height:260px; overflow:auto;}
+.capot-ask{font-size:15px; display:flex; flex-wrap:wrap; align-items:center; gap:10px;}
+.capot-ask a{background:var(--text); color:#fff; font-size:14px; font-weight:500; padding:9px 16px; border-radius:980px;}
+.capot-ask a:hover{background:#000;}
+@media (max-width:720px){
+.capot-row{grid-template-columns:1fr; gap:22px; padding:36px 0;}
+.capot-head{margin-bottom:40px;}
+.capot-checks li{grid-template-columns:80px 1fr; }
+.capot-checks .vl{grid-column:2; text-align:left;}
+.capot-scores{padding:22px 18px 16px;}
+}
+@media (min-width:721px){
+nav ul{gap:20px !important;}
+nav ul li a{white-space:nowrap;}
+}
+@media (min-width:721px) and (max-width:1020px){
+nav ul li:nth-child(2), nav ul li:nth-child(3), nav ul li:nth-child(7){display:none;}
+}
