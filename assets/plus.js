@@ -16,7 +16,7 @@ var T = EN ? {
   field: "Real-user data (Chrome UX Report, 28 days)", lab: "Lab measurement (simulated mobile)",
   prio: "What I would fix first", gain: "Estimated saving:",
   none: "No major issue found. The site is in good shape.",
-  cta: "Let's talk about it", mailSub: "Audit of ", mailBody: "Hello Kevin,%0D%0A%0D%0AI ran the audit of {d} on your portfolio.",
+  cta: "Let's talk about it", call: "Call 06 95 82 24 79", copy: "Copy", copied: "Email address copied", mailSub: "Audit of ", mailBody: "Hello Kevin,%0D%0A%0D%0AI ran the audit of {d} on your portfolio.",
   bad: "Enter a valid address, for example example.com",
   err: "The analysis failed: ", quota: "The audit service is unavailable right now. Please try again later or email me.",
   na: "not measurable", blocked: "The speed test could not run: this site blocks Google's testing robot. Scores and field data above remain valid.", noneNA: "No SEO or accessibility issue detected. Speed could not be tested.",
@@ -30,7 +30,7 @@ var T = EN ? {
   field: "Données d'utilisateurs réels (Chrome UX Report, 28 jours)", lab: "Mesure en laboratoire (mobile simulé)",
   prio: "Ce que je corrigerais en premier", gain: "Gain estimé :",
   none: "Aucun problème majeur détecté. Le site est en bonne santé.",
-  cta: "En parler ensemble", mailSub: "Audit de ", mailBody: "Bonjour Kevin,%0D%0A%0D%0AJ'ai lancé l'audit de {d} sur votre portfolio.",
+  cta: "En parler ensemble", call: "Appeler le 06 95 82 24 79", copy: "Copier", copied: "Adresse e-mail copiée", mailSub: "Audit de ", mailBody: "Bonjour Kevin,%0D%0A%0D%0AJ'ai lancé l'audit de {d} sur votre portfolio.",
   bad: "Saisissez une adresse valide, par exemple exemple.fr",
   err: "L'analyse a échoué : ", quota: "Le service d'audit est indisponible pour le moment. Réessayez plus tard ou écrivez-moi.",
   na: "non mesurable", blocked: "Le test de vitesse n'a pas pu tourner : ce site bloque le robot de mesure de Google. Les autres scores et les données réelles restent valables.", noneNA: "Aucun problème SEO ou d'accessibilité détecté. La vitesse n'a pas pu être testée.",
@@ -188,10 +188,24 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
 
     var host=""; try{ host=new URL(url).hostname; }catch(e){}
     if(host!=="kevinnsame.github.io"){
-      var a=el("a","audit-cta",T.cta);
-      a.href="mailto:kevinsame99@gmail.com?subject="+encodeURIComponent(T.mailSub+host)+"&body="+T.mailBody.replace("{d}",encodeURIComponent(host));
-      a.addEventListener("click",function(){ push({event:"audit_contact", domaine:host}); });
-      panel.appendChild(a);
+      var MAIL="kevinsame99@gmail.com", sub=T.mailSub+host, body=decodeURIComponent(T.mailBody.replace("{d}",host));
+      var a=el("button","audit-cta",T.cta); a.type="button"; a.setAttribute("aria-expanded","false");
+      var box=el("div","audit-contact"); box.hidden=true;
+      function lnk(txt,href,canal){ var l=el("a",null,txt); l.href=href; if(!/^mailto|^tel/.test(href)){ l.target="_blank"; l.rel="noopener"; }
+        l.addEventListener("click",function(){ push({event:"audit_contact", domaine:host, canal:canal}); }); return l; }
+      box.appendChild(lnk("Gmail","https://mail.google.com/mail/?view=cm&fs=1&to="+MAIL+"&su="+encodeURIComponent(sub)+"&body="+encodeURIComponent(body),"gmail"));
+      box.appendChild(lnk("Outlook","https://outlook.live.com/mail/0/deeplink/compose?to="+MAIL+"&subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(body),"outlook"));
+      box.appendChild(lnk("LinkedIn","https://www.linkedin.com/in/kevin-nsame-89b61b1b2","linkedin"));
+      box.appendChild(lnk(T.call,"tel:+33695822479","telephone"));
+      var cp=el("button","audit-copy",T.copy+" "+MAIL); cp.type="button";
+      cp.addEventListener("click",function(){
+        function ok(){ cp.textContent=T.copied; push({event:"audit_contact", domaine:host, canal:"copie_email"}); }
+        if(navigator.clipboard) navigator.clipboard.writeText(MAIL).then(ok,function(){ cp.textContent=MAIL; });
+        else cp.textContent=MAIL;
+      });
+      box.appendChild(cp);
+      a.addEventListener("click",function(){ box.hidden=!box.hidden; a.setAttribute("aria-expanded",String(!box.hidden)); });
+      panel.appendChild(a); panel.appendChild(box);
     }
     push({event:"audit_termine", domaine:host, score_perf:Math.round((cats.performance||{score:0}).score*100), score_seo:Math.round((cats.seo||{score:0}).score*100)});
   }
