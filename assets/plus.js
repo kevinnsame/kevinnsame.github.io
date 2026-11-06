@@ -4,7 +4,7 @@
 
 /* Clé API PageSpeed Insights (gratuite). Laisser vide fonctionne, mais le quota sans clé
    est partagé et parfois saturé. Créer la clé : console.cloud.google.com, API PageSpeed Insights. */
-var PSI_KEY = "";
+var PSI_KEY = "AIzaSyBbuUYGQvWH6eqwA4ANDVMrxtUG6LXl3XI";
 
 var EN = (document.documentElement.lang || "fr").slice(0,2) === "en";
 var T = EN ? {
