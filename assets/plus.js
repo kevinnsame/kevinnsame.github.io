@@ -258,4 +258,59 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
 
   [["ask-pplx","perplexity"],["ask-gpt","chatgpt"]].forEach(function(p){ var a=document.getElementById(p[0]); if(a) a.addEventListener("click",function(){ push({event:"geo_test", moteur:p[1]}); }); });
 })();
+
+(function(){
+  var CHAT_URL = "";
+  if(!CHAT_URL || !document.querySelector("header.hero")) return;
+  var C = EN ? {
+    open:"Questions about my background?", title:"Ask about my background", close:"Close",
+    info:"Answers are generated automatically from my CV and may contain mistakes. To talk to me directly: ",
+    ph:"Your question", send:"Send", wait:"Writing...", err:"The assistant is unavailable right now. You can email me at kevinsame99@gmail.com.",
+    sugg:["What Google Ads experience does he have?","Is he available now?","Which tools does he use?"]
+  } : {
+    open:"Une question sur mon parcours ?", title:"Posez vos questions sur mon parcours", close:"Fermer",
+    info:"Réponses générées automatiquement à partir de mon CV, elles peuvent contenir des erreurs. Pour me parler directement : ",
+    ph:"Votre question", send:"Envoyer", wait:"Rédaction...", err:"L'assistant est indisponible pour le moment. Vous pouvez m'écrire à kevinsame99@gmail.com.",
+    sugg:["Quelle expérience en Google Ads ?","Est-il disponible rapidement ?","Quels outils maîtrise-t-il ?"]
+  };
+  var hist=[], busy=false, opened=false;
+  var btn=el("button","chat-fab",C.open); btn.type="button"; btn.setAttribute("aria-expanded","false");
+  var pan=el("div","chat-panel"); pan.hidden=true; pan.setAttribute("role","dialog"); pan.setAttribute("aria-label",C.title);
+  var head=el("div","chat-head"); head.appendChild(el("strong",null,C.title));
+  var x=el("button","chat-x","×"); x.type="button"; x.setAttribute("aria-label",C.close); head.appendChild(x);
+  var info=el("p","chat-info",C.info); var ml=el("a",null,"kevinsame99@gmail.com"); ml.href="mailto:kevinsame99@gmail.com"; info.appendChild(ml);
+  var log=el("div","chat-log"); log.setAttribute("aria-live","polite");
+  var sug=el("div","chat-sugg");
+  C.sugg.forEach(function(q){ var b=el("button",null,q); b.type="button"; b.addEventListener("click",function(){ ask(q); }); sug.appendChild(b); });
+  var form=el("form","chat-form"); var inp=el("input"); inp.type="text"; inp.maxLength=500; inp.placeholder=C.ph; inp.setAttribute("aria-label",C.ph);
+  var go=el("button",null,C.send); go.type="submit"; form.appendChild(inp); form.appendChild(go);
+  pan.appendChild(head); pan.appendChild(info); pan.appendChild(log); pan.appendChild(sug); pan.appendChild(form);
+  document.body.appendChild(pan); document.body.appendChild(btn);
+
+  function toggle(show){
+    pan.hidden=!show; btn.hidden=show; btn.setAttribute("aria-expanded",String(show));
+    if(show){ inp.focus(); if(!opened){ opened=true; push({event:"chat_open"}); } } else btn.focus();
+  }
+  btn.addEventListener("click",function(){ toggle(true); });
+  x.addEventListener("click",function(){ toggle(false); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape" && !pan.hidden) toggle(false); });
+
+  function bubble(role,txt){ var b=el("div","chat-msg "+role,txt); log.appendChild(b); log.scrollTop=log.scrollHeight; return b; }
+  function ask(q){
+    q=(q||"").trim(); if(!q || busy) return;
+    busy=true; go.disabled=true; sug.hidden=true; inp.value="";
+    bubble("me",q); hist.push({role:"user",content:q});
+    var w=bubble("bot wait",C.wait);
+    push({event:"chat_question"});
+    fetch(CHAT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:hist.slice(-6)})})
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(!j.answer) throw new Error("x");
+      w.className="chat-msg bot"; w.textContent=j.answer; hist.push({role:"assistant",content:j.answer});
+    })
+    .catch(function(){ w.className="chat-msg bot err"; w.textContent=C.err; hist.pop(); })
+    .then(function(){ busy=false; go.disabled=false; log.scrollTop=log.scrollHeight; inp.focus(); });
+  }
+  form.addEventListener("submit",function(e){ e.preventDefault(); ask(inp.value); });
+})();
 })();
