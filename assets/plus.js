@@ -19,6 +19,7 @@ var T = EN ? {
   cta: "Let's talk about it", mailSub: "Audit of ", mailBody: "Hello Kevin,%0D%0A%0D%0AI ran the audit of {d} on your portfolio.",
   bad: "Enter a valid address, for example example.com",
   err: "The analysis failed: ", quota: "The audit service is unavailable right now. Please try again later or email me.",
+  na: "not measurable", blocked: "The speed test could not run: this site blocks Google's testing robot. Scores and field data above remain valid.", noneNA: "No SEO or accessibility issue detected. Speed could not be tested.",
   sec: "s", noField: "Not enough Chrome traffic for real-user data, lab figures shown."
 } : {
   greet: "Préparé pour",
@@ -32,6 +33,7 @@ var T = EN ? {
   cta: "En parler ensemble", mailSub: "Audit de ", mailBody: "Bonjour Kevin,%0D%0A%0D%0AJ'ai lancé l'audit de {d} sur votre portfolio.",
   bad: "Saisissez une adresse valide, par exemple exemple.fr",
   err: "L'analyse a échoué : ", quota: "Le service d'audit est indisponible pour le moment. Réessayez plus tard ou écrivez-moi.",
+  na: "non mesurable", blocked: "Le test de vitesse n'a pas pu tourner : ce site bloque le robot de mesure de Google. Les autres scores et les données réelles restent valables.", noneNA: "Aucun problème SEO ou d'accessibilité détecté. La vitesse n'a pas pu être testée.",
   sec: " s", noField: "Pas assez de trafic Chrome pour des données réelles, mesures de laboratoire affichées."
 };
 
@@ -123,6 +125,16 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ fg.setAttribute("stroke-dashoffset", c*(1-score/100)); }); });
     return d;
   }
+  function ringNA(label){
+    var d=el("div","score"), ns="http://www.w3.org/2000/svg";
+    var svg=document.createElementNS(ns,"svg"); svg.setAttribute("viewBox","0 0 76 76"); svg.setAttribute("aria-hidden","true");
+    var c=document.createElementNS(ns,"circle"); c.setAttribute("cx","38"); c.setAttribute("cy","38"); c.setAttribute("r","30");
+    c.setAttribute("fill","none"); c.setAttribute("stroke-width","6"); c.setAttribute("class","ring-bg"); svg.appendChild(c);
+    var tx=document.createElementNS(ns,"text"); tx.setAttribute("x","38"); tx.setAttribute("y","45"); tx.setAttribute("text-anchor","middle");
+    tx.setAttribute("class","val"); tx.textContent="–"; svg.appendChild(tx);
+    d.appendChild(svg); d.appendChild(el("div","lbl",label)); d.setAttribute("aria-label",label+" : "+T.na);
+    return d;
+  }
   function fmtMs(ms){ return ms>=1000 ? (ms/1000).toFixed(1).replace(".", EN?".":",")+T.sec : Math.round(ms)+" ms"; }
   function vital(k,v,rating){ var d=el("div","vital"); d.appendChild(el("div","k",k)); d.appendChild(el("div","v t-"+rating,v)); return d; }
 
@@ -132,7 +144,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     panel.appendChild(el("div","audit-site",lr.finalDisplayedUrl||lr.finalUrl||url));
     var sc=el("div","scores");
     ["performance","seo","accessibility","best-practices"].forEach(function(k){
-      if(cats[k]) sc.appendChild(ring(Math.round(cats[k].score*100), T.cats[k]));
+      if(cats[k]) sc.appendChild(cats[k].score===null ? ringNA(T.cats[k]) : ring(Math.round(cats[k].score*100), T.cats[k]));
     });
     panel.appendChild(sc);
 
@@ -150,6 +162,8 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     }
     panel.appendChild(vit);
     var n=el("p","small",note); n.style.margin="-12px 0 22px"; panel.appendChild(n);
+    var perfNA = cats.performance && cats.performance.score===null;
+    if(perfNA){ var w=el("p","audit-err",T.blocked); w.style.margin="-8px 0 22px"; w.style.fontSize="14px"; panel.appendChild(w); }
 
     /* Priorités : gains de vitesse les plus forts, puis échecs SEO */
     var list=[];
@@ -170,7 +184,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
       var ol=el("ol","prio");
       top.forEach(function(x){ var li=el("li",null,x.t.replace(/\[([^\]]+)\]\([^)]+\)/g,"$1")); if(x.s) li.appendChild(el("span",null,T.gain+" "+fmtMs(x.s))); ol.appendChild(li); });
       panel.appendChild(ol);
-    } else panel.appendChild(el("p","audit-empty",T.none));
+    } else panel.appendChild(el("p","audit-empty", perfNA ? T.noneNA : T.none));
 
     var host=""; try{ host=new URL(url).hostname; }catch(e){}
     if(host!=="kevinnsame.github.io"){
