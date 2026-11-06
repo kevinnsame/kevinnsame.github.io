@@ -1,17 +1,14 @@
-/* Portfolio Kevin Nsamè : audit en direct, personnalisation par entreprise, compteurs */
 (function(){
 "use strict";
 
-/* Clé API PageSpeed Insights (gratuite). Laisser vide fonctionne, mais le quota sans clé
-   est partagé et parfois saturé. Créer la clé : console.cloud.google.com, API PageSpeed Insights. */
 var PSI_KEY = "AIzaSyBbuUYGQvWH6eqwA4ANDVMrxtUG6LXl3XI";
 
 var EN = (document.documentElement.lang || "fr").slice(0,2) === "en";
 var T = EN ? {
   greet: "Prepared for",
   focus: "Most relevant for you",
-  run: "Run audit", running: "Analysing…",
-  steps: ["Loading the page on a simulated mobile phone…","Measuring load speed and Core Web Vitals…","Checking SEO, accessibility and best practices…","Ranking what to fix first…"],
+  run: "Run audit", running: "Analysing...",
+  steps: ["Loading the page on a simulated mobile phone...","Measuring load speed and Core Web Vitals...","Checking SEO, accessibility and best practices...","Ranking what to fix first..."],
   cats: {performance:"Performance", seo:"SEO", accessibility:"Accessibility", "best-practices":"Best practices"},
   field: "Real-user data (Chrome UX Report, 28 days)", lab: "Lab measurement (simulated mobile)",
   prio: "What I would fix first", gain: "Estimated saving:",
@@ -24,8 +21,8 @@ var T = EN ? {
 } : {
   greet: "Préparé pour",
   focus: "Le plus proche de votre besoin",
-  run: "Lancer l'audit", running: "Analyse en cours…",
-  steps: ["Chargement de la page sur un mobile simulé…","Mesure de la vitesse et des Core Web Vitals…","Vérification SEO, accessibilité et bonnes pratiques…","Classement des priorités…"],
+  run: "Lancer l'audit", running: "Analyse en cours...",
+  steps: ["Chargement de la page sur un mobile simulé...","Mesure de la vitesse et des Core Web Vitals...","Vérification SEO, accessibilité et bonnes pratiques...","Classement des priorités..."],
   cats: {performance:"Performance", seo:"SEO", accessibility:"Accessibilité", "best-practices":"Bonnes pratiques"},
   field: "Données d'utilisateurs réels (Chrome UX Report, 28 jours)", lab: "Mesure en laboratoire (mobile simulé)",
   prio: "Ce que je corrigerais en premier", gain: "Gain estimé :",
@@ -40,7 +37,6 @@ var T = EN ? {
 function push(o){ try{ (window.dataLayer = window.dataLayer || []).push(o); }catch(e){} }
 function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.className=cls; if(txt!=null) n.textContent=txt; return n; }
 
-/* 1. Personnalisation : ?e=Entreprise&p=seo|sea|contenu */
 (function(){
   var q = new URLSearchParams(location.search);
   var e = (q.get("e") || "").replace(/[<>"]/g,"").replace(/[-_+]/g," ").trim().slice(0,40);
@@ -75,7 +71,6 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   push({event:"candidature_view", entreprise:e, focus:p||"aucun"});
 })();
 
-/* 2. Compteurs animés sur les chiffres clés */
 (function(){
   var nums = document.querySelectorAll(".fact .num");
   if(!nums.length || !("IntersectionObserver" in window)) return;
@@ -94,7 +89,6 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   nums.forEach(function(n){ io.observe(n); });
 })();
 
-/* 2b. Suivi des contacts et des vidéos (toutes les pages) */
 (function(){
   document.addEventListener("click",function(e){
     var a=e.target.closest && e.target.closest("a[href]"); if(!a || a.closest(".audit-contact")) return;
@@ -111,7 +105,6 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   });
 })();
 
-/* 3. Audit SEO en direct via l'API PageSpeed Insights */
 (function(){
   var form = document.getElementById("audit-form");
   if(!form) return;
@@ -148,7 +141,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     var c=document.createElementNS(ns,"circle"); c.setAttribute("cx","38"); c.setAttribute("cy","38"); c.setAttribute("r","30");
     c.setAttribute("fill","none"); c.setAttribute("stroke-width","6"); c.setAttribute("class","ring-bg"); svg.appendChild(c);
     var tx=document.createElementNS(ns,"text"); tx.setAttribute("x","38"); tx.setAttribute("y","45"); tx.setAttribute("text-anchor","middle");
-    tx.setAttribute("class","val"); tx.textContent="–"; svg.appendChild(tx);
+    tx.setAttribute("class","val"); tx.textContent="-"; svg.appendChild(tx);
     d.appendChild(svg); d.appendChild(el("div","lbl",label)); d.setAttribute("aria-label",label+" : "+T.na);
     return d;
   }
@@ -174,7 +167,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
       if(m.CUMULATIVE_LAYOUT_SHIFT_SCORE) vit.appendChild(vital("CLS", (m.CUMULATIVE_LAYOUT_SHIFT_SCORE.percentile/100).toFixed(2), rate[m.CUMULATIVE_LAYOUT_SHIFT_SCORE.category]||"mid"));
     } else {
       note=T.noField;
-      function lab(id,k){ var a=au[id]; if(a) vit.appendChild(vital(k, a.displayValue||"–", cls(Math.round((a.score||0)*100)))); }
+      function lab(id,k){ var a=au[id]; if(a) vit.appendChild(vital(k, a.displayValue||"-", cls(Math.round((a.score||0)*100)))); }
       lab("largest-contentful-paint","LCP"); lab("total-blocking-time","TBT"); lab("cumulative-layout-shift","CLS");
     }
     panel.appendChild(vit);
@@ -182,8 +175,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     var perfNA = cats.performance && cats.performance.score===null;
     if(perfNA){ var w=el("p","audit-err",T.blocked); w.style.margin="-8px 0 22px"; w.style.fontSize="14px"; panel.appendChild(w); }
 
-    /* Priorités : gains de vitesse les plus forts, puis échecs SEO */
-    var list=[];
+        var list=[];
     Object.keys(au).forEach(function(id){
       var a=au[id], det=a.details||{};
       if(det.type==="opportunity" && a.score!==null && a.score<0.9 && det.overallSavingsMs>=150)
@@ -264,78 +256,6 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   });
   if(self) self.addEventListener("click",function(){ input.value="kevinnsame.github.io"; run("https://kevinnsame.github.io/"+(EN?"en/":"")); });
 
-  /* 4. Section « Ce site sous le capot » */
-  (function(){
-    var box=document.getElementById("capot-scores"); if(!box) return;
-    var L = EN ? {wait:"Measuring this page on a simulated phone (about 20 s)…", at:"Measured at {t} by the PageSpeed Insights API, mobile.", fail:"The live test is unavailable right now.",
-      ok:"OK", fix:"To fix", title:"Title tag", desc:"Meta description", chars:"characters", canon:"Canonical URL", hl:"hreflang versions", ld:"Structured data",
-      h1:"H1 headings", alt:"Images with alt text", lang:"Page language", idx:"Indexing allowed", vp:"Mobile viewport", llms:"llms.txt file"}
-    : {wait:"Mesure de cette page sur un mobile simulé (environ 20 s)…", at:"Mesuré à {t} par l'API PageSpeed Insights, sur mobile.", fail:"Le test en direct est indisponible pour le moment.",
-      ok:"Conforme", fix:"À revoir", title:"Balise title", desc:"Meta description", chars:"caractères", canon:"URL canonique", hl:"versions hreflang", ld:"Données structurées",
-      h1:"Titres H1", alt:"Images avec texte alternatif", lang:"Langue de la page", idx:"Indexation autorisée", vp:"Viewport mobile", llms:"Fichier llms.txt"};
-    var target=(document.querySelector('link[rel="canonical"]')||{}).href||location.href.split(/[?#]/)[0];
-
-    function show(d){
-      box.innerHTML="";
-      var sc=el("div","scores");
-      ["performance","seo","accessibility","best-practices"].forEach(function(k){
-        if(d.s[k]===null||d.s[k]===undefined) sc.appendChild(ringNA(T.cats[k])); else sc.appendChild(ring(d.s[k],T.cats[k]));
-      });
-      box.appendChild(sc);
-      var v=el("div","vitals");
-      if(d.lcp) v.appendChild(vital("LCP",d.lcp,d.lcpR));
-      if(d.tbt) v.appendChild(vital("TBT",d.tbt,d.tbtR));
-      if(d.cls) v.appendChild(vital("CLS",d.cls,d.clsR));
-      if(v.children.length) box.appendChild(v);
-      box.appendChild(el("p","capot-note",L.at.replace("{t}",d.t)));
-    }
-    function measure(force){
-      if(!force){ try{ var c=JSON.parse(sessionStorage.getItem("kn_lh")||"null"); if(c && Date.now()-c.ts<1800000 && c.u===target){ show(c); return; } }catch(e){} }
-      box.innerHTML="";
-      var st=el("div","audit-status"); st.appendChild(el("div",null,L.wait)); var bar=el("div","bar"); bar.appendChild(el("span")); st.appendChild(bar); box.appendChild(st);
-      var api="https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&locale="+(EN?"en":"fr")+
-        "&category=performance&category=seo&category=accessibility&category=best-practices&url="+encodeURIComponent(target)+(PSI_KEY?"&key="+PSI_KEY:"");
-      fetch(api).then(function(r){ return r.json(); }).then(function(j){
-        if(!j.lighthouseResult) throw new Error("x");
-        var lr=j.lighthouseResult, a=lr.audits, s={};
-        ["performance","seo","accessibility","best-practices"].forEach(function(k){ var c=lr.categories[k]; s[k]= c&&c.score!==null ? Math.round(c.score*100) : null; });
-        function r(id){ return a[id] ? cls(Math.round((a[id].score||0)*100)) : "mid"; }
-        var now=new Date();
-        var d={u:target, ts:Date.now(), t:now.toLocaleTimeString(EN?"en-GB":"fr-FR",{hour:"2-digit",minute:"2-digit"}), s:s,
-          lcp:a["largest-contentful-paint"]&&a["largest-contentful-paint"].displayValue, lcpR:r("largest-contentful-paint"),
-          tbt:a["total-blocking-time"]&&a["total-blocking-time"].displayValue, tbtR:r("total-blocking-time"),
-          cls:a["cumulative-layout-shift"]&&a["cumulative-layout-shift"].displayValue, clsR:r("cumulative-layout-shift")};
-        try{ sessionStorage.setItem("kn_lh",JSON.stringify(d)); }catch(e){}
-        show(d); push({event:"capot_lighthouse", score_perf:s.performance, score_seo:s.seo});
-      }).catch(function(){ box.innerHTML=""; box.appendChild(el("p","audit-err",L.fail)); });
-    }
-    if("IntersectionObserver" in window){
-      var io=new IntersectionObserver(function(es){ if(es[0].isIntersecting){ io.disconnect(); measure(false); } },{rootMargin:"200px"});
-      io.observe(box);
-    } else measure(false);
-    var rr=document.getElementById("capot-rerun"); if(rr) rr.addEventListener("click",function(){ measure(true); });
-
-    /* Contrôles SEO lus dans le code de la page */
-    var ul=document.getElementById("capot-checks");
-    if(ul){
-      function row(ok,label,val){ var li=el("li",ok?"ok":"ko"); li.appendChild(el("span","st",ok?L.ok:L.fix)); li.appendChild(el("span","lb",label)); li.appendChild(el("span","vl",val)); ul.appendChild(li); }
-      var t=document.title.length; row(t>=30&&t<=65, L.title, t+" "+L.chars);
-      var md=(document.querySelector('meta[name="description"]')||{}).content||""; row(md.length>=70&&md.length<=160, L.desc, md.length+" "+L.chars);
-      var cn=document.querySelector('link[rel="canonical"]'); row(!!cn, L.canon, cn?cn.getAttribute("href"):"–");
-      var hl=[].map.call(document.querySelectorAll('link[rel="alternate"][hreflang]'),function(x){return x.getAttribute("hreflang");}); row(hl.length>=2, L.hl, hl.join(", ")||"–");
-      var types=[]; [].forEach.call(document.querySelectorAll('script[type="application/ld+json"]'),function(sc){ try{ var j=JSON.parse(sc.textContent); (j["@graph"]||[j]).forEach(function(n){ if(n["@type"]) types.push(n["@type"]); }); }catch(e){} });
-      row(types.length>0, L.ld, types.join(", ")||"–");
-      var h1=document.querySelectorAll("h1").length; row(h1===1, L.h1, String(h1));
-      var im=document.images.length, ia=[].filter.call(document.images,function(i){ return i.hasAttribute("alt"); }).length; row(ia===im, L.alt, ia+" / "+im);
-      row(!!document.documentElement.lang, L.lang, document.documentElement.lang||"–");
-      var rb=(document.querySelector('meta[name="robots"]')||{}).content||"index"; row(!/noindex/i.test(rb), L.idx, rb.split(",")[0]);
-      row(!!document.querySelector('meta[name="viewport"]'), L.vp, "width=device-width");
-      fetch("/llms.txt").then(function(r){ return r.ok?r.text():Promise.reject(); }).then(function(txt){
-        row(true, L.llms, Math.round(txt.length/100)/10+(EN?" KB":" Ko"));
-        var pre=document.getElementById("capot-llms"); if(pre) pre.textContent=txt.split("\n").slice(0,9).join("\n")+"\n…";
-      }).catch(function(){ row(false, L.llms, "–"); });
-    }
-    [["ask-pplx","perplexity"],["ask-gpt","chatgpt"]].forEach(function(p){ var a=document.getElementById(p[0]); if(a) a.addEventListener("click",function(){ push({event:"geo_test", moteur:p[1]}); }); });
-  })();
+  [["ask-pplx","perplexity"],["ask-gpt","chatgpt"]].forEach(function(p){ var a=document.getElementById(p[0]); if(a) a.addEventListener("click",function(){ push({event:"geo_test", moteur:p[1]}); }); });
 })();
 })();

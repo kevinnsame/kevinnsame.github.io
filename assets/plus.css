@@ -1,9 +1,7 @@
-/* Ajouts portfolio : audit en direct, personnalisation, animations */
 
 @view-transition{navigation:auto;}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.28s;}
 
-/* Bandeau personnalisé (?e=Entreprise) */
 .greet{
 display:none; align-items:center; gap:10px;
 margin:0 auto 28px; padding:8px 16px 8px 10px;
@@ -17,7 +15,6 @@ font-size:14px; width:max-content; max-width:100%;
 .project-card .focus-tag{display:none; font-size:12px; font-weight:600; color:#fff; background:var(--accent); padding:3px 10px; border-radius:980px; margin-bottom:10px; width:max-content;}
 .project-card.focus .focus-tag{display:block;}
 
-/* Section audit */
 #audit{background:#111214; color:#f5f5f7; padding:104px 0;}
 #audit .audit-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:start;}
 #audit h2{font-size:clamp(30px,4vw,44px); font-weight:700; letter-spacing:-0.02em; line-height:1.1; margin-bottom:18px;}
@@ -69,7 +66,6 @@ border:0; border-radius:12px; padding:0 22px; cursor:pointer; white-space:nowrap
 .audit-contact[hidden]{display:none;}
 .audit-err{color:#ff9f0a; font-size:15px; line-height:1.55;}
 
-/* Dates visibles sur mobile */
 @media (max-width:720px){
 .tl-date{display:block !important; text-align:left; padding:0 0 4px; font-size:12.5px;}
 .tl-date br{display:none;}
@@ -81,7 +77,6 @@ border:0; border-radius:12px; padding:0 22px; cursor:pointer; white-space:nowrap
 .audit-panel{min-height:0; padding:22px;}
 }
 
-/* Apparition au défilement (navigateurs compatibles uniquement) */
 @supports (animation-timeline: view()){
 @media (prefers-reduced-motion: no-preference){
 .fact, .skill-card, .project-card, .tl-item, .edu-card{
@@ -91,43 +86,22 @@ animation:rise linear both; animation-timeline:view(); animation-range:entry 0% 
 }
 }
 
-/* Section « Ce site sous le capot » */
-#capot{padding:104px 0;}
-.capot-head{max-width:640px; margin-bottom:64px;}
-.capot-head h2{font-size:clamp(30px,4vw,44px); font-weight:700; letter-spacing:-0.02em; line-height:1.1; margin-bottom:14px;}
-.capot-head p{font-size:18px; color:var(--text-soft); line-height:1.55;}
-.capot-row{display:grid; grid-template-columns:0.75fr 1.25fr; gap:48px; padding:44px 0; border-top:1px solid var(--line);}
-.capot-label h3{font-size:19px; font-weight:600; margin-bottom:8px;}
-.capot-label p{font-size:15px; color:var(--text-soft); line-height:1.55;}
-.capot-label a, .capot-head a{color:var(--accent);}
-.capot-link{margin-top:14px; background:none; border:0; padding:0; font:inherit; font-size:14px; color:var(--accent); cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
-.capot-scores{background:#111214; color:#f5f5f7; border-radius:16px; padding:26px 26px 18px; min-height:220px;}
-.capot-scores .vitals{border-color:#2c2c30;}
-.capot-scores .capot-note{color:#86868b; margin:0;}
-.capot-wait{color:#86868b; font-size:15px;}
-.capot-note{font-size:13px; color:var(--text-soft); line-height:1.5; margin-top:10px;}
-.capot-checks{list-style:none; display:flex; flex-direction:column;}
-.capot-checks li{display:grid; grid-template-columns:96px 1fr auto; gap:14px; align-items:baseline; padding:10px 0; border-bottom:1px solid var(--line); font-size:15px;}
-.capot-checks .st{font-size:12.5px; font-weight:600;}
-.capot-checks .ok .st{color:#1a7f45;} .capot-checks .ko .st{color:#c4320a;}
-.capot-checks .vl{color:var(--text-soft); font-size:13.5px; text-align:right; word-break:break-all; max-width:260px;}
-.capot-table-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
-.capot-table{width:100%; border-collapse:collapse; font-size:14px; min-width:560px;}
-.capot-table th{text-align:left; font-size:12.5px; font-weight:600; color:var(--text-soft); padding:0 12px 10px 0; border-bottom:1px solid var(--text);}
-.capot-table td{padding:11px 12px 11px 0; border-bottom:1px solid var(--line); vertical-align:top; line-height:1.45;}
-.capot-table td:last-child{color:var(--text-soft);}
-.capot-table code, .capot-pre{font-family:ui-monospace, SFMono-Regular, Menlo, monospace;}
-.capot-table code{font-size:12.5px; background:var(--bg-soft); padding:2px 6px; border-radius:5px; white-space:nowrap;}
-.capot-pre{background:var(--bg-soft); border-radius:12px; padding:18px 20px; font-size:12.5px; line-height:1.6; white-space:pre-wrap; color:var(--text); margin-bottom:18px; max-height:260px; overflow:auto;}
-.capot-ask{font-size:15px; display:flex; flex-wrap:wrap; align-items:center; gap:10px;}
-.capot-ask a{background:var(--text); color:#fff; font-size:14px; font-weight:500; padding:9px 16px; border-radius:980px;}
-.capot-ask a:hover{background:#000;}
+#geo{padding:112px 0; border-top:1px solid var(--line);}
+.geo-grid{display:grid; grid-template-columns:5fr 6fr; gap:72px; align-items:end;}
+.geo-intro h2{font-size:clamp(32px,4.4vw,48px); font-weight:700; letter-spacing:-0.025em; line-height:1.05; margin-bottom:22px;}
+.geo-intro p{font-size:17px; color:var(--text-soft); line-height:1.6; max-width:440px;}
+.geo-intro a{color:var(--accent);}
+.geo-q{font-size:clamp(22px,2.6vw,30px); font-weight:600; letter-spacing:-0.015em; line-height:1.25; margin-bottom:28px;}
+.geo-btns{display:flex; flex-wrap:wrap; gap:12px; margin-bottom:18px;}
+.geo-btns a{font-size:15px; font-weight:500; padding:12px 22px; border-radius:980px; transition:background .2s;}
+.geo-btns a:first-child{background:var(--text); color:#fff;}
+.geo-btns a:first-child:hover{background:#000;}
+.geo-btns a + a{background:var(--bg-soft); color:var(--text);}
+.geo-btns a + a:hover{background:#e8e8ed;}
+.geo-note{font-size:13px; color:var(--text-soft); line-height:1.5; max-width:420px;}
 @media (max-width:720px){
-.capot-row{grid-template-columns:1fr; gap:22px; padding:36px 0;}
-.capot-head{margin-bottom:40px;}
-.capot-checks li{grid-template-columns:80px 1fr; }
-.capot-checks .vl{grid-column:2; text-align:left;}
-.capot-scores{padding:22px 18px 16px;}
+#geo{padding:80px 0;}
+.geo-grid{grid-template-columns:1fr; gap:36px;}
 }
 @media (min-width:721px){
 nav ul{gap:20px !important;}
