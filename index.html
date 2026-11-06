@@ -337,7 +337,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <li><a href="#projects">Projets</a></li>
 <li><a href="#experience">Expérience</a></li>
 <li><a href="#education">Formation</a></li>
-<li><a href="#capot">Sous le capot</a></li>
+<li><a href="#geo">GEO</a></li>
 <li><a href="#contact">Contact</a></li>
 <li class="lang-item"><a class="lang-link" href="/en/" hreflang="en" lang="en">English</a></li>
 </ul>
@@ -655,65 +655,19 @@ Votre navigateur ne supporte pas la lecture vidéo.
 </div>
 </section>
 
-<section id="capot" aria-labelledby="capot-title">
-<div class="wrap">
-<div class="capot-head">
-<h2 id="capot-title">Ce site sous le capot</h2>
-<p>Ce portfolio est ma propre étude de cas SEO et GEO. Les chiffres de cette section sont mesurés en direct, au moment où vous la lisez.</p>
+<section id="geo" aria-labelledby="geo-title">
+<div class="wrap geo-grid">
+<div class="geo-intro">
+<h2 id="geo-title">Demandez aux IA qui je suis</h2>
+<p>ChatGPT, Perplexity et les AI Overviews de Google résument des pages au lieu de lister des liens. Pour qu'ils parlent de moi correctement, ce site leur donne deux sources propres : un balisage Schema.org Person dans le code et un fichier <a href="/llms.txt">llms.txt</a> qui résume mon parcours en texte brut.</p>
 </div>
-
-<div class="capot-row capot-lh">
-<div class="capot-label">
-<h3>Score Lighthouse, mesuré maintenant</h3>
-<p>Google charge cette page sur un mobile simulé et la note. Rien n'est copié d'une capture : relancez la mesure, les chiffres bougent un peu d'un passage à l'autre.</p>
-<button type="button" id="capot-rerun" class="capot-link">Relancer la mesure</button>
-</div>
-<div id="capot-scores" class="capot-scores" aria-live="polite"><p class="capot-wait">La mesure démarre quand cette section s'affiche…</p></div>
-</div>
-
-<div class="capot-row">
-<div class="capot-label">
-<h3>SEO technique, vérifié sur cette page</h3>
-<p>Ces contrôles lisent le code de la page que vous avez sous les yeux.</p>
-</div>
-<ul id="capot-checks" class="capot-checks"></ul>
-</div>
-
-<div class="capot-row">
-<div class="capot-label">
-<h3>Plan de taggage</h3>
-<p>Chaque interaction utile part dans le dataLayer de Google Tag Manager, qui la transmet à Google Analytics 4. Je mesure ce qui aide à décider, pas tout ce qui bouge.</p>
-</div>
-<div class="capot-table-wrap">
-<table class="capot-table">
-<thead><tr><th scope="col">Événement</th><th scope="col">Quand</th><th scope="col">Paramètres</th><th scope="col">Pourquoi je le suis</th></tr></thead>
-<tbody>
-<tr><td><code>page_view</code></td><td>Chaque page vue</td><td>page, langue</td><td>Savoir quelles pages et quelle version (FR ou EN) sont lues</td></tr>
-<tr><td><code>candidature_view</code></td><td>Ouverture d'un lien de candidature personnalisé</td><td>entreprise, focus</td><td>Savoir quelle entreprise a ouvert mon portfolio après ma candidature</td></tr>
-<tr><td><code>audit_lance</code></td><td>Clic sur « Lancer l'audit »</td><td>domaine</td><td>Mesurer l'usage de l'outil</td></tr>
-<tr><td><code>audit_termine</code></td><td>Résultats affichés</td><td>domaine, score_perf, score_seo</td><td>Repérer les entreprises dont le site a des points faibles</td></tr>
-<tr><td><code>audit_contact</code></td><td>Contact depuis un résultat d'audit</td><td>domaine, canal</td><td>C'est la conversion principale de l'outil</td></tr>
-<tr><td><code>contact_click</code></td><td>Clic sur e-mail, téléphone ou LinkedIn</td><td>canal, emplacement</td><td>Savoir par où les recruteurs me contactent</td></tr>
-<tr><td><code>video_play</code></td><td>Lecture d'une vidéo de projet</td><td>video</td><td>Savoir quelles réalisations intéressent</td></tr>
-<tr><td><code>capot_lighthouse</code></td><td>Mesure Lighthouse terminée dans cette section</td><td>score_perf, score_seo</td><td>Suivre le score du site dans le temps, mesuré par les visiteurs eux-mêmes</td></tr>
-<tr><td><code>geo_test</code></td><td>Clic sur « Demander à Perplexity » ou « Demander à ChatGPT »</td><td>moteur</td><td>Voir si les visiteurs vérifient ma visibilité dans les IA</td></tr>
-</tbody>
-</table>
-</div>
-</div>
-
-<div class="capot-row">
-<div class="capot-label">
-<h3>GEO : lisible par les moteurs IA</h3>
-<p>ChatGPT, Perplexity et AI Overviews résument des pages au lieu de lister des liens. J'ai donné à ces moteurs deux sources propres sur mon profil : un balisage Schema.org Person dans le code, et un fichier <a href="/llms.txt">llms.txt</a> qui résume mon parcours en texte brut.</p>
-</div>
-<div>
-<pre id="capot-llms" class="capot-pre" aria-label="Début du fichier llms.txt">/llms.txt</pre>
-<p class="capot-ask">Vérifiez vous-même ce que les IA répondent :
+<div class="geo-ask">
+<p class="geo-q">« Qui est Kevin Nsamè, chargé de marketing digital ? »</p>
+<div class="geo-btns">
 <a id="ask-pplx" target="_blank" rel="noopener" href="https://www.perplexity.ai/search?q=Qui%20est%20Kevin%20Nsam%C3%A8%2C%20charg%C3%A9%20de%20marketing%20digital%20%3F">Demander à Perplexity</a>
-<a id="ask-gpt" target="_blank" rel="noopener" href="https://chatgpt.com/?q=Qui%20est%20Kevin%20Nsam%C3%A8%2C%20charg%C3%A9%20de%20marketing%20digital%20%3F%20Cherche%20sur%20le%20web.">Demander à ChatGPT</a></p>
-<p class="capot-note">Les réponses dépendent de la date d'indexation de chaque moteur et peuvent varier d'une fois sur l'autre.</p>
+<a id="ask-gpt" target="_blank" rel="noopener" href="https://chatgpt.com/?q=Qui%20est%20Kevin%20Nsam%C3%A8%2C%20charg%C3%A9%20de%20marketing%20digital%20%3F%20Cherche%20sur%20le%20web.">Demander à ChatGPT</a>
 </div>
+<p class="geo-note">La réponse dépend de la dernière visite de chaque moteur sur le site. Elle peut varier d'une fois sur l'autre.</p>
 </div>
 </div>
 </section>
