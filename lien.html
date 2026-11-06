@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Générateur de lien de candidature</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#f5f5f7;color:#1d1d1f;margin:0;padding:48px 16px;}
+main{max-width:560px;margin:0 auto;}
+h1{font-size:28px;letter-spacing:-0.02em;margin:0 0 8px;}
+p{color:#6e6e73;line-height:1.5;margin:0 0 28px;}
+label{display:block;font-size:14px;font-weight:600;margin:0 0 6px;}
+input,select{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:12px 14px;border:1px solid #d2d2d7;border-radius:10px;background:#fff;margin-bottom:18px;}
+output{display:block;background:#fff;border:1px solid #d2d2d7;border-radius:10px;padding:14px;font-family:ui-monospace,Menlo,monospace;font-size:14px;word-break:break-all;margin-bottom:12px;min-height:20px;}
+button{font:inherit;font-weight:600;background:#0071e3;color:#fff;border:0;border-radius:980px;padding:12px 22px;cursor:pointer;}
+a{color:#0071e3;}
+</style>
+</head>
+<body>
+<main>
+<h1>Lien de candidature</h1>
+<p>Page privée (non indexée). Le portfolio s'ouvrira avec le nom de l'entreprise en haut et l'étude de cas choisie en premier.</p>
+<label for="e">Entreprise</label>
+<input id="e" placeholder="Decathlon" maxlength="40">
+<label for="p">Projet à mettre en avant</label>
+<select id="p"><option value="">Aucun</option><option value="seo">Étude de cas SEO (AMADA)</option><option value="sea">Étude de cas SEA (Castles)</option><option value="contenu">Vidéos</option></select>
+<label for="l">Langue</label>
+<select id="l"><option value="">Français</option><option value="en/">Anglais</option></select>
+<output id="o"></output>
+<button id="c" type="button">Copier le lien</button> <a id="t" href="#" target="_blank" rel="noopener">Tester</a>
+</main>
+<script>
+var e=document.getElementById("e"),p=document.getElementById("p"),l=document.getElementById("l"),o=document.getElementById("o"),t=document.getElementById("t");
+function up(){var q=new URLSearchParams();if(e.value.trim())q.set("e",e.value.trim());if(p.value)q.set("p",p.value);
+var u="https://kevinnsame.github.io/"+l.value+(q.toString()?"?"+q.toString():"");o.textContent=u;t.href=u;}
+[e,p,l].forEach(function(x){x.addEventListener("input",up);});up();
+document.getElementById("c").onclick=function(){navigator.clipboard.writeText(o.textContent).then(function(){document.getElementById("c").textContent="Copié";setTimeout(function(){document.getElementById("c").textContent="Copier le lien";},1500);});};
+</script>
+</body>
+</html>
