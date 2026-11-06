@@ -260,7 +260,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
 })();
 
 (function(){
-  var CHAT_URL = "";
+  var CHAT_URL = "https://portfolio-chat.kevinsame99.workers.dev/";
   if(!CHAT_URL || !document.querySelector("header.hero")) return;
   var C = EN ? {
     open:"Questions about my background?", title:"Ask about my background", close:"Close",
