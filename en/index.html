@@ -344,7 +344,7 @@ transition:background .2s;
 .tl-date{display:none;}
 .tl-dot{left:1px; top:7px;}
 nav ul{gap:12px;}
-nav ul li:nth-child(1), nav ul li:nth-child(2), nav ul li:nth-child(3), nav ul li:nth-child(6){display:none;}
+nav ul li:nth-child(1), nav ul li:nth-child(2), nav ul li:nth-child(3), nav ul li:nth-child(6), nav ul li:nth-child(7){display:none;}
 nav .brand{white-space:nowrap; margin-right:12px;}
 }
 
@@ -353,7 +353,10 @@ nav .brand{white-space:nowrap; margin-right:12px;}
 }
 
 :focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
-nav ul li a.lang-link{color:var(--accent); font-weight:500;}</style>
+nav ul li a.lang-link{color:var(--accent); font-weight:500;}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+</style>
+<link rel="stylesheet" href="/assets/plus.css">
+<script src="/assets/plus.js" defer></script>
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -374,6 +377,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <li><a href="#about">About</a></li>
 <li><a href="#skills">Skills</a></li>
 <li><a href="#services">Services</a></li>
+<li><a href="#audit">Free audit</a></li>
 <li><a href="#projects">Projects</a></li>
 <li><a href="#experience">Experience</a></li>
 <li><a href="#education">Education</a></li>
@@ -421,6 +425,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="num">3 years</div>
 <div class="label">in B2B digital marketing, at AMADA Europe then Castles Technology</div>
 </div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="audit" aria-labelledby="audit-title">
+<div class="wrap">
+<div class="audit-grid">
+<div>
+<h2 id="audit-title">Test your website right here in 30 seconds</h2>
+<p class="lead">Enter your site's address. The tool loads it on a simulated phone, measures speed, SEO and accessibility with Google's data, then ranks the three fixes that would pay off most.</p>
+<form id="audit-form" class="audit-form" novalidate>
+<label for="audit-url" class="sr">Website address</label>
+<input id="audit-url" type="url" inputmode="url" autocomplete="url" placeholder="your-company.com" required>
+<button type="submit">Run audit</button>
+</form>
+<p class="small"><button type="button" id="audit-self" class="audit-self">Or audit this portfolio</button>. Nothing to hide.</p>
+<p class="small" style="margin-top:22px">Engine: Google PageSpeed Insights API (Lighthouse and Chrome UX Report). This site also has Schema.org Person markup, French and English versions linked with hreflang, an <a href="/llms.txt">llms.txt</a> file for AI search engines and GA4 tracking through Tag Manager.</p>
+</div>
+<div id="audit-panel" class="audit-panel" aria-live="polite">
+<p class="audit-empty">Results will appear here: four scores out of 100, Core Web Vitals from real users when Google has them, and your top three priorities.</p>
 </div>
 </div>
 </div>
@@ -573,7 +598,7 @@ Your browser does not support video playback.
 <div class="timeline">
 
 <div class="tl-item">
-<div class="tl-date">Sep 2025<br>to Nov 2026</div>
+<div class="tl-date">Sep 2025 <br>to Nov 2026</div>
 <div class="tl-dot"></div>
 <div class="tl-content">
 <h3>Castles Technology</h3>
@@ -589,7 +614,7 @@ Your browser does not support video playback.
 </div>
 
 <div class="tl-item">
-<div class="tl-date">Sep 2023<br>to Jan 2025</div>
+<div class="tl-date">Sep 2023 <br>to Jan 2025</div>
 <div class="tl-dot"></div>
 <div class="tl-content">
 <h3>AMADA Europe</h3>
@@ -604,7 +629,7 @@ Your browser does not support video playback.
 </div>
 
 <div class="tl-item">
-<div class="tl-date">Apr 2022<br>to Sep 2022</div>
+<div class="tl-date">Apr 2022 <br>to Sep 2022</div>
 <div class="tl-dot"></div>
 <div class="tl-content">
 <h3>Société Française Du Cinéma</h3>
@@ -618,7 +643,7 @@ Your browser does not support video playback.
 </div>
 
 <div class="tl-item">
-<div class="tl-date">Jul 2021<br>to Sep 2021</div>
+<div class="tl-date">Jul 2021 <br>to Sep 2021</div>
 <div class="tl-dot"></div>
 <div class="tl-content">
 <h3>Natural Beauty Store</h3>
@@ -631,7 +656,7 @@ Your browser does not support video playback.
 </div>
 
 <div class="tl-item">
-<div class="tl-date">Apr 2020<br>to Sep 2020</div>
+<div class="tl-date">Apr 2020 <br>to Sep 2020</div>
 <div class="tl-dot"></div>
 <div class="tl-content">
 <h3>Saham Assurance</h3>
