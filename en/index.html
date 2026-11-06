@@ -381,7 +381,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <li><a href="#projects">Projects</a></li>
 <li><a href="#experience">Experience</a></li>
 <li><a href="#education">Education</a></li>
-<li><a href="#capot">Under the hood</a></li>
+<li><a href="#geo">GEO</a></li>
 <li><a href="#contact">Contact</a></li>
 <li class="lang-item"><a class="lang-link" href="/" hreflang="fr" lang="fr">Français</a></li>
 </ul>
@@ -699,65 +699,19 @@ Your browser does not support video playback.
 </div>
 </section>
 
-<section id="capot" aria-labelledby="capot-title">
-<div class="wrap">
-<div class="capot-head">
-<h2 id="capot-title">Under the hood</h2>
-<p>This portfolio is my own SEO and GEO case study. The figures in this section are measured live, while you read it.</p>
+<section id="geo" aria-labelledby="geo-title">
+<div class="wrap geo-grid">
+<div class="geo-intro">
+<h2 id="geo-title">Ask AI who I am</h2>
+<p>ChatGPT, Perplexity and Google's AI Overviews summarise pages instead of listing links. So that they describe me accurately, this site gives them two clean sources: Schema.org Person markup in the code and an <a href="/llms.txt">llms.txt</a> file that sums up my background in plain text.</p>
 </div>
-
-<div class="capot-row capot-lh">
-<div class="capot-label">
-<h3>Lighthouse score, measured now</h3>
-<p>Google loads this page on a simulated phone and scores it. Nothing is copied from a screenshot: run it again and the numbers shift slightly from one pass to the next.</p>
-<button type="button" id="capot-rerun" class="capot-link">Run again</button>
-</div>
-<div id="capot-scores" class="capot-scores" aria-live="polite"><p class="capot-wait">The test starts when this section comes into view…</p></div>
-</div>
-
-<div class="capot-row">
-<div class="capot-label">
-<h3>Technical SEO, checked on this page</h3>
-<p>These checks read the code of the page you are looking at.</p>
-</div>
-<ul id="capot-checks" class="capot-checks"></ul>
-</div>
-
-<div class="capot-row">
-<div class="capot-label">
-<h3>Tracking plan</h3>
-<p>Every useful interaction goes into the Google Tag Manager dataLayer, which sends it to Google Analytics 4. I track what helps make decisions, not everything that moves.</p>
-</div>
-<div class="capot-table-wrap">
-<table class="capot-table">
-<thead><tr><th scope="col">Event</th><th scope="col">When</th><th scope="col">Parameters</th><th scope="col">Why I track it</th></tr></thead>
-<tbody>
-<tr><td><code>page_view</code></td><td>Every page view</td><td>page, language</td><td>Which pages and which version (FR or EN) get read</td></tr>
-<tr><td><code>candidature_view</code></td><td>A personalised application link is opened</td><td>entreprise, focus</td><td>Which company opened my portfolio after I applied</td></tr>
-<tr><td><code>audit_lance</code></td><td>Click on "Run audit"</td><td>domaine</td><td>How much the tool gets used</td></tr>
-<tr><td><code>audit_termine</code></td><td>Results displayed</td><td>domaine, score_perf, score_seo</td><td>Spot companies whose website has weak points</td></tr>
-<tr><td><code>audit_contact</code></td><td>Contact from an audit result</td><td>domaine, canal</td><td>The tool's main conversion</td></tr>
-<tr><td><code>contact_click</code></td><td>Click on email, phone or LinkedIn</td><td>canal, emplacement</td><td>Which channel recruiters use to reach me</td></tr>
-<tr><td><code>video_play</code></td><td>A project video starts</td><td>video</td><td>Which work people are interested in</td></tr>
-<tr><td><code>capot_lighthouse</code></td><td>Lighthouse test finished in this section</td><td>score_perf, score_seo</td><td>Track the site's score over time, measured by visitors themselves</td></tr>
-<tr><td><code>geo_test</code></td><td>Click on "Ask Perplexity" or "Ask ChatGPT"</td><td>moteur</td><td>See whether visitors check my AI visibility</td></tr>
-</tbody>
-</table>
-</div>
-</div>
-
-<div class="capot-row">
-<div class="capot-label">
-<h3>GEO: readable by AI search engines</h3>
-<p>ChatGPT, Perplexity and AI Overviews summarise pages instead of listing links. I gave them two clean sources about me: Schema.org Person markup in the code, and an <a href="/llms.txt">llms.txt</a> file that sums up my background in plain text.</p>
-</div>
-<div>
-<pre id="capot-llms" class="capot-pre" aria-label="Start of the llms.txt file">/llms.txt</pre>
-<p class="capot-ask">Check what AI tools answer:
+<div class="geo-ask">
+<p class="geo-q">“Who is Kevin Nsamè, digital marketing specialist?”</p>
+<div class="geo-btns">
 <a id="ask-pplx" target="_blank" rel="noopener" href="https://www.perplexity.ai/search?q=Who%20is%20Kevin%20Nsam%C3%A8%2C%20digital%20marketing%20specialist%3F">Ask Perplexity</a>
-<a id="ask-gpt" target="_blank" rel="noopener" href="https://chatgpt.com/?q=Who%20is%20Kevin%20Nsam%C3%A8%2C%20digital%20marketing%20specialist%3F%20Search%20the%20web.">Ask ChatGPT</a></p>
-<p class="capot-note">Answers depend on when each engine last indexed the site and may vary between runs.</p>
+<a id="ask-gpt" target="_blank" rel="noopener" href="https://chatgpt.com/?q=Who%20is%20Kevin%20Nsam%C3%A8%2C%20digital%20marketing%20specialist%3F%20Search%20the%20web.">Ask ChatGPT</a>
 </div>
+<p class="geo-note">The answer depends on when each engine last visited the site, and it may vary from one try to the next.</p>
 </div>
 </div>
 </section>
