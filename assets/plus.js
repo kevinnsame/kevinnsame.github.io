@@ -13,7 +13,7 @@ var T = EN ? {
   field: "Real-user data (Chrome UX Report, 28 days)", lab: "Lab measurement (simulated mobile)",
   prio: "What I would fix first", gain: "Estimated saving:",
   none: "No major issue found. The site is in good shape.",
-  cta: "Let's talk about it", call: "Call 06 95 82 24 79", copy: "Copy", copied: "Email address copied", mailSub: "Audit of ", mailBody: "Hello Kevin,%0D%0A%0D%0AI ran the audit of {d} on your portfolio.",
+  seoTitle: "Google positions", seoWait: "Checking Google positions and competitors...", seoSrcPage: "Keywords taken from the page title and H1.", seoSrcUser: "Keywords you entered.", seoOut: "Not in top 10", seoComp: "Competitors seen most often", seoOn: "on", seoKw: "keyword(s)", seoDA: "Domain Authority (Moz)", seoDAquota: "Monthly Moz quota reached, back next month.", seoDAna: "Not available for this domain.", seoErr: "Positions unavailable right now.", seoNone: "No keyword found on the page. Enter some in the field above.", seoFirst: "first", cta: "Let's talk about it", call: "Call 06 95 82 24 79", copy: "Copy", copied: "Email address copied", mailSub: "Audit of ", mailBody: "Hello Kevin,%0D%0A%0D%0AI ran the audit of {d} on your portfolio.",
   bad: "Enter a valid address, for example example.com",
   err: "The analysis failed: ", quota: "The audit service is unavailable right now. Please try again later or email me.",
   na: "not measurable", blocked: "The speed test could not run: this site blocks Google's testing robot. Scores and field data above remain valid.", noneNA: "No SEO or accessibility issue detected. Speed could not be tested.",
@@ -27,7 +27,7 @@ var T = EN ? {
   field: "Données d'utilisateurs réels (Chrome UX Report, 28 jours)", lab: "Mesure en laboratoire (mobile simulé)",
   prio: "Ce que je corrigerais en premier", gain: "Gain estimé :",
   none: "Aucun problème majeur détecté. Le site est en bonne santé.",
-  cta: "En parler ensemble", call: "Appeler le 06 95 82 24 79", copy: "Copier", copied: "Adresse e-mail copiée", mailSub: "Audit de ", mailBody: "Bonjour Kevin,%0D%0A%0D%0AJ'ai lancé l'audit de {d} sur votre portfolio.",
+  seoTitle: "Positions Google", seoWait: "Recherche des positions Google et des concurrents...", seoSrcPage: "Mots-clés tirés du titre et du H1 de la page.", seoSrcUser: "Mots-clés saisis.", seoOut: "Absent du top 10", seoComp: "Concurrents les plus présents", seoOn: "sur", seoKw: "mot(s)-clé(s)", seoDA: "Domain Authority (Moz)", seoDAquota: "Quota Moz du mois atteint, retour le mois prochain.", seoDAna: "Non disponible pour ce domaine.", seoErr: "Positions indisponibles pour le moment.", seoNone: "Aucun mot-clé trouvé sur la page. Saisissez-en dans le champ au-dessus.", seoFirst: "premier", cta: "En parler ensemble", call: "Appeler le 06 95 82 24 79", copy: "Copier", copied: "Adresse e-mail copiée", mailSub: "Audit de ", mailBody: "Bonjour Kevin,%0D%0A%0D%0AJ'ai lancé l'audit de {d} sur votre portfolio.",
   bad: "Saisissez une adresse valide, par exemple exemple.fr",
   err: "L'analyse a échoué : ", quota: "Le service d'audit est indisponible pour le moment. Réessayez plus tard ou écrivez-moi.",
   na: "non mesurable", blocked: "Le test de vitesse n'a pas pu tourner : ce site bloque le robot de mesure de Google. Les autres scores et les données réelles restent valables.", noneNA: "Aucun problème SEO ou d'accessibilité détecté. La vitesse n'a pas pu être testée.",
@@ -112,6 +112,47 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   var panel = document.getElementById("audit-panel");
   var self = document.getElementById("audit-self");
   var busy = false;
+  var AUDIT_URL = "";
+  var kwInput = document.getElementById("audit-kw");
+  var seoBox = el("div","seo-box");
+  function ord(n){ return EN ? "#"+n : (n===1 ? "1re" : n+"e"); }
+  function renderSeo(j){
+    seoBox.innerHTML="";
+    seoBox.appendChild(el("h3",null,T.seoTitle));
+    if(!j || j.error){ seoBox.appendChild(el("p","audit-err",T.seoErr)); return; }
+    if(!j.keywords || !j.keywords.length){ seoBox.appendChild(el("p","audit-empty",T.seoNone)); }
+    else {
+      seoBox.appendChild(el("p","small",j.keyword_source==="visiteur"?T.seoSrcUser:T.seoSrcPage));
+      var ul=el("ul","seo-kws");
+      j.keywords.forEach(function(k){
+        var li=el("li"); var row=el("div","seo-row");
+        row.appendChild(el("span","seo-kw",k.keyword));
+        var pos = k.error ? el("span","seo-pos t-mid","-") : (k.position ? el("span","seo-pos "+(k.position<=3?"t-good":"t-mid"),ord(k.position)) : el("span","seo-pos t-bad",T.seoOut));
+        row.appendChild(pos); li.appendChild(row);
+        if(k.top && k.top.length) li.appendChild(el("div","seo-top",k.top.slice(0,3).map(function(t){ return ord(t.pos)+" "+t.host; }).join("   ")));
+        ul.appendChild(li);
+      });
+      seoBox.appendChild(ul);
+    }
+    if(j.competitors && j.competitors.length){
+      seoBox.appendChild(el("h3",null,T.seoComp));
+      var cl=el("ol","seo-comp");
+      j.competitors.slice(0,5).forEach(function(c){ var li=el("li"); li.appendChild(el("span",null,c.host)); li.appendChild(el("span","small",c.count+" "+T.seoOn+" "+j.keywords.length+" "+T.seoKw+", "+(EN?"best ":"meilleure ")+ord(c.best))); cl.appendChild(li); });
+      seoBox.appendChild(cl);
+    }
+    var da=j.domain_authority||{};
+    seoBox.appendChild(el("h3",null,T.seoDA));
+    if(typeof da.value==="number"){ var d=el("div","seo-da"); d.appendChild(el("strong",null,String(da.value))); d.appendChild(el("span","small"," / 100")); seoBox.appendChild(d); }
+    else seoBox.appendChild(el("p","small", da.error==="quota" ? T.seoDAquota : T.seoDAna));
+    push({event:"audit_seo", domaine:j.host, mots_cles:(j.keywords||[]).length});
+  }
+  function runSeo(url){
+    if(!AUDIT_URL){ seoBox.innerHTML=""; return; }
+    seoBox.innerHTML=""; seoBox.appendChild(el("h3",null,T.seoTitle)); seoBox.appendChild(el("p","audit-empty",T.seoWait));
+    var kws = kwInput && kwInput.value ? kwInput.value.split(",").map(function(x){return x.trim();}).filter(Boolean).slice(0,3) : [];
+    fetch(AUDIT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:url, lang:EN?"en":"fr", keywords:kws})})
+      .then(function(r){ return r.json(); }).then(renderSeo).catch(function(){ renderSeo({error:"x"}); });
+  }
 
   function norm(v){
     v=(v||"").trim(); if(!v) return null;
@@ -195,6 +236,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
       panel.appendChild(ol);
     } else panel.appendChild(el("p","audit-empty", perfNA ? T.noneNA : T.none));
 
+    if(AUDIT_URL) panel.appendChild(seoBox);
     var host=""; try{ host=new URL(url).hostname; }catch(e){}
     if(host!=="kevinnsame.github.io"){
       var MAIL="kevinsame99@gmail.com", sub=T.mailSub+host, body=decodeURIComponent(T.mailBody.replace("{d}",host));
@@ -228,6 +270,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     var i=0, iv=setInterval(function(){ i=Math.min(i+1,T.steps.length-1); msg.textContent=T.steps[i]; },7000);
     var host=""; try{ host=new URL(url).hostname; }catch(e){}
     push({event:"audit_lance", domaine:host});
+    runSeo(url);
     var api="https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&locale="+(EN?"en":"fr")+
       "&category=performance&category=seo&category=accessibility&category=best-practices&url="+encodeURIComponent(url)+
       (PSI_KEY?"&key="+PSI_KEY:"");
@@ -244,6 +287,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
       clearInterval(iv); panel.innerHTML="";
       var msgTxt = e.message===T.quota ? T.quota : T.err+e.message;
       panel.appendChild(el("p","audit-err",msgTxt));
+      if(AUDIT_URL) panel.appendChild(seoBox);
     })
     .then(function(){ busy=false; btn.disabled=false; btn.textContent=T.run; });
   }
