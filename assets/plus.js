@@ -112,7 +112,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   var panel = document.getElementById("audit-panel");
   var self = document.getElementById("audit-self");
   var busy = false;
-  var AUDIT_URL = "";
+  var AUDIT_URL = "https://portfolio-audit.kevinsame99.workers.dev/";
   var kwInput = document.getElementById("audit-kw");
   var seoBox = el("div","seo-box");
   function ord(n){ return EN ? "#"+n : (n===1 ? "1re" : n+"e"); }
@@ -129,21 +129,28 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
         row.appendChild(el("span","seo-kw",k.keyword));
         var pos = k.error ? el("span","seo-pos t-mid","-") : (k.position ? el("span","seo-pos "+(k.position<=3?"t-good":"t-mid"),ord(k.position)) : el("span","seo-pos t-bad",T.seoOut));
         row.appendChild(pos); li.appendChild(row);
-        if(k.top && k.top.length) li.appendChild(el("div","seo-top",k.top.slice(0,3).map(function(t){ return ord(t.pos)+" "+t.host; }).join("   ")));
+        var seenH={}; k.top=(k.top||[]).filter(function(t){ if(seenH[t.host]) return false; seenH[t.host]=1; return true; });
+        if(k.top.length) li.appendChild(el("div","seo-top",k.top.slice(0,3).map(function(t){ return ord(t.pos)+" "+t.host; }).join("   ")));
         ul.appendChild(li);
       });
       seoBox.appendChild(ul);
     }
-    if(j.competitors && j.competitors.length){
+    var tally={};
+    (j.keywords||[]).forEach(function(k){ var seen={}; (k.top||[]).forEach(function(t){ if(seen[t.host]) return; seen[t.host]=1;
+      var c=tally[t.host]||(tally[t.host]={host:t.host,count:0,best:99}); c.count++; c.best=Math.min(c.best,t.pos); }); });
+    j.competitors=Object.keys(tally).map(function(h){return tally[h];}).sort(function(a,b){ return b.count-a.count || a.best-b.best; });
+    if(j.competitors.length){
       seoBox.appendChild(el("h3",null,T.seoComp));
       var cl=el("ol","seo-comp");
       j.competitors.slice(0,5).forEach(function(c){ var li=el("li"); li.appendChild(el("span",null,c.host)); li.appendChild(el("span","small",c.count+" "+T.seoOn+" "+j.keywords.length+" "+T.seoKw+", "+(EN?"best ":"meilleure ")+ord(c.best))); cl.appendChild(li); });
       seoBox.appendChild(cl);
     }
     var da=j.domain_authority||{};
-    seoBox.appendChild(el("h3",null,T.seoDA));
-    if(typeof da.value==="number"){ var d=el("div","seo-da"); d.appendChild(el("strong",null,String(da.value))); d.appendChild(el("span","small"," / 100")); seoBox.appendChild(d); }
-    else seoBox.appendChild(el("p","small", da.error==="quota" ? T.seoDAquota : T.seoDAna));
+    if(da.status!=="absent"){
+      seoBox.appendChild(el("h3",null,T.seoDA));
+      if(typeof da.value==="number"){ var d=el("div","seo-da"); d.appendChild(el("strong",null,String(da.value))); d.appendChild(el("span","small"," / 100")); seoBox.appendChild(d); }
+      else seoBox.appendChild(el("p","small", da.error==="quota" ? T.seoDAquota : T.seoDAna));
+    }
     push({event:"audit_seo", domaine:j.host, mots_cles:(j.keywords||[]).length});
   }
   function runSeo(url){
