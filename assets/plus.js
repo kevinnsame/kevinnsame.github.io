@@ -315,13 +315,13 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   if(!CHAT_URL || !document.querySelector("header.hero")) return;
   var C = EN ? {
     open:"Questions about my background?", title:"Ask about my background", close:"Close",
-    info:"Answers are generated automatically from my CV and may contain mistakes. To talk to me directly: ",
-    ph:"Your question", send:"Send", wait:"Writing...", err:"The assistant is unavailable right now. You can email me at kevinsame99@gmail.com.",
+    info:"Automatic answers, based on my CV. To reach me directly: ",
+    ph:"Your question", send:"Send", wait:"Writing...", err:"This service is unavailable right now. You can email me at kevinsame99@gmail.com.",
     sugg:["What Google Ads experience does he have?","Is he available now?","Which tools does he use?"]
   } : {
     open:"Une question sur mon parcours ?", title:"Posez vos questions sur mon parcours", close:"Fermer",
-    info:"Réponses générées automatiquement à partir de mon CV, elles peuvent contenir des erreurs. Pour me parler directement : ",
-    ph:"Votre question", send:"Envoyer", wait:"Rédaction...", err:"L'assistant est indisponible pour le moment. Vous pouvez m'écrire à kevinsame99@gmail.com.",
+    info:"Réponses automatiques, rédigées à partir de mon CV. Pour me joindre directement : ",
+    ph:"Votre question", send:"Envoyer", wait:"Rédaction...", err:"Ce service est indisponible pour le moment. Vous pouvez m'écrire à kevinsame99@gmail.com.",
     sugg:["Quelle expérience en Google Ads ?","Est-il disponible rapidement ?","Quels outils maîtrise-t-il ?"]
   };
   var hist=[], busy=false, opened=false;
