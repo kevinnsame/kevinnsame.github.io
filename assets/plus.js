@@ -364,4 +364,43 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   }
   form.addEventListener("submit",function(e){ e.preventDefault(); ask(inp.value); });
 })();
+
+(function(){
+  var f=document.getElementById("ads-form"); if(!f) return;
+  var $=function(id){ return document.getElementById(id); };
+  var A = EN ? {
+    good:"Each euro spent brings back {r} € in revenue.", even:"The campaign roughly breaks even: each euro spent brings back {r} €.",
+    bad:"Each euro spent brings back only {r} €: the campaign loses money.",
+    lever:"To double conversions on the same budget, you would need a conversion rate of {cr} % or a cost per click of {cpc} €.",
+    empty:"Enter a budget and a cost per click."
+  } : {
+    good:"Chaque euro investi rapporte {r} € de chiffre d'affaires.", even:"La campagne est à peu près à l'équilibre : chaque euro investi rapporte {r} €.",
+    bad:"Chaque euro investi ne rapporte que {r} € : la campagne perd de l'argent.",
+    lever:"Pour doubler les conversions avec le même budget, il faudrait un taux de conversion de {cr} % ou un coût par clic de {cpc} €.",
+    empty:"Entrez un budget et un coût par clic."
+  };
+  var loc = EN ? "en-GB" : "fr-FR";
+  function n(v,d){ return Number(v).toLocaleString(loc,{minimumFractionDigits:d||0, maximumFractionDigits:d||0}); }
+  function num(id){ var v=parseFloat(String($(id).value).replace(",",".")); return isFinite(v)&&v>=0 ? v : 0; }
+  var tracked=false;
+  function calc(){
+    var b=num("ads-budget"), cpc=num("ads-cpc"), cr=num("ads-cr"), val=num("ads-val");
+    var roasEl=$("ads-roas");
+    if(!b || !cpc){ ["ads-clicks","ads-conv","ads-cpa","ads-rev"].forEach(function(i){ $(i).textContent="-"; }); roasEl.textContent="-"; roasEl.className=""; $("ads-verdict").textContent=A.empty; $("ads-lever").textContent=""; return; }
+    var clicks=b/cpc, conv=clicks*cr/100, rev=conv*val, roas=rev/b;
+    $("ads-clicks").textContent=n(Math.round(clicks));
+    $("ads-conv").textContent=n(conv, conv<10?1:0);
+    $("ads-cpa").textContent=conv>0 ? n(b/conv, b/conv<100?2:0)+" €" : "-";
+    $("ads-rev").textContent=n(Math.round(rev))+" €";
+    roasEl.textContent=n(roas,2).replace(/[.,]00$/,"")+" ×";
+    roasEl.className = roas>=1.2 ? "good" : (roas<0.9 ? "bad" : "");
+    var r=n(roas,2);
+    $("ads-verdict").textContent=(roas>=1.2?A.good:(roas<0.9?A.bad:A.even)).replace("{r}",r);
+    $("ads-lever").textContent = cr>0 && cr*2<=100 ? A.lever.replace("{cr}",n(cr*2,1)).replace("{cpc}",n(cpc/2,2)) : "";
+    if(!tracked && f.dataset.touched){ tracked=true; push({event:"calculateur_ads", budget:b, roas:Math.round(roas*100)/100}); }
+  }
+  f.addEventListener("input",function(){ f.dataset.touched="1"; calc(); });
+  f.addEventListener("submit",function(e){ e.preventDefault(); });
+  calc();
+})();
 })();
