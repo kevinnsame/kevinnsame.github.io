@@ -41,7 +41,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   var q = new URLSearchParams(location.search);
   var e = (q.get("e") || "").replace(/[<>"]/g,"").replace(/[-_+]/g," ").trim().slice(0,40);
   var p = (q.get("p") || "").toLowerCase();
-  var RELANCE_URL = "";
+  var RELANCE_URL = "https://script.google.com/macros/s/AKfycbzQu_I8WtPbWQ6gwL-NwconMdB5E7SxbSQL7c-omchPy3aGCHW7aj-khMHM77PCX28ppQ/exec";
   var moi = false; try{ moi = localStorage.getItem("kn_moi")==="1"; }catch(x){}
   if(e && RELANCE_URL && !moi && !q.get("t")){
     try{ if(!sessionStorage.getItem("kn_ping")){ sessionStorage.setItem("kn_ping","1"); new Image().src = RELANCE_URL+"?a=ouverture&e="+encodeURIComponent(e); } }catch(x){}
