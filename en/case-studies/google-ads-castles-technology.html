@@ -82,6 +82,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-NPRNXCGP');</script>
 <!-- End Google Tag Manager -->
 <style>@view-transition{navigation:auto;}</style>
+<link rel="stylesheet" href="/assets/ads.css">
 <script src="/assets/plus.js" defer></script>
 </head>
 <body>
@@ -120,6 +121,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <h2>Result</h2>
 <p>In two months, the number of leads rose by 47%.</p>
+
+<h2>Simulate your own campaign</h2>
+<div id="ads-calc">
+<p class="ads-intro-p">The same reasoning applies to any campaign. Enter your figures to see how many leads your budget can bring in. Everything is calculated in your browser, nothing is sent.</p>
+<div class="ads-grid">
+<div>
+<form class="ads-form" id="ads-form" novalidate>
+<label>Monthly budget<span class="ads-in"><input type="number" id="ads-budget" min="0" step="50" value="1500" inputmode="decimal"><em>€</em></span></label>
+<label>Average cost per click<span class="ads-in"><input type="number" id="ads-cpc" min="0.01" step="0.05" value="1.20" inputmode="decimal"><em>€</em></span></label>
+<label>Website conversion rate<span class="ads-in"><input type="number" id="ads-cr" min="0" max="100" step="0.1" value="3" inputmode="decimal"><em>%</em></span></label>
+<label>Value of one conversion<span class="ads-in"><input type="number" id="ads-val" min="0" step="10" value="150" inputmode="decimal"><em>€</em></span></label>
+</form>
+<p class="ads-note">The starting values are examples, not Castles Technology's figures.</p>
+</div>
+<div class="ads-out" aria-live="polite">
+<dl class="ads-res">
+<div><dt>Clicks per month</dt><dd id="ads-clicks">-</dd></div>
+<div><dt>Conversions per month</dt><dd id="ads-conv">-</dd></div>
+<div><dt>Cost per conversion</dt><dd id="ads-cpa">-</dd></div>
+<div><dt>Revenue generated</dt><dd id="ads-rev">-</dd></div>
+<div class="ads-big"><dt>ROAS</dt><dd id="ads-roas">-</dd></div>
+</dl>
+<p class="ads-verdict" id="ads-verdict"></p>
+<p class="ads-lever" id="ads-lever"></p>
+<a class="ads-cta" href="/en/#contact">Improve these numbers with me</a>
+</div>
+</div>
+</div>
 
 <h2>Tools used</h2>
 <p class="tools">Google Ads, Google Analytics 4, Google Tag Manager, Looker Studio, Google Search Console.</p>
