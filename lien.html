@@ -20,22 +20,48 @@ a{color:#0071e3;}
 <body>
 <main>
 <h1>Lien de candidature</h1>
-<p>Page privée (non indexée). Le portfolio s'ouvrira avec le nom de l'entreprise en haut et l'étude de cas choisie en premier.</p>
+<p>Page privée (non indexée). Le portfolio s'ouvrira avec le nom de l'entreprise en haut et l'étude de cas choisie en premier. Si tu renseignes l'e-mail du recruteur, une relance partira automatiquement 2 jours après sa première ouverture du lien, sauf s'il t'a répondu entre-temps.</p>
 <label for="e">Entreprise</label>
 <input id="e" placeholder="Decathlon" maxlength="40">
+<label for="po">Intitulé du poste</label>
+<input id="po" placeholder="Chargé de marketing digital" maxlength="80">
 <label for="p">Projet à mettre en avant</label>
 <select id="p"><option value="">Aucun</option><option value="seo">Étude de cas SEO (AMADA)</option><option value="sea">Étude de cas SEA (Castles)</option><option value="contenu">Vidéos</option></select>
 <label for="l">Langue</label>
 <select id="l"><option value="">Français</option><option value="en/">Anglais</option></select>
+<label for="m">E-mail du recruteur (pour la relance)</label>
+<input id="m" type="email" placeholder="prenom.nom@entreprise.fr" maxlength="120">
+<label for="pr">Prénom du recruteur (facultatif)</label>
+<input id="pr" placeholder="Sophie" maxlength="40">
+<label for="k">Code personnel</label>
+<input id="k" placeholder="Affiché à l'installation du script" maxlength="20" autocomplete="off">
 <output id="o"></output>
-<button id="c" type="button">Copier le lien</button> <a id="t" href="#" target="_blank" rel="noopener">Tester</a>
+<button id="r" type="button">Enregistrer la candidature et copier le lien</button>
+<p id="msg" style="margin:12px 0 0;min-height:22px"></p>
+<p style="margin-top:18px"><button id="c" type="button" style="background:#e8e8ed;color:#1d1d1f">Copier sans enregistrer</button> <a id="t" href="#" target="_blank" rel="noopener">Tester</a></p>
 </main>
 <script>
-var e=document.getElementById("e"),p=document.getElementById("p"),l=document.getElementById("l"),o=document.getElementById("o"),t=document.getElementById("t");
+var RELANCE_URL="";
+try{localStorage.setItem("kn_moi","1");}catch(x){}
+var $=function(i){return document.getElementById(i);};
+var e=$("e"),p=$("p"),l=$("l"),o=$("o"),t=$("t"),k=$("k"),msg=$("msg");
+try{k.value=localStorage.getItem("kn_code")||"";}catch(x){}
 function up(){var q=new URLSearchParams();if(e.value.trim())q.set("e",e.value.trim());if(p.value)q.set("p",p.value);
-var u="https://kevinnsame.github.io/"+l.value+(q.toString()?"?"+q.toString():"");o.textContent=u;t.href=u;}
+var u="https://kevinnsame.github.io/"+l.value+(q.toString()?"?"+q.toString():"");o.textContent=u;t.href=u+(u.indexOf("?")>0?"&":"?")+"t=1";}
 [e,p,l].forEach(function(x){x.addEventListener("input",up);});up();
-document.getElementById("c").onclick=function(){navigator.clipboard.writeText(o.textContent).then(function(){document.getElementById("c").textContent="Copié";setTimeout(function(){document.getElementById("c").textContent="Copier le lien";},1500);});};
+function copier(b,txt){navigator.clipboard.writeText(o.textContent).then(function(){var a=b.textContent;b.textContent=txt;setTimeout(function(){b.textContent=a;},1800);});}
+$("c").onclick=function(){copier(this,"Copié");};
+$("r").onclick=function(){
+  var b=this;
+  if(!e.value.trim()){msg.textContent="Indique au moins l'entreprise.";return;}
+  if(!RELANCE_URL){msg.textContent="La relance n'est pas encore installée. Lien copié sans enregistrement.";copier(b,"Copié");return;}
+  if(!k.value.trim()){msg.textContent="Saisis ton code personnel.";return;}
+  try{localStorage.setItem("kn_code",k.value.trim());}catch(x){}
+  fetch(RELANCE_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({action:"enregistrer",code:k.value.trim(),entreprise:e.value.trim(),poste:$("po").value.trim(),
+    email:$("m").value.trim(),prenom:$("pr").value.trim(),projet:p.value,langue:l.value?"en":"fr",lien:o.textContent})})
+  .then(function(){msg.textContent="Candidature envoyée dans ta feuille Google. Vérifie qu'elle y apparaît.";copier(b,"Enregistré et copié");})
+  .catch(function(){msg.textContent="Envoi impossible. Le lien a quand même été copié.";copier(b,"Copié");});
+};
 </script>
 </body>
 </html>
