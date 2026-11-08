@@ -443,6 +443,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 </section>
 
+<section id="ads-calc" aria-labelledby="ads-title">
+<div class="wrap ads-grid">
+<div class="ads-intro">
+<h2 id="ads-title">How many leads your Google Ads budget can bring in</h2>
+<p>Enter your figures. Everything is calculated in your browser, nothing is sent.</p>
+<form class="ads-form" id="ads-form" novalidate>
+<label>Monthly budget<span class="ads-in"><input type="number" id="ads-budget" min="0" step="50" value="1500" inputmode="decimal"><em>€</em></span></label>
+<label>Average cost per click<span class="ads-in"><input type="number" id="ads-cpc" min="0.01" step="0.05" value="1.20" inputmode="decimal"><em>€</em></span></label>
+<label>Website conversion rate<span class="ads-in"><input type="number" id="ads-cr" min="0" max="100" step="0.1" value="3" inputmode="decimal"><em>%</em></span></label>
+<label>Value of one conversion<span class="ads-in"><input type="number" id="ads-val" min="0" step="10" value="150" inputmode="decimal"><em>€</em></span></label>
+</form>
+<p class="ads-note">The starting values are examples.</p>
+</div>
+<div class="ads-out" aria-live="polite">
+<dl class="ads-res">
+<div><dt>Clicks per month</dt><dd id="ads-clicks">-</dd></div>
+<div><dt>Conversions per month</dt><dd id="ads-conv">-</dd></div>
+<div><dt>Cost per conversion</dt><dd id="ads-cpa">-</dd></div>
+<div><dt>Revenue generated</dt><dd id="ads-rev">-</dd></div>
+<div class="ads-big"><dt>ROAS</dt><dd id="ads-roas">-</dd></div>
+</dl>
+<p class="ads-verdict" id="ads-verdict"></p>
+<p class="ads-lever" id="ads-lever"></p>
+<a class="ads-cta" href="#contact">Improve these numbers with me</a>
+</div>
+</div>
+</section>
+
 <section id="skills" class="soft" aria-labelledby="skills-title">
 <div class="wrap">
 <div class="section-head">
