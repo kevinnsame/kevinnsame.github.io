@@ -80,6 +80,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-NPRNXCGP');</script>
 <!-- End Google Tag Manager -->
 <style>@view-transition{navigation:auto;}</style>
+<link rel="stylesheet" href="/assets/ads.css">
 <script src="/assets/plus.js" defer></script>
 </head>
 <body>
@@ -119,6 +120,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <h2>Le résultat</h2>
 <p>En deux mois, le nombre de leads a augmenté de 47 %.</p>
+
+<h2>Simulez votre propre campagne</h2>
+<div id="ads-calc">
+<p class="ads-intro-p">Le même raisonnement s'applique à n'importe quelle campagne. Entrez vos chiffres pour voir combien de leads votre budget peut rapporter. Le calcul se fait dans votre navigateur, rien n'est envoyé.</p>
+<div class="ads-grid">
+<div>
+<form class="ads-form" id="ads-form" novalidate>
+<label>Budget mensuel<span class="ads-in"><input type="number" id="ads-budget" min="0" step="50" value="1500" inputmode="decimal"><em>€</em></span></label>
+<label>Coût par clic moyen<span class="ads-in"><input type="number" id="ads-cpc" min="0.01" step="0.05" value="1.20" inputmode="decimal"><em>€</em></span></label>
+<label>Taux de conversion du site<span class="ads-in"><input type="number" id="ads-cr" min="0" max="100" step="0.1" value="3" inputmode="decimal"><em>%</em></span></label>
+<label>Valeur d'une conversion<span class="ads-in"><input type="number" id="ads-val" min="0" step="10" value="150" inputmode="decimal"><em>€</em></span></label>
+</form>
+<p class="ads-note">Les valeurs affichées au départ sont des exemples, pas les chiffres de Castles Technology.</p>
+</div>
+<div class="ads-out" aria-live="polite">
+<dl class="ads-res">
+<div><dt>Clics par mois</dt><dd id="ads-clicks">-</dd></div>
+<div><dt>Conversions par mois</dt><dd id="ads-conv">-</dd></div>
+<div><dt>Coût par conversion</dt><dd id="ads-cpa">-</dd></div>
+<div><dt>Chiffre d'affaires généré</dt><dd id="ads-rev">-</dd></div>
+<div class="ads-big"><dt>ROAS</dt><dd id="ads-roas">-</dd></div>
+</dl>
+<p class="ads-verdict" id="ads-verdict"></p>
+<p class="ads-lever" id="ads-lever"></p>
+<a class="ads-cta" href="../#contact">Améliorer ces chiffres avec moi</a>
+</div>
+</div>
+</div>
 
 <h2>Outils utilisés</h2>
 <p class="tools">Google Ads, Google Analytics 4, Google Tag Manager, Looker Studio, Google Search Console.</p>
