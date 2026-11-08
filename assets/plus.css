@@ -156,33 +156,3 @@ nav ul li:nth-child(2), nav ul li:nth-child(3), nav ul li:nth-child(7){display:n
 .seo-comp li{display:flex; justify-content:space-between; gap:12px; font-size:14.5px; color:#d1d1d6;}
 .seo-comp .small{margin:0; text-align:right;}
 .seo-da strong{font-size:28px; font-weight:700; color:#f5f5f7;}
-#ads-calc{padding:104px 0;}
-.ads-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start;}
-.ads-intro h2{font-size:clamp(30px,4vw,44px); font-weight:700; letter-spacing:-0.02em; line-height:1.1; margin-bottom:16px;}
-.ads-intro > p{font-size:17px; color:var(--text-soft); line-height:1.55; margin-bottom:28px;}
-.ads-form{display:flex; flex-direction:column; gap:14px;}
-.ads-form label{display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:15px; font-weight:500; padding-bottom:14px; border-bottom:1px solid var(--line);}
-.ads-in{display:flex; align-items:center; gap:6px;}
-.ads-in input{width:110px; font:inherit; font-size:17px; font-weight:600; text-align:right; border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:#fff; color:var(--text);}
-.ads-in input:focus{outline:none; border-color:var(--accent);}
-.ads-in em{font-style:normal; color:var(--text-soft); width:14px;}
-.ads-note{font-size:13px; color:var(--text-soft); margin-top:14px;}
-.ads-out{background:var(--bg-soft); border-radius:16px; padding:30px 30px 28px;}
-.ads-res{display:flex; flex-direction:column;}
-.ads-res > div{display:flex; justify-content:space-between; align-items:baseline; padding:12px 0; border-bottom:1px solid var(--line);}
-.ads-res dt{font-size:15px; color:var(--text-soft);}
-.ads-res dd{font-size:20px; font-weight:600; font-variant-numeric:tabular-nums;}
-.ads-res .ads-big{border-bottom:0; padding-top:20px;}
-.ads-res .ads-big dt{font-size:17px; color:var(--text); font-weight:600;}
-.ads-res .ads-big dd{font-size:40px; font-weight:700; letter-spacing:-0.02em;}
-.ads-res .ads-big dd.bad{color:#c4320a;} .ads-res .ads-big dd.good{color:#1a7f45;}
-.ads-verdict{font-size:15.5px; line-height:1.5; margin:6px 0 10px;}
-.ads-lever{font-size:14px; color:var(--text-soft); line-height:1.5; margin-bottom:22px;}
-.ads-cta{display:inline-block; background:var(--text); color:#fff; font-size:15px; font-weight:500; padding:12px 22px; border-radius:980px;}
-.ads-cta:hover{background:#000;}
-@media (max-width:720px){
-#ads-calc{padding:80px 0;}
-.ads-grid{grid-template-columns:1fr; gap:36px;}
-.ads-in input{width:96px;}
-.ads-out{padding:24px 20px;}
-}

@@ -1,0 +1,26 @@
+#ads-calc{--t:#1d1d1f; --s:#6e6e73; --l:#d2d2d7; --b:#f5f5f7; --a:#0071e3; margin:8px 0 8px;}
+#ads-calc .ads-intro-p{font-size:17px; color:#333336; margin-bottom:22px;}
+.ads-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:start;}
+.ads-form{display:flex; flex-direction:column; gap:12px;}
+.ads-form label{display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:15px; font-weight:500; color:var(--t); padding-bottom:12px; border-bottom:1px solid var(--l);}
+.ads-in{display:flex; align-items:center; gap:6px;}
+.ads-in input{width:96px; font:inherit; font-size:16px; font-weight:600; text-align:right; border:1px solid var(--l); border-radius:10px; padding:7px 9px; background:#fff; color:var(--t);}
+.ads-in input:focus{outline:none; border-color:var(--a);}
+.ads-in em{font-style:normal; color:var(--s); width:14px;}
+#ads-calc .ads-note{font-size:13px; color:var(--s); margin:12px 0 0;}
+.ads-out{background:var(--b); border-radius:16px; padding:22px 22px 24px;}
+.ads-res{display:flex; flex-direction:column; margin:0;}
+.ads-res > div{display:flex; justify-content:space-between; align-items:baseline; gap:10px; padding:10px 0; border-bottom:1px solid var(--l);}
+.ads-res dt{font-size:14.5px; color:var(--s);}
+.ads-res dd{font-size:18px; font-weight:600; font-variant-numeric:tabular-nums; margin:0;}
+.ads-res .ads-big{border-bottom:0; padding-top:16px;}
+.ads-res .ads-big dt{font-size:16px; color:var(--t); font-weight:600;}
+.ads-res .ads-big dd{font-size:34px; font-weight:700; letter-spacing:-0.02em;}
+.ads-res .ads-big dd.bad{color:#c4320a;} .ads-res .ads-big dd.good{color:#1a7f45;}
+#ads-calc .ads-verdict{font-size:15px; color:var(--t); line-height:1.5; margin:4px 0 8px;}
+#ads-calc .ads-lever{font-size:13.5px; color:var(--s); line-height:1.5; margin:0 0 18px;}
+.ads-cta{display:inline-block; background:var(--t); color:#fff !important; font-size:14.5px; font-weight:500; padding:11px 20px; border-radius:980px; text-decoration:none !important;}
+.ads-cta:hover{background:#000;}
+@media (max-width:680px){
+.ads-grid{grid-template-columns:1fr; gap:22px;}
+}
