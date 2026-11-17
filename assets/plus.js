@@ -78,7 +78,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
 })();
 
 (function(){
-  var nums = document.querySelectorAll(".fact .num");
+  var nums = document.querySelectorAll(".fact .num-anim");
   if(!nums.length || !("IntersectionObserver" in window)) return;
   if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var io = new IntersectionObserver(function(entries){
