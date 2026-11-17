@@ -494,12 +494,3 @@ nav ul li:nth-child(2), nav ul li:nth-child(3), nav ul li:nth-child(7){display:n
 .pdf-export .rp-table{font-size:11px;}
 .pdf-export .rp-ring svg{transform:none !important;}
 .pdf-export .pdf-brk{margin-top:0 !important;}
-
-/* Titres de section : à gauche, tailles variées, moins d'animation */
-.section-head{text-align:left !important; margin-bottom:40px !important; max-width:760px;}
-.section-head h2{font-size:clamp(26px,3.2vw,36px) !important; line-height:1.15; letter-spacing:-0.015em;}
-#experience .section-head, #services .section-head{max-width:none;}
-#services .section-head h2, #education .section-head h2{font-size:clamp(22px,2.4vw,28px) !important;}
-#services{padding:64px 0;}
-#education{background:var(--bg) !important; border-top:1px solid var(--line);}
-.fact, .skill-card, .project-card, .tl-item, .edu-card{animation:none !important;}
