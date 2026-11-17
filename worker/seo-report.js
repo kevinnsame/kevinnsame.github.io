@@ -159,7 +159,7 @@ function parse(html, pageUrl) {
   ];
   const cmsHit = cmsRules.find(([, re]) => re.test(low));
   const stack = {
-    cms: gen ? gen.slice(0, 40) : cmsHit ? cmsHit[0] : null,
+    cms: cmsHit ? cmsHit[0] : (gen && !/builder|elementor|divi|yoast|rank math|powered by/i.test(gen) ? gen.slice(0, 40) : null),
     gtm: /googletagmanager\.com\/gtm\.js|['"]gtm-[a-z0-9]{4,}['"]/i.test(html),
     ga4: /googletagmanager\.com\/gtag\/js\?id=g-|gtag\(\s*['"]config['"]\s*,\s*['"]g-/i.test(html),
     ads: /googletagmanager\.com\/gtag\/js\?id=aw-|gtag\(\s*['"]config['"]\s*,\s*['"]aw-|googleadservices\.com/i.test(html),
