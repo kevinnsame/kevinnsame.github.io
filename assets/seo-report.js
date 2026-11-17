@@ -217,7 +217,7 @@ function render(){
 
   var unlocked=false; try{ unlocked=sessionStorage.getItem("kn_rp_ok")==="1"; }catch(x){}
   if(!CODE_URL || CODE_URL.indexOf("__")===0) unlocked=true;
-  var SHOW=2;
+  var SHOW=3;
 
   // Compteurs
   if(list.length){
@@ -226,8 +226,8 @@ function render(){
     box.appendChild(ct);
   }
 
-  // Notes par thème
-  box.appendChild(el("h4","rp-h",L("Vos notes, thème par thème","Your scores, area by area")));
+  // Notes par thème (rapport débloqué seulement)
+  if(unlocked) box.appendChild(el("h4","rp-h",L("Vos notes, thème par thème","Your scores, area by area")));
   var tb=el("div","rp-grid");
   cats.forEach(function(c,i){ var s=scores[i], n=list.filter(function(r){return r.cat===c[0];}).length; var row=el("div","rp-row is-"+tone(s));
     row.appendChild(el("span","rp-g-name",c[1]));
@@ -235,15 +235,16 @@ function render(){
     row.appendChild(el("span","rp-g-n",String(s)));
     row.appendChild(el("span","rp-g-l",level(s)));
     tb.appendChild(row); });
-  box.appendChild(tb);
+  if(unlocked) box.appendChild(tb);
 
-  function item(r,i){
+  function item(r,i,full){
     var li=el("li","rp-item sev-"+r.sev);
     li.appendChild(el("span","rp-num",String(i+1)));
     var body=el("div","rp-body");
     var tt=r.t, nm=tt.match(/^(\d+)\s/); if(nm) tt=tt.replace(/\(s\)/g, +nm[1]>1?"s":"");
     body.appendChild(el("p","rp-t",tt));
     var tg=el("p","rp-tags"); tg.appendChild(el("span","rp-sev",SEVTXT[r.sev])); tg.appendChild(document.createTextNode(" · "+(CATS.filter(function(c){return c[0]===r.cat;})[0]||["",""])[1]+" · "+EFF[r.eff])); body.appendChild(tg);
+    if(!full){ li.appendChild(body); return li; }
     body.appendChild(el("p","rp-fix",r.fix));
     if(r.ev && r.ev.length){ var ev=el("div","rp-ev"); ev.appendChild(el("p","rp-lbl",L("Ce que j'ai trouvé","What I found"))); var ul=el("ul"); r.ev.forEach(function(x){ ul.appendChild(el("li",null,esc(x))); }); ev.appendChild(ul); body.appendChild(ev); }
     if(r.code){ var pre=el("pre","rp-code"); pre.appendChild(el("code",null,r.code)); body.appendChild(pre); }
@@ -255,23 +256,18 @@ function render(){
   function mailLink(){ if(!mh || f.host==="kevinnsame.github.io") return null; var a=el("a","rp-mail",L("M'écrire pour en parler","Email me to discuss it")); a.href=mh+"?subject="+encodeURIComponent(L("Rapport SEO de ","SEO report for ")+f.host); a.addEventListener("click",function(){ push({event:"audit_contact", domaine:f.host, canal:"rapport_email"}); }); return a; }
 
   if(list.length){
-    box.appendChild(el("h4","rp-h",L("Ce qu'il faut corriger, dans l'ordre","What to fix, in order")));
+    box.appendChild(el("h4","rp-h",unlocked ? L("Ce qu'il faut corriger, dans l'ordre","What to fix, in order") : L("Les "+Math.min(SHOW,list.length)+" problèmes les plus urgents","The "+Math.min(SHOW,list.length)+" most urgent issues")));
     var ol=el("ol","rp-list");
-    list.slice(0, unlocked ? list.length : SHOW).forEach(function(r,i){ ol.appendChild(item(r,i)); });
+    list.slice(0, unlocked ? list.length : SHOW).forEach(function(r,i){ ol.appendChild(item(r,i,unlocked)); });
     box.appendChild(ol);
   }
 
   if(!unlocked){
     var rest=list.length-SHOW, pagesN=1+(f.crawl||[]).length;
     var lock=el("div","rp-lock");
-    if(rest>0){
-      var peek=el("ol","rp-peek"); peek.setAttribute("aria-hidden","true");
-      list.slice(SHOW, SHOW+3).forEach(function(r,i){ var li=el("li","sev-"+r.sev); li.appendChild(el("span","rp-num",String(SHOW+i+1))); var tt=r.t, nm=tt.match(/^(\d+)\s/); if(nm) tt=tt.replace(/\(s\)/g, +nm[1]>1?"s":""); li.appendChild(el("span","rp-peek-t",tt)); peek.appendChild(li); });
-      lock.appendChild(peek);
-    }
     var cta=el("div","rp-cta");
-    cta.appendChild(el("p","rp-cta-t", rest>0 ? L(rest+" autre"+(rest>1?"s":"")+" correction"+(rest>1?"s":"")+" vous attend"+(rest>1?"ent":"")+" dans le rapport complet", rest+" more fix"+(rest>1?"es":"")+" in the full report") : L("Le rapport complet vous attend","The full report is ready")));
-    cta.appendChild(el("p","rp-cta-s",L("Avec, pour chaque point, ce que j'ai trouvé sur votre site, le code à copier-coller, ce qui fonctionne déjà et le détail des "+pagesN+" pages visitées. Gratuit, en PDF.","With, for each point, what I found on your site, code to copy and paste, what already works and details of the "+pagesN+" pages visited. Free, as a PDF.")));
+    cta.appendChild(el("p","rp-cta-t", rest>0 ? L("+ "+rest+" autre"+(rest>1?"s":"")+" correction"+(rest>1?"s":"")+" dans le rapport complet", "+ "+rest+" more fix"+(rest>1?"es":"")+" in the full report") : L("Les solutions sont dans le rapport complet","The fixes are in the full report")));
+    cta.appendChild(el("p","rp-cta-s",L("La solution pour chaque problème, vos notes par thème et le détail des "+pagesN+" pages visitées. Gratuit, en PDF.","The fix for each issue, your scores by area and details of the "+pagesN+" pages visited. Free, as a PDF.")));
     var gate=gateBox(f, global, function(){ render(); setTimeout(imprimer, 300); });
     gate.hidden=false; cta.appendChild(gate);
     lock.appendChild(cta); box.appendChild(lock);
@@ -303,8 +299,8 @@ function render(){
     var m1=mailLink(); if(m1) act.appendChild(m1);
     box.appendChild(act);
   }
-  if(!state.psi) box.appendChild(el("p","rp-note",L("La mesure de vitesse de Google s'ajoutera ici dès qu'elle sera prête.","Google's speed test will be added here as soon as it is ready.")));
-  box.appendChild(el("p","rp-note",L("Analyse automatique de la page d'accueil et de "+(f.crawl||[]).length+" pages liées. La vitesse et les positions viennent de Google. Un audit complet ajoute la Search Console, toutes les pages du site et les liens externes.","Automated analysis of the homepage and "+(f.crawl||[]).length+" linked pages. Speed and rankings come from Google. A full audit adds Search Console, every page of the site and backlinks.")));
+  if(unlocked && !state.psi) box.appendChild(el("p","rp-note",L("La mesure de vitesse de Google s'ajoutera ici dès qu'elle sera prête.","Google's speed test will be added here as soon as it is ready.")));
+  if(unlocked) box.appendChild(el("p","rp-note",L("Analyse automatique de la page d'accueil et de "+(f.crawl||[]).length+" pages liées. La vitesse et les positions viennent de Google. Un audit complet ajoute la Search Console, toutes les pages du site et les liens externes.","Automated analysis of the homepage and "+(f.crawl||[]).length+" linked pages. Speed and rankings come from Google. A full audit adds Search Console, every page of the site and backlinks.")));
 
   push({event:"rapport_seo", domaine:f.host, score:global, points:list.length});
 }
