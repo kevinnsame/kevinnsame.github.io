@@ -79,7 +79,8 @@ function parse(html, pageUrl) {
   const titles = (html.match(/<title\b/gi) || []).length;
   const desc = meta(html, "description");
   const robots = (meta(html, "robots") || "").toLowerCase();
-  const htmlTag = (html.match(/<html\b[^>]*>/i) || [""])[0];
+  const htmlTags = html.slice(0, 20000).match(/<html\b[^>]*>/gi) || [""];
+  const htmlTag = htmlTags.find((t) => /\slang\s*=/i.test(t)) || htmlTags[htmlTags.length - 1];
 
   const links = tags(head + html.slice(0, 400000), "link");
   let canonical = null; const hreflang = []; let favicon = false; let manifest = false; let preconnect = 0;
@@ -171,7 +172,7 @@ function parse(html, pageUrl) {
   };
 
   return {
-    lang: attr(htmlTag, "lang"),
+    lang: attr(htmlTag, "lang") || (meta(html, "og:locale") ? meta(html, "og:locale").replace("_", "-") : null),
     title, titleLen: title.length, titles,
     desc, descLen: desc ? desc.length : 0,
     robots, noindex: /noindex/.test(robots), nofollow: /nofollow/.test(robots),
