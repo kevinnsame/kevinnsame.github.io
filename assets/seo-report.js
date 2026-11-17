@@ -252,25 +252,7 @@ function render(){
 
   var unlocked=false; try{ unlocked=sessionStorage.getItem("kn_rp_ok")==="1"; }catch(x){}
   if(!CODE_URL || CODE_URL.indexOf("__")===0) unlocked=true;
-  var SHOW=3;
-
-  // Compteurs (rapport débloqué seulement)
-  if(list.length && unlocked){
-    var ct=el("div","rp-counts");
-    ["crit","high","med","low"].forEach(function(k){ if(!counts[k]) return; var c=el("div","rp-count sev-"+k); c.appendChild(el("strong",null,String(counts[k]))); c.appendChild(el("span",null,SEVTXT[k]+(!EN && counts[k]>1 && k!=="low" ? "s" : ""))); ct.appendChild(c); });
-    box.appendChild(ct);
-  }
-
-  // Notes par thème (rapport débloqué seulement)
-  if(unlocked) box.appendChild(el("h4","rp-h",L("Vos notes, thème par thème","Your scores, area by area")));
-  var tb=el("div","rp-grid");
-  cats.forEach(function(c,i){ var s=scores[i], n=list.filter(function(r){return r.cat===c[0];}).length; var row=el("div","rp-row is-"+tone(s));
-    row.appendChild(el("span","rp-g-name",c[1]));
-    var bar=el("span","rp-bar"), fill=el("span"); fill.style.width=Math.max(s,3)+"%"; bar.appendChild(fill); row.appendChild(bar);
-    row.appendChild(el("span","rp-g-n",String(s)));
-    row.appendChild(el("span","rp-g-l",level(s)));
-    tb.appendChild(row); });
-  if(unlocked) box.appendChild(tb);
+  var SHOW=3, rest=Math.max(list.length-SHOW,0), pagesN=1+(f.crawl||[]).length;
 
   function item(r,i,full){
     var li=el("li","rp-item sev-"+r.sev+(full?"":" is-teaser"));
@@ -287,35 +269,52 @@ function render(){
     if(r.code){ var pre=el("pre","rp-code"); pre.appendChild(el("code",null,r.code)); body.appendChild(pre); }
     li.appendChild(body); return li;
   }
-
   function imprimer(){ push({event:"rapport_pdf", domaine:f.host}); document.body.classList.add("print-report"); window.print(); setTimeout(function(){ document.body.classList.remove("print-report"); },500); }
   var mh=contactHref();
   function mailLink(){ if(!mh || f.host==="kevinnsame.github.io") return null; var a=el("a","rp-mail",L("M'écrire pour en parler","Email me to discuss it")); a.href=mh+"?subject="+encodeURIComponent(L("Rapport SEO de ","SEO report for ")+f.host); a.addEventListener("click",function(){ push({event:"audit_contact", domaine:f.host, canal:"rapport_email"}); }); return a; }
 
+  // A l'écran : 3 problèmes et l'accès au PDF, rien de plus
+  var scr=el("div","rp-screen");
   if(list.length){
-    box.appendChild(el("h4","rp-h",unlocked ? L("Ce qu'il faut corriger, dans l'ordre","What to fix, in order") : L("Les "+Math.min(SHOW,list.length)+" problèmes les plus urgents","The "+Math.min(SHOW,list.length)+" most urgent issues")));
-    var ol=el("ol","rp-list");
-    list.slice(0, unlocked ? list.length : SHOW).forEach(function(r,i){ ol.appendChild(item(r,i,unlocked)); });
-    box.appendChild(ol);
+    scr.appendChild(el("h4","rp-h",L("Les "+Math.min(SHOW,list.length)+" problèmes les plus urgents","The "+Math.min(SHOW,list.length)+" most urgent issues")));
+    var ol0=el("ol","rp-list"); list.slice(0,SHOW).forEach(function(r,i){ ol0.appendChild(item(r,i,false)); }); scr.appendChild(ol0);
   }
-
+  var lock=el("div","rp-lock"), cta=el("div","rp-cta");
+  cta.appendChild(pdfMock(f, global));
+  var ctaBody=el("div","rp-cta-body"); cta.appendChild(ctaBody);
   if(!unlocked){
-    var rest=list.length-SHOW, pagesN=1+(f.crawl||[]).length;
-    var lock=el("div","rp-lock");
-    var cta=el("div","rp-cta");
-    cta.appendChild(pdfMock(f, global));
-    var ctaBody=el("div","rp-cta-body"); cta.appendChild(ctaBody);
     ctaBody.appendChild(el("p","rp-cta-t", rest>0 ? L("+ "+rest+" autre"+(rest>1?"s":"")+" correction"+(rest>1?"s":"")+" dans le rapport complet", "+ "+rest+" more fix"+(rest>1?"es":"")+" in the full report") : L("Les solutions sont dans le rapport complet","The fixes are in the full report")));
     ctaBody.appendChild(el("p","rp-cta-s",L("La solution pour chaque problème, vos notes par thème et le détail des "+pagesN+" pages visitées. Gratuit, en PDF.","The fix for each issue, your scores by area and details of the "+pagesN+" pages visited. Free, as a PDF.")));
     var gate=gateBox(f, global, function(){ render(); setTimeout(imprimer, 300); });
     gate.hidden=false; ctaBody.appendChild(gate);
-    lock.appendChild(cta); box.appendChild(lock);
-    var m0=mailLink(); if(m0){ var a0=el("div","rp-actions"); a0.appendChild(m0); box.appendChild(a0); }
   } else {
-    var ok=passes(f); if(ok.length){ box.appendChild(el("h4","rp-h",L("Ce qui fonctionne déjà","What already works"))); var ul2=el("ul","rp-ok"); ok.forEach(function(x){ ul2.appendChild(el("li",null,x)); }); box.appendChild(ul2); }
+    ctaBody.appendChild(el("p","rp-cta-t",L("Votre rapport complet est prêt","Your full report is ready")));
+    ctaBody.appendChild(el("p","rp-cta-s",L(list.length+" corrections expliquées, vos notes par thème et le détail des "+pagesN+" pages visitées.",list.length+" fixes explained, your scores by area and details of the "+pagesN+" pages visited.")));
+    var pdf=el("button","rp-btn",L("Télécharger le PDF","Download the PDF")); pdf.type="button"; pdf.addEventListener("click",imprimer); ctaBody.appendChild(pdf);
+  }
+  lock.appendChild(cta); scr.appendChild(lock);
+  var m0=mailLink(); if(m0){ var a0=el("div","rp-actions"); a0.appendChild(m0); scr.appendChild(a0); }
+  box.appendChild(scr);
 
+  // Rapport complet : uniquement dans le PDF
+  if(unlocked){
+    var full=el("div","rp-full");
+    if(list.length){
+      var ct=el("div","rp-counts");
+      ["crit","high","med","low"].forEach(function(k){ if(!counts[k]) return; var c=el("div","rp-count sev-"+k); c.appendChild(el("strong",null,String(counts[k]))); c.appendChild(el("span",null,SEVTXT[k]+(!EN && counts[k]>1 && k!=="low" ? "s" : ""))); ct.appendChild(c); });
+      full.appendChild(ct);
+    }
+    full.appendChild(el("h4","rp-h",L("Vos notes, thème par thème","Your scores, area by area")));
+    var tl=el("div","rp-tiles");
+    cats.forEach(function(c,i){ var s=scores[i], t=el("div","rp-tile is-"+tone(s)); t.appendChild(el("strong",null,String(s))); t.appendChild(el("span",null,c[1])); tl.appendChild(t); });
+    full.appendChild(tl);
+    if(list.length){
+      full.appendChild(el("h4","rp-h",L("Ce qu'il faut corriger, dans l'ordre","What to fix, in order")));
+      var ol=el("ol","rp-list"); list.forEach(function(r,i){ ol.appendChild(item(r,i,true)); }); full.appendChild(ol);
+    }
+    var ok=passes(f); if(ok.length){ full.appendChild(el("h4","rp-h",L("Ce qui fonctionne déjà","What already works"))); var ul2=el("ul","rp-ok"); ok.forEach(function(x){ ul2.appendChild(el("li",null,x)); }); full.appendChild(ul2); }
     var pages=[{url:f.url,status:f.http.status,title:f.page.title,h1:f.page.h1.length,words:f.page.words,noindex:f.page.noindex}].concat(f.crawl||[]);
-    box.appendChild(el("h4","rp-h",L("Les pages visitées","Pages visited")));
+    full.appendChild(el("h4","rp-h",L("Les pages visitées","Pages visited")));
     var tw=el("div","rp-tablew"), t=el("table","rp-table"), th=el("thead"), hr=el("tr");
     [L("Adresse","Address"),L("Réponse","Response"),L("Titre","Title"),L("Titre principal (H1)","Main heading (H1)"),L("Mots","Words"),L("Visible sur Google","Visible on Google")].forEach(function(x){ hr.appendChild(el("th",null,x)); });
     th.appendChild(hr); t.appendChild(th); var tbo=el("tbody");
@@ -327,19 +326,12 @@ function render(){
       r.appendChild(el("td",null,c.words!=null?String(c.words):"–"));
       r.appendChild(el("td",c.title===undefined?null:c.noindex?"is-bad":"is-ok",c.title===undefined?"–":(c.noindex?L("non","no"):L("oui","yes"))));
       tbo.appendChild(r); });
-    t.appendChild(tbo); tw.appendChild(t); box.appendChild(tw);
-
+    t.appendChild(tbo); tw.appendChild(t); full.appendChild(tw);
     var st=f.page.stack||{}, tech=[st.cms, st.gtm&&"Google Tag Manager", st.ga4&&"GA4", st.ads&&"Google Ads", st.meta&&"Meta Pixel", st.linkedin&&"LinkedIn Insight", st.matomo&&"Matomo", st.hotjar&&"Hotjar / Clarity", st.consent&&L("bannière de cookies","cookie banner")].filter(Boolean);
-    if(tech.length) box.appendChild(el("p","rp-note",L("Outils repérés sur le site : ","Tools found on the site: ")+tech.join(", ")+"."));
-
-    var act=el("div","rp-actions");
-    var pdf=el("button","rp-btn",L("Télécharger le rapport en PDF","Download the report as PDF")); pdf.type="button";
-    pdf.addEventListener("click",imprimer); act.appendChild(pdf);
-    var m1=mailLink(); if(m1) act.appendChild(m1);
-    box.appendChild(act);
+    if(tech.length) full.appendChild(el("p","rp-note",L("Outils repérés sur le site : ","Tools found on the site: ")+tech.join(", ")+"."));
+    full.appendChild(el("p","rp-note",L("Analyse automatique de la page d'accueil et de "+(f.crawl||[]).length+" pages liées. La vitesse et les positions viennent de Google. Un audit complet ajoute la Search Console, toutes les pages du site et les liens externes.","Automated analysis of the homepage and "+(f.crawl||[]).length+" linked pages. Speed and rankings come from Google. A full audit adds Search Console, every page of the site and backlinks.")));
+    box.appendChild(full);
   }
-  if(unlocked && !state.psi) box.appendChild(el("p","rp-note",L("La mesure de vitesse de Google s'ajoutera ici dès qu'elle sera prête.","Google's speed test will be added here as soon as it is ready.")));
-  if(unlocked) box.appendChild(el("p","rp-note",L("Analyse automatique de la page d'accueil et de "+(f.crawl||[]).length+" pages liées. La vitesse et les positions viennent de Google. Un audit complet ajoute la Search Console, toutes les pages du site et les liens externes.","Automated analysis of the homepage and "+(f.crawl||[]).length+" linked pages. Speed and rankings come from Google. A full audit adds Search Console, every page of the site and backlinks.")));
 
   push({event:"rapport_seo", domaine:f.host, score:global, points:list.length});
 }
