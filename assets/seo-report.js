@@ -208,85 +208,102 @@ function render(){
   var d=new Date();
   left.appendChild(el("p","rp-meta",d.toLocaleDateString(EN?"en-GB":"fr-FR",{day:"numeric",month:"long",year:"numeric"})+" · "+(1+(f.crawl||[]).length)+L(" pages visitées"," pages visited")+" · Kevin Nsamè"));
   head.appendChild(left);
-  var sc=el("div","rp-score"+(global<60?" is-low":""));
+  var sc=el("div","rp-score is-"+tone(global));
   var big=el("p","rp-score-n"); big.appendChild(document.createTextNode(String(global))); big.appendChild(el("span",null,"/100")); sc.appendChild(big);
+  sc.appendChild(el("p","rp-score-l",level(global)));
   head.appendChild(sc);
   box.appendChild(head);
   box.appendChild(el("p","rp-verdict",verdict(global, list.length)));
 
+  var unlocked=false; try{ unlocked=sessionStorage.getItem("kn_rp_ok")==="1"; }catch(x){}
+  if(!CODE_URL || CODE_URL.indexOf("__")===0) unlocked=true;
+  var SHOW=2;
+
   // Compteurs
   if(list.length){
     var ct=el("div","rp-counts");
-    ["crit","high","med","low"].forEach(function(k){ if(!counts[k]) return; var c=el("div","rp-count"+(k==="crit"?" is-crit":"")); c.appendChild(el("strong",null,String(counts[k]))); c.appendChild(el("span",null,SEVTXT[k]+(!EN && counts[k]>1 && k!=="low" ? "s" : ""))); ct.appendChild(c); });
+    ["crit","high","med","low"].forEach(function(k){ if(!counts[k]) return; var c=el("div","rp-count sev-"+k); c.appendChild(el("strong",null,String(counts[k]))); c.appendChild(el("span",null,SEVTXT[k]+(!EN && counts[k]>1 && k!=="low" ? "s" : ""))); ct.appendChild(c); });
     box.appendChild(ct);
   }
 
   // Notes par thème
   box.appendChild(el("h4","rp-h",L("Vos notes, thème par thème","Your scores, area by area")));
-  var tb=el("table","rp-grid"), tbody=el("tbody");
-  cats.forEach(function(c,i){ var s=scores[i], n=list.filter(function(r){return r.cat===c[0];}).length; var tr=el("tr", s<60?"is-low":null);
-    tr.appendChild(el("th",null,c[1]));
-    var td=el("td","rp-g-bar"), bar=el("span","rp-bar"), fill=el("span"); fill.style.width=s+"%"; bar.appendChild(fill); td.appendChild(bar); tr.appendChild(td);
-    tr.appendChild(el("td","rp-g-n",s+"/100"));
-    tr.appendChild(el("td","rp-g-l",n ? level(s)+" · "+n+L(" correction"+(n>1?"s":"")," fix"+(n>1?"es":"")) : L("Rien à corriger","Nothing to fix")));
-    tbody.appendChild(tr); });
-  tb.appendChild(tbody); box.appendChild(tb);
+  var tb=el("div","rp-grid");
+  cats.forEach(function(c,i){ var s=scores[i], n=list.filter(function(r){return r.cat===c[0];}).length; var row=el("div","rp-row is-"+tone(s));
+    row.appendChild(el("span","rp-g-name",c[1]));
+    var bar=el("span","rp-bar"), fill=el("span"); fill.style.width=Math.max(s,3)+"%"; bar.appendChild(fill); row.appendChild(bar);
+    row.appendChild(el("span","rp-g-n",String(s)));
+    row.appendChild(el("span","rp-g-l",level(s)));
+    tb.appendChild(row); });
+  box.appendChild(tb);
 
-  // Plan d'action
+  function item(r,i){
+    var li=el("li","rp-item sev-"+r.sev);
+    li.appendChild(el("span","rp-num",String(i+1)));
+    var body=el("div","rp-body");
+    var tt=r.t, nm=tt.match(/^(\d+)\s/); if(nm) tt=tt.replace(/\(s\)/g, +nm[1]>1?"s":"");
+    body.appendChild(el("p","rp-t",tt));
+    var tg=el("p","rp-tags"); tg.appendChild(el("span","rp-sev",SEVTXT[r.sev])); tg.appendChild(document.createTextNode(" · "+(CATS.filter(function(c){return c[0]===r.cat;})[0]||["",""])[1]+" · "+EFF[r.eff])); body.appendChild(tg);
+    body.appendChild(el("p","rp-fix",r.fix));
+    if(r.ev && r.ev.length){ var ev=el("div","rp-ev"); ev.appendChild(el("p","rp-lbl",L("Ce que j'ai trouvé","What I found"))); var ul=el("ul"); r.ev.forEach(function(x){ ul.appendChild(el("li",null,esc(x))); }); ev.appendChild(ul); body.appendChild(ev); }
+    if(r.code){ var pre=el("pre","rp-code"); pre.appendChild(el("code",null,r.code)); body.appendChild(pre); }
+    li.appendChild(body); return li;
+  }
+
+  function imprimer(){ push({event:"rapport_pdf", domaine:f.host}); document.body.classList.add("print-report"); window.print(); setTimeout(function(){ document.body.classList.remove("print-report"); },500); }
+  var mh=contactHref();
+  function mailLink(){ if(!mh || f.host==="kevinnsame.github.io") return null; var a=el("a","rp-mail",L("M'écrire pour en parler","Email me to discuss it")); a.href=mh+"?subject="+encodeURIComponent(L("Rapport SEO de ","SEO report for ")+f.host); a.addEventListener("click",function(){ push({event:"audit_contact", domaine:f.host, canal:"rapport_email"}); }); return a; }
+
   if(list.length){
     box.appendChild(el("h4","rp-h",L("Ce qu'il faut corriger, dans l'ordre","What to fix, in order")));
     var ol=el("ol","rp-list");
-    list.forEach(function(r,i){
-      var li=el("li","rp-item"+(r.sev==="crit"?" is-crit":""));
-      li.appendChild(el("span","rp-num",String(i+1)));
-      var body=el("div","rp-body");
-      var tt=r.t, nm=tt.match(/^(\d+)\s/); if(nm) tt=tt.replace(/\(s\)/g, +nm[1]>1?"s":"");
-      body.appendChild(el("p","rp-t",tt));
-      body.appendChild(el("p","rp-tags",SEVTXT[r.sev]+" · "+(CATS.filter(function(c){return c[0]===r.cat;})[0]||["",""])[1]+" · "+EFF[r.eff]));
-      body.appendChild(el("p","rp-fix",r.fix));
-      if(r.ev && r.ev.length){ var ev=el("div","rp-ev"); ev.appendChild(el("p","rp-lbl",L("Ce que j'ai trouvé","What I found"))); var ul=el("ul"); r.ev.forEach(function(x){ ul.appendChild(el("li",null,esc(x))); }); ev.appendChild(ul); body.appendChild(ev); }
-      if(r.code){ var pre=el("pre","rp-code"); pre.appendChild(el("code",null,r.code)); body.appendChild(pre); }
-      li.appendChild(body); ol.appendChild(li);
-    });
+    list.slice(0, unlocked ? list.length : SHOW).forEach(function(r,i){ ol.appendChild(item(r,i)); });
     box.appendChild(ol);
   }
 
-  var ok=passes(f); if(ok.length){ box.appendChild(el("h4","rp-h",L("Ce qui fonctionne déjà","What already works"))); var ul2=el("ul","rp-ok"); ok.forEach(function(x){ ul2.appendChild(el("li",null,x)); }); box.appendChild(ul2); }
+  if(!unlocked){
+    var rest=list.length-SHOW, pagesN=1+(f.crawl||[]).length;
+    var lock=el("div","rp-lock");
+    if(rest>0){
+      var peek=el("ol","rp-peek"); peek.setAttribute("aria-hidden","true");
+      list.slice(SHOW, SHOW+3).forEach(function(r,i){ var li=el("li","sev-"+r.sev); li.appendChild(el("span","rp-num",String(SHOW+i+1))); var tt=r.t, nm=tt.match(/^(\d+)\s/); if(nm) tt=tt.replace(/\(s\)/g, +nm[1]>1?"s":""); li.appendChild(el("span","rp-peek-t",tt)); peek.appendChild(li); });
+      lock.appendChild(peek);
+    }
+    var cta=el("div","rp-cta");
+    cta.appendChild(el("p","rp-cta-t", rest>0 ? L(rest+" autre"+(rest>1?"s":"")+" correction"+(rest>1?"s":"")+" vous attend"+(rest>1?"ent":"")+" dans le rapport complet", rest+" more fix"+(rest>1?"es":"")+" in the full report") : L("Le rapport complet vous attend","The full report is ready")));
+    cta.appendChild(el("p","rp-cta-s",L("Avec, pour chaque point, ce que j'ai trouvé sur votre site, le code à copier-coller, ce qui fonctionne déjà et le détail des "+pagesN+" pages visitées. Gratuit, en PDF.","With, for each point, what I found on your site, code to copy and paste, what already works and details of the "+pagesN+" pages visited. Free, as a PDF.")));
+    var gate=gateBox(f, global, function(){ render(); setTimeout(imprimer, 300); });
+    gate.hidden=false; cta.appendChild(gate);
+    lock.appendChild(cta); box.appendChild(lock);
+    var m0=mailLink(); if(m0){ var a0=el("div","rp-actions"); a0.appendChild(m0); box.appendChild(a0); }
+  } else {
+    var ok=passes(f); if(ok.length){ box.appendChild(el("h4","rp-h",L("Ce qui fonctionne déjà","What already works"))); var ul2=el("ul","rp-ok"); ok.forEach(function(x){ ul2.appendChild(el("li",null,x)); }); box.appendChild(ul2); }
 
-  // Pages visitées
-  var pages=[{url:f.url,status:f.http.status,title:f.page.title,h1:f.page.h1.length,words:f.page.words,noindex:f.page.noindex}].concat(f.crawl||[]);
-  box.appendChild(el("h4","rp-h",L("Les pages visitées","Pages visited")));
-  var tw=el("div","rp-tablew"), t=el("table","rp-table"), th=el("thead"), hr=el("tr");
-  [L("Adresse","Address"),L("Réponse","Response"),L("Titre","Title"),L("Titre principal (H1)","Main heading (H1)"),L("Mots","Words"),L("Visible sur Google","Visible on Google")].forEach(function(x){ hr.appendChild(el("th",null,x)); });
-  th.appendChild(hr); t.appendChild(th); var tbo=el("tbody");
-  pages.forEach(function(c){ var r=el("tr"), ok=c.status>=200&&c.status<300;
-    r.appendChild(el("td","rp-url",short(c.url)));
-    r.appendChild(el("td",ok?null:"is-bad", !c.status ? L("aucune","none") : ok ? "OK" : c.status>=300&&c.status<400 ? L("redirigée","redirected") : L("erreur ","error ")+c.status));
-    r.appendChild(el("td",null,c.title!=null?(c.title||L("(vide)","(empty)")).slice(0,60):"–"));
-    r.appendChild(el("td",c.h1===1||c.h1==null?null:"is-bad",c.h1==null?"–":c.h1===0?L("absent","missing"):c.h1===1?L("oui","yes"):c.h1+L(" titres"," headings")));
-    r.appendChild(el("td",null,c.words!=null?String(c.words):"–"));
-    r.appendChild(el("td",c.noindex?"is-bad":null,c.title===undefined?"–":(c.noindex?L("non","no"):L("oui","yes"))));
-    tbo.appendChild(r); });
-  t.appendChild(tbo); tw.appendChild(t); box.appendChild(tw);
+    var pages=[{url:f.url,status:f.http.status,title:f.page.title,h1:f.page.h1.length,words:f.page.words,noindex:f.page.noindex}].concat(f.crawl||[]);
+    box.appendChild(el("h4","rp-h",L("Les pages visitées","Pages visited")));
+    var tw=el("div","rp-tablew"), t=el("table","rp-table"), th=el("thead"), hr=el("tr");
+    [L("Adresse","Address"),L("Réponse","Response"),L("Titre","Title"),L("Titre principal (H1)","Main heading (H1)"),L("Mots","Words"),L("Visible sur Google","Visible on Google")].forEach(function(x){ hr.appendChild(el("th",null,x)); });
+    th.appendChild(hr); t.appendChild(th); var tbo=el("tbody");
+    pages.forEach(function(c){ var r=el("tr"), okp=c.status>=200&&c.status<300;
+      r.appendChild(el("td","rp-url",short(c.url)));
+      r.appendChild(el("td",okp?"is-ok":"is-bad", !c.status ? L("aucune","none") : okp ? "OK" : c.status>=300&&c.status<400 ? L("redirigée","redirected") : L("erreur ","error ")+c.status));
+      r.appendChild(el("td",null,c.title!=null?(c.title||L("(vide)","(empty)")).slice(0,60):"–"));
+      r.appendChild(el("td",c.h1==null?null:c.h1===1?"is-ok":"is-bad",c.h1==null?"–":c.h1===0?L("absent","missing"):c.h1===1?L("oui","yes"):c.h1+L(" titres"," headings")));
+      r.appendChild(el("td",null,c.words!=null?String(c.words):"–"));
+      r.appendChild(el("td",c.title===undefined?null:c.noindex?"is-bad":"is-ok",c.title===undefined?"–":(c.noindex?L("non","no"):L("oui","yes"))));
+      tbo.appendChild(r); });
+    t.appendChild(tbo); tw.appendChild(t); box.appendChild(tw);
 
-  var st=f.page.stack||{}, tech=[st.cms, st.gtm&&"Google Tag Manager", st.ga4&&"GA4", st.ads&&"Google Ads", st.meta&&"Meta Pixel", st.linkedin&&"LinkedIn Insight", st.matomo&&"Matomo", st.hotjar&&"Hotjar / Clarity", st.consent&&L("bannière de cookies","cookie banner")].filter(Boolean);
-  if(tech.length) box.appendChild(el("p","rp-note",L("Outils repérés sur le site : ","Tools found on the site: ")+tech.join(", ")+"."));
+    var st=f.page.stack||{}, tech=[st.cms, st.gtm&&"Google Tag Manager", st.ga4&&"GA4", st.ads&&"Google Ads", st.meta&&"Meta Pixel", st.linkedin&&"LinkedIn Insight", st.matomo&&"Matomo", st.hotjar&&"Hotjar / Clarity", st.consent&&L("bannière de cookies","cookie banner")].filter(Boolean);
+    if(tech.length) box.appendChild(el("p","rp-note",L("Outils repérés sur le site : ","Tools found on the site: ")+tech.join(", ")+"."));
+
+    var act=el("div","rp-actions");
+    var pdf=el("button","rp-btn",L("Télécharger le rapport en PDF","Download the report as PDF")); pdf.type="button";
+    pdf.addEventListener("click",imprimer); act.appendChild(pdf);
+    var m1=mailLink(); if(m1) act.appendChild(m1);
+    box.appendChild(act);
+  }
   if(!state.psi) box.appendChild(el("p","rp-note",L("La mesure de vitesse de Google s'ajoutera ici dès qu'elle sera prête.","Google's speed test will be added here as soon as it is ready.")));
-
-  var act=el("div","rp-actions");
-  var pdf=el("button","rp-btn",L("Télécharger le rapport en PDF","Download the report as PDF")); pdf.type="button";
-  function imprimer(){ push({event:"rapport_pdf", domaine:f.host}); document.body.classList.add("print-report"); window.print(); setTimeout(function(){ document.body.classList.remove("print-report"); },500); }
-  var gate=gateBox(f, global, imprimer);
-  pdf.addEventListener("click",function(){
-    var okd=false; try{ okd=sessionStorage.getItem("kn_rp_ok")==="1"; }catch(x){}
-    if(okd || !CODE_URL || CODE_URL.indexOf("__")===0) return imprimer();
-    gate.hidden=!gate.hidden; if(!gate.hidden){ var i=gate.querySelector("input"); if(i) i.focus(); push({event:"rapport_pdf_demande", domaine:f.host}); }
-  });
-  act.appendChild(pdf);
-  var mh=contactHref();
-  if(mh && f.host!=="kevinnsame.github.io"){ var mail=el("a","rp-mail",L("M'écrire pour en parler","Email me to discuss it")); mail.href=mh+"?subject="+encodeURIComponent(L("Rapport SEO de ","SEO report for ")+f.host); mail.addEventListener("click",function(){ push({event:"audit_contact", domaine:f.host, canal:"rapport_email"}); }); act.appendChild(mail); }
-  box.appendChild(act);
-  box.appendChild(gate);
   box.appendChild(el("p","rp-note",L("Analyse automatique de la page d'accueil et de "+(f.crawl||[]).length+" pages liées. La vitesse et les positions viennent de Google. Un audit complet ajoute la Search Console, toutes les pages du site et les liens externes.","Automated analysis of the homepage and "+(f.crawl||[]).length+" linked pages. Speed and rankings come from Google. A full audit adds Search Console, every page of the site and backlinks.")));
 
   push({event:"rapport_seo", domaine:f.host, score:global, points:list.length});
@@ -299,15 +316,14 @@ function gateBox(f, global, done){
   function call(o){ return fetch(CODE_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).then(function(r){ return r.json(); }); }
   function step1(){
     g.innerHTML="";
-    g.appendChild(el("p","rp-gate-t",L("Recevez le PDF avec un code envoyé par e-mail","Get the PDF with a code sent by email")));
-    g.appendChild(el("p","rp-gate-s",L("Saisissez votre adresse : je vous envoie un code à 6 chiffres, valable 15 minutes.","Enter your address: I will send you a 6-digit code, valid for 15 minutes.")));
+    g.appendChild(el("p","rp-gate-s",L("Saisissez votre adresse e-mail : vous recevez un code à 6 chiffres pour débloquer le rapport.","Enter your email address: you will receive a 6-digit code to unlock the report.")));
     var fm=el("form","rp-gate-f"); var lb=el("label","sr",L("Adresse e-mail","Email address")); lb.htmlFor="rp-mail-in"; fm.appendChild(lb);
     var inp=el("input"); inp.id="rp-mail-in"; inp.type="email"; inp.required=true; inp.autocomplete="email"; inp.placeholder=L("vous@entreprise.fr","you@company.com"); inp.value=mail; fm.appendChild(inp);
-    var b=el("button",null,L("Recevoir le code","Send me the code")); b.type="submit"; fm.appendChild(b);
+    var b=el("button",null,L("Recevoir mon code","Send my code")); b.type="submit"; fm.appendChild(b);
     var er=el("p","rp-gate-e"); g.appendChild(fm); g.appendChild(er);
     fm.addEventListener("submit",function(ev){ ev.preventDefault(); mail=inp.value.trim(); if(!mail) return; b.disabled=true; b.textContent=L("Envoi…","Sending…"); er.textContent="";
-      call({action:"send", email:mail, site:f.host, score:global, lang:EN?"en":"fr"}).then(function(j){ if(j.ok){ push({event:"rapport_code_envoye", domaine:f.host}); step2(); } else { er.textContent=MSG[j.error]||MSG.reseau; b.disabled=false; b.textContent=L("Recevoir le code","Send me the code"); } })
-      .catch(function(){ er.textContent=MSG.reseau; b.disabled=false; b.textContent=L("Recevoir le code","Send me the code"); }); });
+      call({action:"send", email:mail, site:f.host, score:global, lang:EN?"en":"fr"}).then(function(j){ if(j.ok){ push({event:"rapport_code_envoye", domaine:f.host}); step2(); } else { er.textContent=MSG[j.error]||MSG.reseau; b.disabled=false; b.textContent=L("Recevoir mon code","Send my code"); } })
+      .catch(function(){ er.textContent=MSG.reseau; b.disabled=false; b.textContent=L("Recevoir mon code","Send my code"); }); });
   }
   function step2(){
     g.innerHTML="";
@@ -315,13 +331,13 @@ function gateBox(f, global, done){
     g.appendChild(el("p","rp-gate-s",L("Pensez à regarder dans les indésirables si vous ne le voyez pas.","Check your spam folder if you cannot see it.")));
     var fm=el("form","rp-gate-f"); var lb=el("label","sr",L("Code à 6 chiffres","6-digit code")); lb.htmlFor="rp-code-in"; fm.appendChild(lb);
     var inp=el("input","rp-code-in"); inp.id="rp-code-in"; inp.inputMode="numeric"; inp.autocomplete="one-time-code"; inp.maxLength=6; inp.placeholder="123456"; fm.appendChild(inp);
-    var b=el("button",null,L("Valider et télécharger","Confirm and download")); b.type="submit"; fm.appendChild(b);
+    var b=el("button",null,L("Débloquer le rapport","Unlock the report")); b.type="submit"; fm.appendChild(b);
     var er=el("p","rp-gate-e"); g.appendChild(fm); g.appendChild(er);
     var back=el("button","rp-gate-back",L("Changer d'adresse ou renvoyer le code","Change address or resend the code")); back.type="button"; back.addEventListener("click",step1); g.appendChild(back);
     inp.focus();
     fm.addEventListener("submit",function(ev){ ev.preventDefault(); b.disabled=true; er.textContent="";
       call({action:"verify", email:mail, code:inp.value}).then(function(j){
-        if(j.ok){ try{ sessionStorage.setItem("kn_rp_ok","1"); }catch(x){} push({event:"rapport_code_valide", domaine:f.host}); g.hidden=true; step1(); done(); }
+        if(j.ok){ try{ sessionStorage.setItem("kn_rp_ok","1"); }catch(x){} push({event:"rapport_code_valide", domaine:f.host}); step1(); done(); }
         else { er.textContent=(MSG[j.error]||MSG.reseau)+(j.reste!=null?L(" Essais restants : "," Attempts left: ")+j.reste+".":""); b.disabled=false; }
       }).catch(function(){ er.textContent=MSG.reseau; b.disabled=false; }); });
   }
