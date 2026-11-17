@@ -3,6 +3,7 @@
 (function(){
 "use strict";
 var REPORT_URL = "https://portfolio-seo-report.kevinsame99.workers.dev/";
+var CODE_URL = "https://script.google.com/macros/s/AKfycbyyayLkqZwDsF-_njUeS4-mkwTzo3r7T_8t849Ggpk7YaRw69bcCYt6see_lvdne8tEEw/exec";
 var EN = (document.documentElement.lang || "fr").slice(0,2) === "en";
 function L(fr,en){ return EN ? en : fr; }
 function push(o){ try{ (window.dataLayer = window.dataLayer || []).push(o); }catch(e){} }
@@ -12,16 +13,16 @@ function esc(s){ return String(s==null?"":s); }
 function contactHref(){ var a=document.querySelector('a[href^="mailto:"]'); return a ? a.getAttribute("href").split("?")[0] : null; }
 
 var SEV = { crit:{w:40, fr:"Critique", en:"Critical"}, high:{w:20, fr:"Importante", en:"High"}, med:{w:10, fr:"Moyenne", en:"Medium"}, low:{w:4, fr:"À améliorer", en:"Minor"} };
-var EFF = { quick:L("Correction rapide","Quick fix"), mid:L("Une demi-journée","Half a day"), proj:L("Projet","Project") };
+var EFF = { quick:L("moins d'une heure","under an hour"), mid:L("une demi-journée","half a day"), proj:L("quelques jours","a few days") };
 var CATS = [
-  ["index", L("Indexation et exploration","Indexing and crawling")],
-  ["tech", L("Technique et sécurité","Technical and security")],
-  ["content", L("Contenu et balises","Content and tags")],
-  ["links", L("Maillage et liens","Internal linking")],
-  ["schema", L("Données structurées et partage","Structured data and sharing")],
-  ["geo", L("Visibilité dans les IA (GEO)","AI search visibility (GEO)")],
-  ["perf", L("Vitesse et Core Web Vitals","Speed and Core Web Vitals")],
-  ["track", L("Mesure et conformité","Tracking and compliance")]
+  ["index", L("Présence sur Google","Presence on Google")],
+  ["tech", L("Sécurité et fiabilité","Security and reliability")],
+  ["content", L("Textes et titres","Text and headings")],
+  ["links", L("Liens entre les pages","Links between pages")],
+  ["schema", L("Fiche d'identité pour Google","Identity card for Google")],
+  ["geo", L("Visibilité dans les IA","Visibility in AI tools")],
+  ["perf", L("Vitesse","Speed")],
+  ["track", L("Mesure et cookies","Tracking and cookies")]
 ];
 
 var state = { url:null, facts:null, psi:null, pos:null, err:null, box:null };
@@ -177,76 +178,155 @@ function passes(f){
 function score(list, cat){ var pen=list.filter(function(r){ return r.cat===cat; }).reduce(function(s,r){ return s+SEV[r.sev].w; },0); return Math.max(0, 100-pen); }
 function tone(s){ return s>=85?"good":(s>=60?"mid":"bad"); }
 
+function verdict(s, n){
+  if(!n) return L("Rien à corriger sur les points contrôlés. Le site est en très bonne forme.","Nothing to fix on the points checked. The site is in very good shape.");
+  if(s>=85) return L("Bonne base. Quelques réglages suffiront à gagner encore en visibilité.","Solid base. A few tweaks will bring more visibility.");
+  if(s>=65) return L("Le site tient la route, mais plusieurs points freinent sa visibilité sur Google.","The site holds up, but several issues hold back its Google visibility.");
+  return L("Des problèmes importants empêchent le site d'être bien trouvé sur Google. À traiter en priorité.","Major issues stop the site from being found on Google. Fix these first.");
+}
+function level(s){ return s>=85 ? L("Bon","Good") : s>=60 ? L("À améliorer","Needs work") : L("Faible","Weak"); }
+var SEVTXT={crit:L("Urgent","Urgent"), high:L("Important","Important"), med:L("Utile","Useful"), low:L("Bonus","Nice to have")};
+
 function render(){
   var f=state.facts, box=state.box; if(!box) return;
   box.innerHTML=""; box.hidden=false;
   if(state.err){ box.appendChild(el("p","audit-err",L("Le rapport détaillé n'a pas pu être généré pour ce site : ","The detailed report could not be generated for this site: ")+state.err)); return; }
-  if(!f){ var w=el("div","rp-wait"); w.appendChild(el("strong",null,L("Rapport SEO complet en préparation","Full SEO report in progress"))); w.appendChild(el("p",null,L("Exploration du site : robots.txt, sitemap, redirections, données structurées, pages internes, visibilité IA...","Crawling the site: robots.txt, sitemap, redirects, structured data, inner pages, AI visibility..."))); var b=el("div","bar"); b.appendChild(el("span")); w.appendChild(b); box.appendChild(w); return; }
+  if(!f){ var w=el("div","rp-wait"); w.appendChild(el("p","rp-wait-t",L("Le rapport complet se prépare…","The full report is being prepared…"))); w.appendChild(el("p","rp-wait-s",L("Le robot visite vos pages, comme le ferait Google.","The crawler is visiting your pages, the way Google would."))); var b=el("div","bar"); b.appendChild(el("span")); w.appendChild(b); box.appendChild(w); return; }
 
   var list=rules(f, state.psi, state.pos), order={crit:0,high:1,med:2,low:3}, effo={quick:0,mid:1,proj:2};
   list.sort(function(a,b){ return order[a.sev]-order[b.sev] || effo[a.eff]-effo[b.eff]; });
   var cats=CATS.filter(function(c){ return c[0]!=="perf" || state.psi || list.some(function(r){ return r.cat==="perf"; }); });
   var scores=cats.map(function(c){ return score(list,c[0]); });
   var global=Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length);
-
-  var head=el("div","rp-head");
-  var h=el("div"); h.appendChild(el("p","rp-kicker",L("Rapport SEO","SEO report"))); h.appendChild(el("h3","rp-title",f.host));
-  var d=new Date(); h.appendChild(el("p","rp-meta",L("Établi le ","Produced on ")+d.toLocaleDateString(EN?"en-GB":"fr-FR",{day:"numeric",month:"long",year:"numeric"})+L(" par Kevin Nsamè · "," by Kevin Nsamè · ")+(1+(f.crawl||[]).length)+L(" pages analysées"," pages analysed")));
-  head.appendChild(h);
-  var g=el("div","rp-global t-"+tone(global)); g.appendChild(el("strong",null,String(global))); g.appendChild(el("span",null,"/100")); head.appendChild(g);
-  box.appendChild(head);
-
   var counts={crit:0,high:0,med:0,low:0}; list.forEach(function(r){ counts[r.sev]++; });
-  box.appendChild(el("p","rp-sum", list.length ? L(list.length+" points à corriger : ", list.length+" issues: ")+["crit","high","med","low"].filter(function(k){return counts[k];}).map(function(k){ var w=SEV[k][EN?"en":"fr"].toLowerCase(); if(!EN && counts[k]>1 && k!=="low") w+="s"; return counts[k]+" "+w; }).join(", ")+"." : L("Aucun problème détecté sur les points contrôlés.","No issue found on the points checked.")));
 
-  var grid=el("div","rp-cats");
-  cats.forEach(function(c,i){ var s=scores[i], n=list.filter(function(r){return r.cat===c[0];}).length; var it=el("div","rp-cat");
-    var top=el("div","rp-cat-h"); top.appendChild(el("span",null,c[1])); top.appendChild(el("strong","t-"+tone(s),String(s))); it.appendChild(top);
-    var bar=el("div","rp-bar"); var fill=el("span","g-"+tone(s)); fill.style.width=s+"%"; bar.appendChild(fill); it.appendChild(bar);
-    it.appendChild(el("p","rp-cat-n", n? n+L(" point(s)"," issue(s)") : L("Rien à signaler","All clear"))); grid.appendChild(it); });
-  box.appendChild(grid);
+  // En-tête : site, note, verdict en une phrase
+  var head=el("div","rp-head");
+  var left=el("div","rp-id");
+  left.appendChild(el("p","rp-kicker",L("Rapport SEO de","SEO report for")));
+  left.appendChild(el("h3","rp-title",f.host.replace(/^www\./,"")));
+  var d=new Date();
+  left.appendChild(el("p","rp-meta",d.toLocaleDateString(EN?"en-GB":"fr-FR",{day:"numeric",month:"long",year:"numeric"})+" · "+(1+(f.crawl||[]).length)+L(" pages visitées"," pages visited")+" · Kevin Nsamè"));
+  head.appendChild(left);
+  var sc=el("div","rp-score"+(global<60?" is-low":""));
+  var big=el("p","rp-score-n"); big.appendChild(document.createTextNode(String(global))); big.appendChild(el("span",null,"/100")); sc.appendChild(big);
+  head.appendChild(sc);
+  box.appendChild(head);
+  box.appendChild(el("p","rp-verdict",verdict(global, list.length)));
 
+  // Compteurs
   if(list.length){
-    box.appendChild(el("h4","rp-h",L("Plan d'action, par ordre de priorité","Action plan, by priority")));
+    var ct=el("div","rp-counts");
+    ["crit","high","med","low"].forEach(function(k){ if(!counts[k]) return; var c=el("div","rp-count"+(k==="crit"?" is-crit":"")); c.appendChild(el("strong",null,String(counts[k]))); c.appendChild(el("span",null,SEVTXT[k]+(!EN && counts[k]>1 && k!=="low" ? "s" : ""))); ct.appendChild(c); });
+    box.appendChild(ct);
+  }
+
+  // Notes par thème
+  box.appendChild(el("h4","rp-h",L("Vos notes, thème par thème","Your scores, area by area")));
+  var tb=el("table","rp-grid"), tbody=el("tbody");
+  cats.forEach(function(c,i){ var s=scores[i], n=list.filter(function(r){return r.cat===c[0];}).length; var tr=el("tr", s<60?"is-low":null);
+    tr.appendChild(el("th",null,c[1]));
+    var td=el("td","rp-g-bar"), bar=el("span","rp-bar"), fill=el("span"); fill.style.width=s+"%"; bar.appendChild(fill); td.appendChild(bar); tr.appendChild(td);
+    tr.appendChild(el("td","rp-g-n",s+"/100"));
+    tr.appendChild(el("td","rp-g-l",n ? level(s)+" · "+n+L(" correction"+(n>1?"s":"")," fix"+(n>1?"es":"")) : L("Rien à corriger","Nothing to fix")));
+    tbody.appendChild(tr); });
+  tb.appendChild(tbody); box.appendChild(tb);
+
+  // Plan d'action
+  if(list.length){
+    box.appendChild(el("h4","rp-h",L("Ce qu'il faut corriger, dans l'ordre","What to fix, in order")));
     var ol=el("ol","rp-list");
-    list.forEach(function(r){
-      var li=el("li","rp-item sev-"+r.sev);
-      var tg=el("div","rp-tags"); tg.appendChild(el("span","rp-sev",SEV[r.sev][EN?"en":"fr"])); tg.appendChild(el("span",null,(CATS.filter(function(c){return c[0]===r.cat;})[0]||["",""])[1])); tg.appendChild(el("span",null,EFF[r.eff])); li.appendChild(tg);
+    list.forEach(function(r,i){
+      var li=el("li","rp-item"+(r.sev==="crit"?" is-crit":""));
+      li.appendChild(el("span","rp-num",String(i+1)));
+      var body=el("div","rp-body");
       var tt=r.t, nm=tt.match(/^(\d+)\s/); if(nm) tt=tt.replace(/\(s\)/g, +nm[1]>1?"s":"");
-      li.appendChild(el("p","rp-t",tt));
-      if(r.ev && r.ev.length){ var ev=el("div","rp-ev"); ev.appendChild(el("span","rp-lbl",L("Constat","Evidence"))); var ul=el("ul"); r.ev.forEach(function(x){ ul.appendChild(el("li",null,esc(x))); }); ev.appendChild(ul); li.appendChild(ev); }
-      var fx=el("div","rp-fix"); fx.appendChild(el("span","rp-lbl",L("Correction","Fix"))); fx.appendChild(el("p",null,r.fix)); li.appendChild(fx);
-      if(r.code){ var pre=el("pre","rp-code"); pre.appendChild(el("code",null,r.code)); li.appendChild(pre); }
-      ol.appendChild(li);
+      body.appendChild(el("p","rp-t",tt));
+      body.appendChild(el("p","rp-tags",SEVTXT[r.sev]+" · "+(CATS.filter(function(c){return c[0]===r.cat;})[0]||["",""])[1]+" · "+EFF[r.eff]));
+      body.appendChild(el("p","rp-fix",r.fix));
+      if(r.ev && r.ev.length){ var ev=el("div","rp-ev"); ev.appendChild(el("p","rp-lbl",L("Ce que j'ai trouvé","What I found"))); var ul=el("ul"); r.ev.forEach(function(x){ ul.appendChild(el("li",null,esc(x))); }); ev.appendChild(ul); body.appendChild(ev); }
+      if(r.code){ var pre=el("pre","rp-code"); pre.appendChild(el("code",null,r.code)); body.appendChild(pre); }
+      li.appendChild(body); ol.appendChild(li);
     });
     box.appendChild(ol);
   }
 
-  var ok=passes(f); if(ok.length){ box.appendChild(el("h4","rp-h",L("Ce qui est déjà en place","Already in place"))); var ul2=el("ul","rp-ok"); ok.forEach(function(x){ ul2.appendChild(el("li",null,x)); }); box.appendChild(ul2); }
+  var ok=passes(f); if(ok.length){ box.appendChild(el("h4","rp-h",L("Ce qui fonctionne déjà","What already works"))); var ul2=el("ul","rp-ok"); ok.forEach(function(x){ ul2.appendChild(el("li",null,x)); }); box.appendChild(ul2); }
 
+  // Pages visitées
   var pages=[{url:f.url,status:f.http.status,title:f.page.title,h1:f.page.h1.length,words:f.page.words,noindex:f.page.noindex}].concat(f.crawl||[]);
-  box.appendChild(el("h4","rp-h",L("Pages analysées","Pages analysed")));
-  var tw=el("div","rp-tablew"), tb=el("table","rp-table"), thead=el("thead"), tr=el("tr");
-  [L("Page","Page"),L("Code","Status"),L("Titre","Title"),"H1",L("Mots","Words"),L("Indexable","Indexable")].forEach(function(x){ tr.appendChild(el("th",null,x)); });
-  thead.appendChild(tr); tb.appendChild(thead); var tbo=el("tbody");
-  pages.forEach(function(c){ var r=el("tr"); r.appendChild(el("td","rp-url",short(c.url))); r.appendChild(el("td",c.status>=400||!c.status?"t-bad":(c.final?"t-mid":"t-good"),String(c.status||"-")));
-    r.appendChild(el("td",null,c.title!=null?(c.title||L("(vide)","(empty)")).slice(0,60):"-")); r.appendChild(el("td",c.h1===1?null:"t-mid",c.h1!=null?String(c.h1):"-")); r.appendChild(el("td",c.words!=null&&c.words<200?"t-mid":null,c.words!=null?String(c.words):"-")); r.appendChild(el("td",c.noindex?"t-bad":null,c.title===undefined?"-":(c.noindex?L("Non","No"):L("Oui","Yes")))); tbo.appendChild(r); });
-  tb.appendChild(tbo); tw.appendChild(tb); box.appendChild(tw);
+  box.appendChild(el("h4","rp-h",L("Les pages visitées","Pages visited")));
+  var tw=el("div","rp-tablew"), t=el("table","rp-table"), th=el("thead"), hr=el("tr");
+  [L("Adresse","Address"),L("Réponse","Response"),L("Titre","Title"),L("Titre principal (H1)","Main heading (H1)"),L("Mots","Words"),L("Visible sur Google","Visible on Google")].forEach(function(x){ hr.appendChild(el("th",null,x)); });
+  th.appendChild(hr); t.appendChild(th); var tbo=el("tbody");
+  pages.forEach(function(c){ var r=el("tr"), ok=c.status>=200&&c.status<300;
+    r.appendChild(el("td","rp-url",short(c.url)));
+    r.appendChild(el("td",ok?null:"is-bad", !c.status ? L("aucune","none") : ok ? "OK" : c.status>=300&&c.status<400 ? L("redirigée","redirected") : L("erreur ","error ")+c.status));
+    r.appendChild(el("td",null,c.title!=null?(c.title||L("(vide)","(empty)")).slice(0,60):"–"));
+    r.appendChild(el("td",c.h1===1||c.h1==null?null:"is-bad",c.h1==null?"–":c.h1===0?L("absent","missing"):c.h1===1?L("oui","yes"):c.h1+L(" titres"," headings")));
+    r.appendChild(el("td",null,c.words!=null?String(c.words):"–"));
+    r.appendChild(el("td",c.noindex?"is-bad":null,c.title===undefined?"–":(c.noindex?L("non","no"):L("oui","yes"))));
+    tbo.appendChild(r); });
+  t.appendChild(tbo); tw.appendChild(t); box.appendChild(tw);
 
-  var st=f.page.stack||{}, tech=[st.cms, st.gtm&&"Google Tag Manager", st.ga4&&"GA4", st.ads&&"Google Ads", st.meta&&"Meta Pixel", st.linkedin&&"LinkedIn Insight", st.matomo&&"Matomo", st.hotjar&&"Hotjar / Clarity", st.consent&&L("CMP de consentement","Consent platform")].filter(Boolean);
-  if(tech.length) box.appendChild(el("p","rp-note",L("Technologies détectées : ","Detected stack: ")+tech.join(", ")+"."));
-  if(!state.psi) box.appendChild(el("p","rp-note",L("Les mesures de vitesse PageSpeed s'ajouteront à ce rapport dès qu'elles seront prêtes.","PageSpeed measurements will be added to this report as soon as they are ready.")));
+  var st=f.page.stack||{}, tech=[st.cms, st.gtm&&"Google Tag Manager", st.ga4&&"GA4", st.ads&&"Google Ads", st.meta&&"Meta Pixel", st.linkedin&&"LinkedIn Insight", st.matomo&&"Matomo", st.hotjar&&"Hotjar / Clarity", st.consent&&L("bannière de cookies","cookie banner")].filter(Boolean);
+  if(tech.length) box.appendChild(el("p","rp-note",L("Outils repérés sur le site : ","Tools found on the site: ")+tech.join(", ")+"."));
+  if(!state.psi) box.appendChild(el("p","rp-note",L("La mesure de vitesse de Google s'ajoutera ici dès qu'elle sera prête.","Google's speed test will be added here as soon as it is ready.")));
 
   var act=el("div","rp-actions");
-  var pdf=el("button","audit-cta",L("Télécharger le rapport (PDF)","Download the report (PDF)")); pdf.type="button";
-  pdf.addEventListener("click",function(){ push({event:"rapport_pdf", domaine:f.host}); document.body.classList.add("print-report"); window.print(); setTimeout(function(){ document.body.classList.remove("print-report"); },500); });
+  var pdf=el("button","rp-btn",L("Télécharger le rapport en PDF","Download the report as PDF")); pdf.type="button";
+  function imprimer(){ push({event:"rapport_pdf", domaine:f.host}); document.body.classList.add("print-report"); window.print(); setTimeout(function(){ document.body.classList.remove("print-report"); },500); }
+  var gate=gateBox(f, global, imprimer);
+  pdf.addEventListener("click",function(){
+    var okd=false; try{ okd=sessionStorage.getItem("kn_rp_ok")==="1"; }catch(x){}
+    if(okd || !CODE_URL || CODE_URL.indexOf("__")===0) return imprimer();
+    gate.hidden=!gate.hidden; if(!gate.hidden){ var i=gate.querySelector("input"); if(i) i.focus(); push({event:"rapport_pdf_demande", domaine:f.host}); }
+  });
   act.appendChild(pdf);
   var mh=contactHref();
-  if(mh && f.host!=="kevinnsame.github.io"){ var mail=el("a","rp-mail",L("En discuter avec moi","Talk it through with me")); mail.href=mh+"?subject="+encodeURIComponent(L("Rapport SEO de ","SEO report for ")+f.host); mail.addEventListener("click",function(){ push({event:"audit_contact", domaine:f.host, canal:"rapport_email"}); }); act.appendChild(mail); }
+  if(mh && f.host!=="kevinnsame.github.io"){ var mail=el("a","rp-mail",L("M'écrire pour en parler","Email me to discuss it")); mail.href=mh+"?subject="+encodeURIComponent(L("Rapport SEO de ","SEO report for ")+f.host); mail.addEventListener("click",function(){ push({event:"audit_contact", domaine:f.host, canal:"rapport_email"}); }); act.appendChild(mail); }
   box.appendChild(act);
-  box.appendChild(el("p","rp-note",L("Analyse automatique de l'accueil et de "+(f.crawl||[]).length+" pages liées. Les positions et la vitesse viennent de Google. Une mission complète ajoute la Search Console, le crawl intégral et l'analyse des backlinks.","Automated analysis of the homepage and "+(f.crawl||[]).length+" linked pages. Rankings and speed come from Google. A full engagement adds Search Console, a complete crawl and backlink analysis.")));
+  box.appendChild(gate);
+  box.appendChild(el("p","rp-note",L("Analyse automatique de la page d'accueil et de "+(f.crawl||[]).length+" pages liées. La vitesse et les positions viennent de Google. Un audit complet ajoute la Search Console, toutes les pages du site et les liens externes.","Automated analysis of the homepage and "+(f.crawl||[]).length+" linked pages. Speed and rankings come from Google. A full audit adds Search Console, every page of the site and backlinks.")));
 
   push({event:"rapport_seo", domaine:f.host, score:global, points:list.length});
+}
+
+function gateBox(f, global, done){
+  var g=el("div","rp-gate"); g.hidden=true;
+  var MSG={format:L("Cette adresse e-mail n'est pas valide.","This email address is not valid."), domaine:L("Ce domaine ne reçoit pas d'e-mails, ou c'est une adresse jetable. Utilisez une adresse réelle.","This domain cannot receive email, or it is a disposable address. Please use a real address."), quota:L("Le service est saturé pour aujourd'hui. Réessayez demain ou écrivez-moi.","The service is busy today. Try again tomorrow or email me."), trop:L("Trop de tentatives. Patientez 15 minutes.","Too many attempts. Please wait 15 minutes."), expire:L("Ce code a expiré. Demandez-en un nouveau.","This code has expired. Request a new one."), code:L("Code incorrect.","Wrong code."), reseau:L("Le service ne répond pas. Réessayez dans un instant.","The service is not responding. Try again shortly.")};
+  var mail="";
+  function call(o){ return fetch(CODE_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).then(function(r){ return r.json(); }); }
+  function step1(){
+    g.innerHTML="";
+    g.appendChild(el("p","rp-gate-t",L("Recevez le PDF avec un code envoyé par e-mail","Get the PDF with a code sent by email")));
+    g.appendChild(el("p","rp-gate-s",L("Saisissez votre adresse : je vous envoie un code à 6 chiffres, valable 15 minutes.","Enter your address: I will send you a 6-digit code, valid for 15 minutes.")));
+    var fm=el("form","rp-gate-f"); var lb=el("label","sr",L("Adresse e-mail","Email address")); lb.htmlFor="rp-mail-in"; fm.appendChild(lb);
+    var inp=el("input"); inp.id="rp-mail-in"; inp.type="email"; inp.required=true; inp.autocomplete="email"; inp.placeholder=L("vous@entreprise.fr","you@company.com"); inp.value=mail; fm.appendChild(inp);
+    var b=el("button",null,L("Recevoir le code","Send me the code")); b.type="submit"; fm.appendChild(b);
+    var er=el("p","rp-gate-e"); g.appendChild(fm); g.appendChild(er);
+    fm.addEventListener("submit",function(ev){ ev.preventDefault(); mail=inp.value.trim(); if(!mail) return; b.disabled=true; b.textContent=L("Envoi…","Sending…"); er.textContent="";
+      call({action:"send", email:mail, site:f.host, score:global, lang:EN?"en":"fr"}).then(function(j){ if(j.ok){ push({event:"rapport_code_envoye", domaine:f.host}); step2(); } else { er.textContent=MSG[j.error]||MSG.reseau; b.disabled=false; b.textContent=L("Recevoir le code","Send me the code"); } })
+      .catch(function(){ er.textContent=MSG.reseau; b.disabled=false; b.textContent=L("Recevoir le code","Send me the code"); }); });
+  }
+  function step2(){
+    g.innerHTML="";
+    g.appendChild(el("p","rp-gate-t",L("Code envoyé à ","Code sent to ")+mail));
+    g.appendChild(el("p","rp-gate-s",L("Pensez à regarder dans les indésirables si vous ne le voyez pas.","Check your spam folder if you cannot see it.")));
+    var fm=el("form","rp-gate-f"); var lb=el("label","sr",L("Code à 6 chiffres","6-digit code")); lb.htmlFor="rp-code-in"; fm.appendChild(lb);
+    var inp=el("input","rp-code-in"); inp.id="rp-code-in"; inp.inputMode="numeric"; inp.autocomplete="one-time-code"; inp.maxLength=6; inp.placeholder="123456"; fm.appendChild(inp);
+    var b=el("button",null,L("Valider et télécharger","Confirm and download")); b.type="submit"; fm.appendChild(b);
+    var er=el("p","rp-gate-e"); g.appendChild(fm); g.appendChild(er);
+    var back=el("button","rp-gate-back",L("Changer d'adresse ou renvoyer le code","Change address or resend the code")); back.type="button"; back.addEventListener("click",step1); g.appendChild(back);
+    inp.focus();
+    fm.addEventListener("submit",function(ev){ ev.preventDefault(); b.disabled=true; er.textContent="";
+      call({action:"verify", email:mail, code:inp.value}).then(function(j){
+        if(j.ok){ try{ sessionStorage.setItem("kn_rp_ok","1"); }catch(x){} push({event:"rapport_code_valide", domaine:f.host}); g.hidden=true; step1(); done(); }
+        else { er.textContent=(MSG[j.error]||MSG.reseau)+(j.reste!=null?L(" Essais restants : "," Attempts left: ")+j.reste+".":""); b.disabled=false; }
+      }).catch(function(){ er.textContent=MSG.reseau; b.disabled=false; }); });
+  }
+  step1();
+  return g;
 }
 
 function start(url){
