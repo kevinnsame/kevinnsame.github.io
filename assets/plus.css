@@ -394,3 +394,14 @@ nav ul li:nth-child(2), nav ul li:nth-child(3), nav ul li:nth-child(7){display:n
 #audit .t-bad{color:#d70015;} #audit .g-bad{stroke:#e5242f;}
 #audit .seo-report{background:#fff; border:1px solid #e3e3e8; box-shadow:0 1px 3px rgba(0,0,0,.04);}
 #audit .rp-cta{background:#f5f5f7;}
+
+/* Section audit : texte plus contrasté */
+#audit .lead{color:#1d1d1f;}
+#audit .small, #audit .audit-kw-l, #audit .score .lbl, #audit .audit-site, #audit .vital .k, #audit .prio li span, #audit .seo-box .small, #audit .seo-top{color:#3a3a3c;}
+#audit .audit-status, #audit .prio li, #audit .seo-comp li{color:#1d1d1f;}
+#audit .audit-form input::placeholder, #audit .audit-kw::placeholder{color:#6e6e73;}
+#audit .audit-form input, #audit .audit-kw{border-color:#b9b9c0;}
+#audit .wait-s{color:#3a3a3c;}
+#audit .wait-ring span{color:#8e8e93;} #audit .wait-ring circle{stroke:#c7c7cc;}
+#audit .seo-report{--fg2:#3a3a3c;}
+#audit .ex-more{color:#3a3a3c;}
