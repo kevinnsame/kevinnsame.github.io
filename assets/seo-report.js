@@ -178,6 +178,41 @@ function passes(f){
 function score(list, cat){ var pen=list.filter(function(r){ return r.cat===cat; }).reduce(function(s,r){ return s+SEV[r.sev].w; },0); return Math.max(0, 100-pen); }
 function tone(s){ return s>=85?"good":(s>=60?"mid":"bad"); }
 
+var NS="http://www.w3.org/2000/svg";
+var ICONS={
+  index:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',
+  tech:'<rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+  content:'<path d="M5 6h14M5 10.5h14M5 15h9"/>',
+  links:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  schema:'<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 15.5c.6-1.3 1.7-2 3-2s2.4.7 3 2M14.5 10h3.5M14.5 13.5h3.5"/>',
+  geo:'<path d="M4.5 6.5h15v9h-8l-4 3.5v-3.5h-3z"/><path d="M9 11h6"/>',
+  perf:'<path d="M4.5 16a7.5 7.5 0 1 1 15 0"/><path d="M12 16l3.5-4.5"/>',
+  track:'<path d="M5 19V9M10 19V5M15 19v-7M20 19v-4"/>'
+};
+function icon(cat){ var s=document.createElementNS(NS,"svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("aria-hidden","true"); s.innerHTML=ICONS[cat]||ICONS.index; return s; }
+function ringEl(score){
+  var w=el("div","rp-ring"), r=52, c=2*Math.PI*r, svg=document.createElementNS(NS,"svg"); svg.setAttribute("viewBox","0 0 128 128"); svg.setAttribute("aria-hidden","true");
+  function circ(cls){ var x=document.createElementNS(NS,"circle"); x.setAttribute("cx","64"); x.setAttribute("cy","64"); x.setAttribute("r",r); x.setAttribute("class",cls); return x; }
+  svg.appendChild(circ("rp-ring-bg")); var fg=circ("rp-ring-fg"); fg.setAttribute("stroke-dasharray",c); fg.setAttribute("stroke-dashoffset",c); svg.appendChild(fg);
+  w.appendChild(svg);
+  var n=el("div","rp-ring-n"); var strong=el("strong",null,"0"); n.appendChild(strong); n.appendChild(el("span",null,"/100")); w.appendChild(n);
+  w.setAttribute("role","img"); w.setAttribute("aria-label",score+"/100");
+  var reduce=window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ fg.style.strokeDashoffset=c*(1-score/100); }); });
+  if(reduce){ strong.textContent=score; } else { var t0=null; (function f(ts){ if(!t0) t0=ts; var k=Math.min(1,(ts-t0)/1200); k=1-Math.pow(1-k,3); strong.textContent=Math.round(score*k); if(k<1) requestAnimationFrame(f); })(performance.now());  }
+  return w;
+}
+function pdfMock(f, global){
+  var m=el("div","rp-pdf"); m.setAttribute("aria-hidden","true");
+  var pg=el("div","rp-pdf-page");
+  pg.appendChild(el("p","rp-pdf-k",L("Rapport SEO","SEO report")));
+  pg.appendChild(el("p","rp-pdf-h",f.host.replace(/^www\./,"")));
+  var sc=el("div","rp-pdf-score is-"+(global>=85?"good":global>=60?"mid":"bad")); sc.textContent=global; pg.appendChild(sc);
+  for(var i=0;i<6;i++){ var ln=el("div","rp-pdf-line"); ln.style.width=(55+((i*37)%40))+"%"; pg.appendChild(ln); }
+  m.appendChild(pg);
+  var pg2=el("div","rp-pdf-page rp-pdf-back"); m.insertBefore(pg2, pg);
+  return m;
+}
 function verdict(s, n){
   if(!n) return L("Rien à corriger sur les points contrôlés. Le site est en très bonne forme.","Nothing to fix on the points checked. The site is in very good shape.");
   if(s>=85) return L("Bonne base. Quelques réglages suffiront à gagner encore en visibilité.","Solid base. A few tweaks will bring more visibility.");
@@ -209,7 +244,7 @@ function render(){
   left.appendChild(el("p","rp-meta",d.toLocaleDateString(EN?"en-GB":"fr-FR",{day:"numeric",month:"long",year:"numeric"})+" · "+(1+(f.crawl||[]).length)+L(" pages visitées"," pages visited")+" · Kevin Nsamè"));
   head.appendChild(left);
   var sc=el("div","rp-score is-"+tone(global));
-  var big=el("p","rp-score-n"); big.appendChild(document.createTextNode(String(global))); big.appendChild(el("span",null,"/100")); sc.appendChild(big);
+  sc.appendChild(ringEl(global));
   sc.appendChild(el("p","rp-score-l",level(global)));
   head.appendChild(sc);
   box.appendChild(head);
@@ -219,8 +254,8 @@ function render(){
   if(!CODE_URL || CODE_URL.indexOf("__")===0) unlocked=true;
   var SHOW=3;
 
-  // Compteurs
-  if(list.length){
+  // Compteurs (rapport débloqué seulement)
+  if(list.length && unlocked){
     var ct=el("div","rp-counts");
     ["crit","high","med","low"].forEach(function(k){ if(!counts[k]) return; var c=el("div","rp-count sev-"+k); c.appendChild(el("strong",null,String(counts[k]))); c.appendChild(el("span",null,SEVTXT[k]+(!EN && counts[k]>1 && k!=="low" ? "s" : ""))); ct.appendChild(c); });
     box.appendChild(ct);
@@ -238,8 +273,10 @@ function render(){
   if(unlocked) box.appendChild(tb);
 
   function item(r,i,full){
-    var li=el("li","rp-item sev-"+r.sev);
-    li.appendChild(el("span","rp-num",String(i+1)));
+    var li=el("li","rp-item sev-"+r.sev+(full?"":" is-teaser"));
+    if(full) li.appendChild(el("span","rp-num",String(i+1)));
+    else { var ic=el("span","rp-ico"); ic.appendChild(icon(r.cat)); li.appendChild(ic); }
+    li.style.setProperty("--i",i);
     var body=el("div","rp-body");
     var tt=r.t, nm=tt.match(/^(\d+)\s/); if(nm) tt=tt.replace(/\(s\)/g, +nm[1]>1?"s":"");
     body.appendChild(el("p","rp-t",tt));
@@ -266,10 +303,12 @@ function render(){
     var rest=list.length-SHOW, pagesN=1+(f.crawl||[]).length;
     var lock=el("div","rp-lock");
     var cta=el("div","rp-cta");
-    cta.appendChild(el("p","rp-cta-t", rest>0 ? L("+ "+rest+" autre"+(rest>1?"s":"")+" correction"+(rest>1?"s":"")+" dans le rapport complet", "+ "+rest+" more fix"+(rest>1?"es":"")+" in the full report") : L("Les solutions sont dans le rapport complet","The fixes are in the full report")));
-    cta.appendChild(el("p","rp-cta-s",L("La solution pour chaque problème, vos notes par thème et le détail des "+pagesN+" pages visitées. Gratuit, en PDF.","The fix for each issue, your scores by area and details of the "+pagesN+" pages visited. Free, as a PDF.")));
+    cta.appendChild(pdfMock(f, global));
+    var ctaBody=el("div","rp-cta-body"); cta.appendChild(ctaBody);
+    ctaBody.appendChild(el("p","rp-cta-t", rest>0 ? L("+ "+rest+" autre"+(rest>1?"s":"")+" correction"+(rest>1?"s":"")+" dans le rapport complet", "+ "+rest+" more fix"+(rest>1?"es":"")+" in the full report") : L("Les solutions sont dans le rapport complet","The fixes are in the full report")));
+    ctaBody.appendChild(el("p","rp-cta-s",L("La solution pour chaque problème, vos notes par thème et le détail des "+pagesN+" pages visitées. Gratuit, en PDF.","The fix for each issue, your scores by area and details of the "+pagesN+" pages visited. Free, as a PDF.")));
     var gate=gateBox(f, global, function(){ render(); setTimeout(imprimer, 300); });
-    gate.hidden=false; cta.appendChild(gate);
+    gate.hidden=false; ctaBody.appendChild(gate);
     lock.appendChild(cta); box.appendChild(lock);
     var m0=mailLink(); if(m0){ var a0=el("div","rp-actions"); a0.appendChild(m0); box.appendChild(a0); }
   } else {
@@ -348,12 +387,22 @@ function start(url){
   var my=url;
   fetch(REPORT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:url})})
     .then(function(r){ return r.json(); })
-    .then(function(j){ if(state.url!==my) return; if(!j || j.error) state.err=(j&&j.detail)||L("site injoignable","site unreachable"); else state.facts=j; render(); })
+    .then(function(j){ if(state.url!==my) return; if(!j || j.error) state.err=(j&&j.detail)||L("site injoignable","site unreachable"); else state.facts=j; render(); if(state.facts && !document.querySelector("#audit-panel .audit-status")) compactPanel(); })
     .catch(function(){ if(state.url!==my) return; state.box.hidden=true; state.box.innerHTML=""; });
 }
 
-document.addEventListener("kn:audit-start",function(e){ start(e.detail.url); });
-document.addEventListener("kn:audit-psi",function(e){ state.psi=e.detail.data; if(state.facts) render(); });
-document.addEventListener("kn:audit-pos",function(e){ state.pos=e.detail.data; if(state.facts) render(); });
+// Quand le rapport est prêt, le panneau de droite se réduit à une ligne : tout le reste est dans le rapport.
+function compactPanel(){
+  var panel=document.getElementById("audit-panel"); if(!panel || !state.facts || !state.box) return;
+  panel.innerHTML="";
+  panel.classList.add("is-compact");
+  panel.appendChild(el("p","rp-done-t",L("Analyse terminée","Analysis complete")));
+  var a=el("a","rp-done-l",L("Voir le résultat ↓","See the result ↓")); a.href="#seo-report";
+  a.addEventListener("click",function(ev){ ev.preventDefault(); try{ state.box.scrollIntoView({behavior:"smooth", block:"start"}); }catch(x){ state.box.scrollIntoView(); } });
+  panel.appendChild(a);
+}
+document.addEventListener("kn:audit-start",function(e){ var panel=document.getElementById("audit-panel"); if(panel) panel.classList.remove("is-compact"); start(e.detail.url); });
+document.addEventListener("kn:audit-psi",function(e){ state.psi=e.detail.data; if(state.facts){ render(); compactPanel(); } });
+document.addEventListener("kn:audit-pos",function(e){ state.pos=e.detail.data; if(state.facts){ render(); compactPanel(); } });
 window.KNSeoReport={rules:rules, passes:passes, _state:state, _render:render, _start:start, _setUrl:function(u){ REPORT_URL=u; }};
 })();

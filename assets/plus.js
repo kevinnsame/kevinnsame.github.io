@@ -303,6 +303,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
       var msgTxt = e.message===T.quota ? T.quota : T.err+e.message;
       panel.appendChild(el("p","audit-err",msgTxt));
       if(AUDIT_URL) panel.appendChild(seoBox);
+      emit("kn:audit-psi",{data:null});
     })
     .then(function(){ busy=false; btn.disabled=false; btn.textContent=T.run; });
   }
