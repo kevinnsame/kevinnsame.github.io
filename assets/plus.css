@@ -467,3 +467,30 @@ nav ul li:nth-child(2), nav ul li:nth-child(3), nav ul li:nth-child(7){display:n
 }
 .audit-right .rp-cta > *, .audit-right .rp-cta-body, .audit-right .rp-gate{min-width:0; max-width:100%;}
 .audit-right .rp-gate-f input, .audit-right .rp-gate-f button{width:100%; box-sizing:border-box;}
+@media print{
+  body.print-report .rp-head{flex-direction:row !important; align-items:center !important; justify-content:space-between;}
+  body.print-report .rp-score{align-items:center !important; text-align:center !important;}
+  body.print-report .rp-counts{display:grid !important; grid-template-columns:repeat(4,1fr) !important; gap:8px;}
+  body.print-report .rp-h{break-after:avoid; page-break-after:avoid;}
+  body.print-report .rp-item{break-inside:auto !important; page-break-inside:auto !important;}
+  body.print-report .rp-t, body.print-report .rp-tags{break-after:avoid;}
+}
+
+/* Export PDF direct (html2pdf) */
+.pdf-hold{position:fixed; left:0; top:0; z-index:-1; pointer-events:none;}
+.pdf-export{width:700px; background:#fff;}
+.pdf-export .seo-report{margin:0 !important; padding:0 !important; border:0 !important; border-radius:0 !important; box-shadow:none !important; background:#fff !important; overflow:visible !important;}
+.pdf-export .seo-report, .pdf-export .seo-report *{animation:none !important; opacity:1 !important; transition:none !important;}
+.pdf-export .rp-full{display:block !important;}
+.pdf-export .rp-screen, .pdf-export .rp-actions, .pdf-export .rp-lock{display:none !important;}
+.pdf-export .rp-head{display:flex !important; flex-direction:row !important; align-items:center !important; justify-content:space-between !important;}
+.pdf-export .rp-score{align-items:center !important; text-align:center !important;}
+.pdf-export .rp-ring{width:130px !important; height:130px !important;}
+.pdf-export .rp-ring-fg{filter:none !important;}
+.pdf-export .rp-title{font-size:40px !important;}
+.pdf-export .rp-counts{display:grid !important; grid-template-columns:repeat(4,1fr) !important; gap:8px;}
+.pdf-export .rp-tiles{grid-template-columns:repeat(4,1fr) !important;}
+.pdf-export .rp-tablew{overflow:visible !important;}
+.pdf-export .rp-table{font-size:11px;}
+.pdf-export .rp-ring svg{transform:none !important;}
+.pdf-export .pdf-brk{margin-top:0 !important;}

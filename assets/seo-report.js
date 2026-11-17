@@ -250,7 +250,7 @@ function render(){
   box.appendChild(head);
   box.appendChild(el("p","rp-verdict",verdict(global, list.length)));
 
-  var unlocked=false; try{ unlocked=sessionStorage.getItem("kn_rp_ok")==="1"; }catch(x){}
+  var unlocked=false; try{ unlocked=sessionStorage.getItem("kn_rp_ok")===f.host; }catch(x){}
   if(!CODE_URL || CODE_URL.indexOf("__")===0) unlocked=true;
   var SHOW=3, rest=Math.max(list.length-SHOW,0), pagesN=1+(f.crawl||[]).length;
 
@@ -269,7 +269,32 @@ function render(){
     if(r.code){ var pre=el("pre","rp-code"); pre.appendChild(el("code",null,r.code)); body.appendChild(pre); }
     li.appendChild(body); return li;
   }
-  function imprimer(){ push({event:"rapport_pdf", domaine:f.host}); document.body.classList.add("print-report"); window.print(); setTimeout(function(){ document.body.classList.remove("print-report"); },500); }
+  function imprimerNavigateur(){ document.body.classList.add("print-report"); window.print(); setTimeout(function(){ document.body.classList.remove("print-report"); },500); }
+  function imprimer(btn){
+    push({event:"rapport_pdf", domaine:f.host});
+    var b=btn && btn.nodeType ? btn : box.querySelector(".rp-cta-body .rp-btn"), lbl=b?b.textContent:"";
+    if(b){ b.disabled=true; b.textContent=L("Préparation du PDF…","Preparing the PDF…"); }
+    function fin(){ if(b){ b.disabled=false; b.textContent=lbl; } }
+    chargerPdf(function(ok){
+      if(!ok || !window.html2pdf){ fin(); imprimerNavigateur(); return; }
+      var w=el("div","pdf-export"), c=box.cloneNode(true);
+      c.removeAttribute("id"); c.hidden=false;
+      var s0=c.querySelector(".rp-screen"); if(s0) s0.parentNode.removeChild(s0);
+      var oR=box.querySelector(".rp-ring"), cR=c.querySelector(".rp-ring");
+      if(oR && cR){ var oc=oR.querySelectorAll("circle"), sv=cR.querySelector("svg"), cv=document.createElement("canvas"); cv.width=260; cv.height=260; cv.style.width="100%"; cv.style.height="100%";
+        var x=cv.getContext("2d"), bgc=getComputedStyle(oc[0]).stroke, fgc=getComputedStyle(oc[1]).stroke;
+        x.lineWidth=20; x.strokeStyle=bgc; x.beginPath(); x.arc(130,130,113,0,2*Math.PI); x.stroke();
+        x.lineCap="round"; x.strokeStyle=fgc; x.beginPath(); x.arc(130,130,113,-Math.PI/2,-Math.PI/2+2*Math.PI*global/100); x.stroke();
+        if(sv) sv.parentNode.replaceChild(cv,sv); var st=cR.querySelector("strong"); if(st) st.textContent=global; }
+      w.appendChild(c); var hold=el("div","pdf-hold"); hold.appendChild(w); document.body.appendChild(hold);
+      var nom="rapport-seo-"+f.host.replace(/^www\./,"").replace(/[^a-z0-9.-]/gi,"-")+".pdf";
+      window.html2pdf().set({ margin:[12,12,14,12], filename:nom, image:{type:"jpeg", quality:0.95},
+        html2canvas:{scale:2, useCORS:true, backgroundColor:"#ffffff", scrollX:0, scrollY:0},
+        jsPDF:{unit:"mm", format:"a4", orientation:"portrait"},
+        pagebreak:{mode:["css","legacy"], before:[".pdf-brk"], avoid:[".rp-item",".rp-tile",".rp-count","tr",".rp-ok li",".rp-head",".rp-h"]}
+      }).from(w).save().then(function(){ hold.parentNode.removeChild(hold); fin(); }, function(){ if(hold.parentNode) hold.parentNode.removeChild(hold); fin(); imprimerNavigateur(); });
+    });
+  }
   var mh=contactHref();
   function mailLink(){ if(!mh || f.host==="kevinnsame.github.io") return null; var a=el("a","rp-mail",L("M'écrire pour en parler","Email me to discuss it")); a.href=mh+"?subject="+encodeURIComponent(L("Rapport SEO de ","SEO report for ")+f.host); a.addEventListener("click",function(){ push({event:"audit_contact", domaine:f.host, canal:"rapport_email"}); }); return a; }
 
@@ -290,7 +315,7 @@ function render(){
   } else {
     ctaBody.appendChild(el("p","rp-cta-t",L("Votre rapport complet est prêt","Your full report is ready")));
     ctaBody.appendChild(el("p","rp-cta-s",L(list.length+" corrections expliquées, vos notes par thème et le détail des "+pagesN+" pages visitées.",list.length+" fixes explained, your scores by area and details of the "+pagesN+" pages visited.")));
-    var pdf=el("button","rp-btn",L("Télécharger le PDF","Download the PDF")); pdf.type="button"; pdf.addEventListener("click",imprimer); ctaBody.appendChild(pdf);
+    var pdf=el("button","rp-btn",L("Télécharger le PDF","Download the PDF")); pdf.type="button"; pdf.addEventListener("click",function(){ imprimer(pdf); }); ctaBody.appendChild(pdf);
   }
   lock.appendChild(cta); scr.appendChild(lock);
   var m0=mailLink(); if(m0){ var a0=el("div","rp-actions"); a0.appendChild(m0); scr.appendChild(a0); }
@@ -309,7 +334,7 @@ function render(){
     cats.forEach(function(c,i){ var s=scores[i], t=el("div","rp-tile is-"+tone(s)); t.appendChild(el("strong",null,String(s))); t.appendChild(el("span",null,c[1])); tl.appendChild(t); });
     full.appendChild(tl);
     if(list.length){
-      full.appendChild(el("h4","rp-h",L("Ce qu'il faut corriger, dans l'ordre","What to fix, in order")));
+      full.appendChild(el("h4","rp-h pdf-brk",L("Ce qu'il faut corriger, dans l'ordre","What to fix, in order")));
       var ol=el("ol","rp-list"); list.forEach(function(r,i){ ol.appendChild(item(r,i,true)); }); full.appendChild(ol);
     }
     var ok=passes(f); if(ok.length){ full.appendChild(el("h4","rp-h",L("Ce qui fonctionne déjà","What already works"))); var ul2=el("ul","rp-ok"); ok.forEach(function(x){ ul2.appendChild(el("li",null,x)); }); full.appendChild(ul2); }
@@ -364,7 +389,7 @@ function gateBox(f, global, done){
     inp.focus();
     fm.addEventListener("submit",function(ev){ ev.preventDefault(); b.disabled=true; er.textContent="";
       call({action:"verify", email:mail, code:inp.value}).then(function(j){
-        if(j.ok){ try{ sessionStorage.setItem("kn_rp_ok","1"); }catch(x){} push({event:"rapport_code_valide", domaine:f.host}); step1(); done(); }
+        if(j.ok){ try{ sessionStorage.setItem("kn_rp_ok",f.host); }catch(x){} push({event:"rapport_code_valide", domaine:f.host}); step1(); done(); }
         else { er.textContent=(MSG[j.error]||MSG.reseau)+(j.reste!=null?L(" Essais restants : "," Attempts left: ")+j.reste+".":""); b.disabled=false; }
       }).catch(function(){ er.textContent=MSG.reseau; b.disabled=false; }); });
   }
@@ -384,6 +409,15 @@ function start(url){
 }
 
 // Quand le rapport est prêt, le panneau de droite se réduit à une ligne : tout le reste est dans le rapport.
+var pdfLib=null;
+function chargerPdf(cb){
+  if(window.html2pdf) return cb(true);
+  if(pdfLib){ pdfLib.push(cb); return; }
+  pdfLib=[cb]; var sc=document.createElement("script"); sc.src="/assets/vendor/html2pdf.bundle.min.js"; sc.async=true;
+  sc.onload=function(){ var l=pdfLib; pdfLib=null; l.forEach(function(f){ f(true); }); };
+  sc.onerror=function(){ var l=pdfLib; pdfLib=null; l.forEach(function(f){ f(false); }); };
+  document.head.appendChild(sc);
+}
 function compactPanel(){
   var panel=document.getElementById("audit-panel"); if(!panel || !state.facts || !state.box) return;
   panel.hidden=true;
