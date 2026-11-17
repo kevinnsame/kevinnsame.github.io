@@ -226,7 +226,7 @@ function render(){
   var f=state.facts, box=state.box; if(!box) return;
   box.innerHTML=""; box.hidden=false;
   if(state.err){ box.appendChild(el("p","audit-err",L("Le rapport détaillé n'a pas pu être généré pour ce site : ","The detailed report could not be generated for this site: ")+state.err)); return; }
-  if(!f){ var w=el("div","rp-wait"); w.appendChild(el("p","rp-wait-t",L("Le rapport complet se prépare…","The full report is being prepared…"))); w.appendChild(el("p","rp-wait-s",L("Le robot visite vos pages, comme le ferait Google.","The crawler is visiting your pages, the way Google would."))); var b=el("div","bar"); b.appendChild(el("span")); w.appendChild(b); box.appendChild(w); return; }
+  if(!f){ box.hidden=true; return; }
 
   var list=rules(f, state.psi, state.pos), order={crit:0,high:1,med:2,low:3}, effo={quick:0,mid:1,proj:2};
   list.sort(function(a,b){ return order[a.sev]-order[b.sev] || effo[a.eff]-effo[b.eff]; });
@@ -374,7 +374,7 @@ function gateBox(f, global, done){
 
 function start(url){
   var grid=document.querySelector("#audit .audit-grid"); if(!grid) return;
-  if(!state.box){ state.box=el("div","seo-report"); state.box.id="seo-report"; state.box.setAttribute("aria-live","polite"); grid.parentNode.insertBefore(state.box, grid.nextSibling); }
+  if(!state.box){ state.box=el("div","seo-report"); state.box.id="seo-report"; state.box.setAttribute("aria-live","polite"); var pn=document.getElementById("audit-panel"); if(pn && pn.parentNode===grid){ var rc=el("div","audit-right"); grid.insertBefore(rc,pn); rc.appendChild(pn); rc.appendChild(state.box); } else grid.parentNode.insertBefore(state.box, grid.nextSibling); }
   state.url=url; state.facts=null; state.psi=null; state.pos=null; state.err=null; render();
   var my=url;
   fetch(REPORT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:url})})
@@ -386,14 +386,9 @@ function start(url){
 // Quand le rapport est prêt, le panneau de droite se réduit à une ligne : tout le reste est dans le rapport.
 function compactPanel(){
   var panel=document.getElementById("audit-panel"); if(!panel || !state.facts || !state.box) return;
-  panel.innerHTML="";
-  panel.classList.add("is-compact");
-  panel.appendChild(el("p","rp-done-t",L("Analyse terminée","Analysis complete")));
-  var a=el("a","rp-done-l",L("Voir le résultat ↓","See the result ↓")); a.href="#seo-report";
-  a.addEventListener("click",function(ev){ ev.preventDefault(); try{ state.box.scrollIntoView({behavior:"smooth", block:"start"}); }catch(x){ state.box.scrollIntoView(); } });
-  panel.appendChild(a);
+  panel.hidden=true;
 }
-document.addEventListener("kn:audit-start",function(e){ var panel=document.getElementById("audit-panel"); if(panel) panel.classList.remove("is-compact"); start(e.detail.url); });
+document.addEventListener("kn:audit-start",function(e){ var panel=document.getElementById("audit-panel"); if(panel){ panel.classList.remove("is-compact"); panel.hidden=false; } start(e.detail.url); });
 document.addEventListener("kn:audit-psi",function(e){ state.psi=e.detail.data; if(state.facts){ render(); compactPanel(); } });
 document.addEventListener("kn:audit-pos",function(e){ state.pos=e.detail.data; if(state.facts){ render(); compactPanel(); } });
 window.KNSeoReport={rules:rules, passes:passes, _state:state, _render:render, _start:start, _setUrl:function(u){ REPORT_URL=u; }};
