@@ -35,6 +35,7 @@ var T = EN ? {
 };
 
 function push(o){ try{ (window.dataLayer = window.dataLayer || []).push(o); }catch(e){} }
+function emit(name, detail){ try{ document.dispatchEvent(new CustomEvent(name,{detail:detail})); }catch(e){} }
 function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.className=cls; if(txt!=null) n.textContent=txt; return n; }
 
 (function(){
@@ -163,7 +164,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     seoBox.innerHTML=""; seoBox.appendChild(el("h3",null,T.seoTitle)); seoBox.appendChild(el("p","audit-empty",T.seoWait));
     var kws = kwInput && kwInput.value ? kwInput.value.split(",").map(function(x){return x.trim();}).filter(Boolean).slice(0,3) : [];
     fetch(AUDIT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:url, lang:EN?"en":"fr", keywords:kws})})
-      .then(function(r){ return r.json(); }).then(renderSeo).catch(function(){ renderSeo({error:"x"}); });
+      .then(function(r){ return r.json(); }).then(function(j){ renderSeo(j); if(j && !j.error) emit("kn:audit-pos",{data:j}); }).catch(function(){ renderSeo({error:"x"}); });
   }
 
   function norm(v){
@@ -282,6 +283,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     var i=0, iv=setInterval(function(){ i=Math.min(i+1,T.steps.length-1); msg.textContent=T.steps[i]; },7000);
     var host=""; try{ host=new URL(url).hostname; }catch(e){}
     push({event:"audit_lance", domaine:host});
+    emit("kn:audit-start",{url:url});
     runSeo(url);
     var api="https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&locale="+(EN?"en":"fr")+
       "&category=performance&category=seo&category=accessibility&category=best-practices&url="+encodeURIComponent(url)+
@@ -294,6 +296,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
         throw new Error(res.status===429||/quota/i.test(m) ? T.quota : m);
       }
       render(res.j, url);
+      emit("kn:audit-psi",{data:res.j});
     })
     .catch(function(e){
       clearInterval(iv); panel.innerHTML="";
