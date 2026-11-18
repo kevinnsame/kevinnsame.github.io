@@ -337,7 +337,7 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   var btn=el("button","chat-fab",C.open); btn.type="button"; btn.setAttribute("aria-expanded","false");
   var pan=el("div","chat-panel"); pan.hidden=true; pan.setAttribute("role","dialog"); pan.setAttribute("aria-label",C.title);
   var head=el("div","chat-head"); head.appendChild(el("strong",null,C.title));
-  var x=el("button","chat-x","×"); x.type="button"; x.setAttribute("aria-label",C.close); head.appendChild(x);
+  var x=el("button","chat-x",C.close); x.type="button"; x.setAttribute("aria-label",C.close); head.appendChild(x);
   var info=el("p","chat-info",C.info); var ml=el("a",null,"kevinsame99@gmail.com"); ml.href="mailto:kevinsame99@gmail.com"; info.appendChild(ml);
   var log=el("div","chat-log"); log.setAttribute("aria-live","polite");
   var sug=el("div","chat-sugg");

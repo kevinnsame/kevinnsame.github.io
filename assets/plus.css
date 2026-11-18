@@ -232,7 +232,7 @@ nav ul li:nth-child(2), nav ul li:nth-child(3), nav ul li:nth-child(7){display:n
 
 .rp-ok{list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:8px;}
 .rp-ok li{font-size:16px; background:var(--panel); border-radius:10px; padding:12px 14px 12px 40px; position:relative;}
-.rp-ok li::before{content:"✓"; position:absolute; left:15px; color:var(--good); font-weight:700;}
+.rp-ok li::before{content:""; position:absolute; left:16px; top:50%; width:6px; height:6px; margin-top:-3px; border-radius:50%; background:var(--good);}
 
 .rp-tablew{overflow-x:auto; background:var(--panel); border-radius:14px; padding:6px 0;}
 .rp-table{width:100%; border-collapse:collapse; font-size:15px;}
@@ -494,3 +494,9 @@ nav ul li:nth-child(2), nav ul li:nth-child(3), nav ul li:nth-child(7){display:n
 .pdf-export .rp-table{font-size:11px;}
 .pdf-export .rp-ring svg{transform:none !important;}
 .pdf-export .pdf-brk{margin-top:0 !important;}
+
+/* Pied de page : une ligne simple */
+footer.contact .fine{display:flex; justify-content:space-between; gap:16px; margin-top:56px; padding-top:20px; border-top:1px solid #3a3a3c; font-size:13px; color:#a1a1a6; text-align:left;}
+footer.contact .fine a{color:#f5f5f7; text-decoration:none;}
+footer.contact .fine a:hover{text-decoration:underline;}
+.chat-x{font-size:14px !important; font-weight:600; color:var(--accent) !important; padding:4px 2px !important;}
