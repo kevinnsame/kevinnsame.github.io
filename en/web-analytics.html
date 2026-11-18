@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Web analytics: GA4 and GTM tracking plan and dashboard | Kevin Nsamè</title>
-<meta name="description" content="The tracking plan of my portfolio (GA4 and Google Tag Manager) and its public Data Studio dashboard: audience, SEO audit tool, contact clicks and Search Console.">
+<title>Web analytics: GA4 and Data Studio dashboard | Kevin Nsamè</title>
+<meta name="description" content="The Data Studio dashboard of my portfolio, connected to GA4 and Google Tag Manager: audience, SEO audit tool, contact clicks and Search Console.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Kevin Nsamè">
 <link rel="canonical" href="https://kevinnsame.github.io/en/web-analytics.html">
@@ -14,13 +14,13 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Kevin Nsamè">
-<meta property="og:title" content="Web analytics: GA4 and GTM tracking plan and dashboard | Kevin Nsamè">
-<meta property="og:description" content="The tracking plan of my portfolio (GA4 and Google Tag Manager) and its public Data Studio dashboard: audience, SEO audit tool, contact clicks and Search Console.">
+<meta property="og:title" content="Web analytics: GA4 and Data Studio dashboard | Kevin Nsamè">
+<meta property="og:description" content="The Data Studio dashboard of my portfolio, connected to GA4 and Google Tag Manager: audience, SEO audit tool, contact clicks and Search Console.">
 <meta property="og:url" content="https://kevinnsame.github.io/en/web-analytics.html">
 <meta property="og:image" content="https://kevinnsame.github.io/photo.jpg">
 <meta name="twitter:card" content="summary">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"Service","@id":"https://kevinnsame.github.io/en/web-analytics.html#service","name":"Web analytics and tracking","serviceType":"Web analytics and tracking","description":"The tracking plan of my portfolio (GA4 and Google Tag Manager) and its public Data Studio dashboard: audience, SEO audit tool, contact clicks and Search Console.","url":"https://kevinnsame.github.io/en/web-analytics.html","inLanguage":"en-US","provider":{"@id":"https://kevinnsame.github.io/#person"}},{"@type":"Person","@id":"https://kevinnsame.github.io/#person","name":"Kevin Nsamè","url":"https://kevinnsame.github.io/","jobTitle":"Digital marketing specialist","sameAs":["https://www.linkedin.com/in/kevin-nsame-89b61b1b2"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Portfolio","item":"https://kevinnsame.github.io/en/"},{"@type":"ListItem","position":2,"name":"Web analytics","item":"https://kevinnsame.github.io/en/web-analytics.html"}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"Service","@id":"https://kevinnsame.github.io/en/web-analytics.html#service","name":"Web analytics and tracking","serviceType":"Web analytics and tracking","description":"The Data Studio dashboard of my portfolio, connected to GA4 and Google Tag Manager: audience, SEO audit tool, contact clicks and Search Console.","url":"https://kevinnsame.github.io/en/web-analytics.html","inLanguage":"en-US","provider":{"@id":"https://kevinnsame.github.io/#person"}},{"@type":"Person","@id":"https://kevinnsame.github.io/#person","name":"Kevin Nsamè","url":"https://kevinnsame.github.io/","jobTitle":"Digital marketing specialist","sameAs":["https://www.linkedin.com/in/kevin-nsame-89b61b1b2"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Portfolio","item":"https://kevinnsame.github.io/en/"},{"@type":"ListItem","position":2,"name":"Web analytics","item":"https://kevinnsame.github.io/en/web-analytics.html"}]}]}
 </script>
 <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#1d1d1f;background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}a{color:#0071e3;text-decoration:none}a:hover{text-decoration:underline}.wrap{max-width:760px;margin:0 auto;padding:0 24px}nav{border-bottom:1px solid rgba(0,0,0,.06);font-size:13px}nav .wrap{max-width:900px;height:52px;display:flex;align-items:center;gap:8px;color:#6e6e73;flex-wrap:wrap}nav a{color:#1d1d1f;font-weight:600}header{padding:64px 0 40px;background:#f5f5f7}.kicker{font-size:13px;font-weight:600;color:#0071e3;margin-bottom:12px}h1{font-size:clamp(30px,4.5vw,46px);letter-spacing:-.025em;line-height:1.1;margin-bottom:18px}.lead{font-size:19px;color:#424245}.result{display:flex;gap:16px;flex-wrap:wrap;margin-top:28px}.result div{background:#fff;border:1px solid #d2d2d7;border-radius:14px;padding:16px 20px}.result b{display:block;font-size:26px;letter-spacing:-.02em}.result span{font-size:13px;color:#6e6e73}main{padding:48px 0 72px}h2{font-size:24px;letter-spacing:-.015em;margin:44px 0 14px}h2:first-child{margin-top:0}h3{font-size:18px;margin:26px 0 8px}p{font-size:17px;color:#333336;margin-bottom:14px}ul,ol{margin:0 0 16px 22px}li{font-size:16.5px;color:#333336;margin-bottom:8px}.tools{font-size:15px;color:#6e6e73}.next{margin-top:48px;padding-top:24px;border-top:1px solid #d2d2d7;font-size:16px}footer{background:#f5f5f7;padding:28px 0;font-size:13px;color:#6e6e73}.zone{font-size:15px;color:#6e6e73}.cta{display:inline-block;margin-top:8px;background:#0071e3;color:#fff;padding:11px 22px;border-radius:980px;font-weight:500}.cta:hover{text-decoration:none;background:#0077ed}.lang{margin-left:auto;font-weight:500;white-space:nowrap}nav .wrap{height:auto;min-height:52px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}table{width:100%;border-collapse:collapse;margin:8px 0 20px;font-size:15px}th,td{text-align:left;padding:9px 10px;border-bottom:1px solid #e3e3e8;vertical-align:top}th{font-size:13px;color:#6e6e73;font-weight:600}td code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;color:#1d1d1f}.tablew{overflow-x:auto}.dash{margin:20px 0 10px;border:1px solid #d2d2d7;border-radius:14px;overflow:hidden;background:#f5f5f7}.dash iframe{display:block;width:100%;aspect-ratio:4/3;min-height:480px;border:0}.note{font-size:14px;color:#6e6e73}</style>
 <!-- Google Tag Manager -->
@@ -40,36 +40,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <nav aria-label="Breadcrumb"><div class="wrap"><a href="/en/">Kevin Nsamè</a> <span>/</span> <span>Web analytics</span> <a class="lang" href="/webanalyse.html" hreflang="fr" lang="fr">Version française</a></div></nav>
 <header><div class="wrap">
-<div class="kicker">Web analytics, GA4, Google Tag Manager, Data Studio</div>
-<h1>Web analytics: the tracking of my own portfolio</h1>
-<p class="lead">I no longer have access to my former employers' data, so I show the tracking I set up on this site. Every useful click is sent to GA4 through Google Tag Manager, and the dashboard below updates on its own.</p>
-<div class="result"><div><b>20</b><span>events tracked in GA4</span></div><div><b>GTM</b><span>one versioned container</span></div><div><b>Data Studio</b><span>public dashboard</span></div></div>
+<h1>Web analytics: portfolio dashboard</h1>
+<p class="lead">I built this Looker Studio dashboard from the tracking I set up on this site with Google Tag Manager, GA4 and Search Console. It shows the audience, use of the SEO audit tool, contact clicks and visibility in Google, with data updated every day.</p>
 </div></header>
 <main><div class="wrap">
-<h2>The live dashboard</h2>
-<p>Three pages: site audience, use of the SEO audit tool with contact clicks, and visibility in Google (Search Console). You can change the date range at the top right.</p>
 <div class="dash"><iframe src="https://datastudio.google.com/embed/reporting/ad8f4753-785c-4bfe-9486-3afb8334a28b/page/TlJ0C" title="Portfolio Data Studio dashboard" loading="lazy" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe></div>
-<p class="note">Dashboard not showing? <a href="https://datastudio.google.com/reporting/ad8f4753-785c-4bfe-9486-3afb8334a28b" target="_blank" rel="noopener">Open it in Data Studio</a>.</p>
-
-<h2>The tracking plan</h2>
-<p>Before adding a tag, I list what counts as a useful action on the site. For a portfolio, that means contacts, case study reads and use of the tools. Here is what is measured today:</p>
-<div class="tablew"><table><thead><tr><th>What I measure</th><th>GA4 event</th><th>GTM trigger</th></tr></thead><tbody><tr><td>Click on the email address</td><td><code>clic_email</code></td><td>link starting with mailto:</td></tr><tr><td>Click on the phone number</td><td><code>clic_telephone</code></td><td>link starting with tel:</td></tr><tr><td>Click to LinkedIn</td><td><code>clic_linkedin</code></td><td>link containing linkedin.com</td></tr><tr><td>“Contact me” button</td><td><code>clic_me_contacter</code></td><td>link text</td></tr><tr><td>“See my experience” button</td><td><code>clic_voir_parcours</code></td><td>link text</td></tr><tr><td>Case study read</td><td><code>lecture_etude_de_cas</code></td><td>75% scroll on /etudes-de-cas/</td></tr><tr><td>Video plays (video pages)</td><td><code>video_start, video_progress, video_complete</code></td><td>listener on HTML5 videos</td></tr><tr><td>Video started from the home page</td><td><code>video_play</code></td><td>event sent by the site</td></tr><tr><td>SEO audit started, then finished</td><td><code>audit_lance, audit_termine</code></td><td>event sent by the tool, with the tested domain</td></tr><tr><td>SEO report displayed</td><td><code>rapport_seo</code></td><td>with the domain, score and number of fixes</td></tr><tr><td>Code requested, then validated</td><td><code>rapport_code_envoye, rapport_code_valide</code></td><td>PDF report form</td></tr><tr><td>PDF downloaded</td><td><code>rapport_pdf</code></td><td>“Download the PDF” button</td></tr><tr><td>Application link opened</td><td><code>candidature_view</code></td><td>personalised link sent to a recruiter</td></tr><tr><td>Chatbot questions</td><td><code>chat_open, chat_question</code></td><td>opening and sending a question</td></tr><tr><td>Test in ChatGPT or Perplexity</td><td><code>geo_test</code></td><td>“Ask…” buttons</td></tr></tbody></table></div>
-<p>The audit tool events carry parameters (tested domain, contact channel). I registered them as custom dimensions in GA4, which makes it possible to see each step of the audit site by site.</p>
-
-<h2>My method</h2>
-<ol>
-<li>Define what counts as a conversion, with the person who uses the numbers.</li>
-<li>Set up the tags in Google Tag Manager, with precise triggers and readable event names.</li>
-<li>Check every tag in GTM preview mode before publishing a version.</li>
-<li>Register the useful parameters as custom dimensions in GA4.</li>
-<li>Build the dashboard in Data Studio, connected to GA4 and Search Console.</li>
-</ol>
-<p>On this site, version 4 of the GTM container added tracking for the SEO report: display, code requested, code validated and PDF download.</p>
-
-<h2>Contact me</h2>
-<p>For a position or a tracking project, email me at <a href="mailto:kevinsame99@gmail.com">kevinsame99@gmail.com</a> or call <a href="tel:+33695822479">+33 6 95 82 24 79</a>.</p>
-<p><a class="cta" href="mailto:kevinsame99@gmail.com?subject=Web analytics">Send an email</a></p>
-<div class="next"><p>See also: <a href="/en/seo-consultant.html">SEO consultant</a> and <a href="/en/google-ads-consultant.html">Google Ads consultant</a></p><p><a href="/en/">Back to portfolio</a></p></div>
+<p class="note">Dashboard not showing? <a href="https://datastudio.google.com/reporting/ad8f4753-785c-4bfe-9486-3afb8334a28b" target="_blank" rel="noopener">Open it in Looker Studio</a>.</p>
+<div class="next"><p><a href="/en/">Back to portfolio</a></p></div>
 </div></main>
 <footer><div class="wrap">Kevin Nsamè, digital marketing and acquisition specialist: SEO, Google Ads, web analytics and content creation</div></footer>
 </body>
