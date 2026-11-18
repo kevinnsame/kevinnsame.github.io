@@ -180,4 +180,18 @@
 <video:family_friendly>yes</video:family_friendly>
 </video:video>
 </url>
+<url>
+<loc>https://kevinnsame.github.io/webanalyse.html</loc>
+<lastmod>2026-11-18</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/webanalyse.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/web-analytics.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/webanalyse.html"/>
+</url>
+<url>
+<loc>https://kevinnsame.github.io/en/web-analytics.html</loc>
+<lastmod>2026-11-18</lastmod>
+<xhtml:link rel="alternate" hreflang="fr" href="https://kevinnsame.github.io/webanalyse.html"/>
+<xhtml:link rel="alternate" hreflang="en" href="https://kevinnsame.github.io/en/web-analytics.html"/>
+<xhtml:link rel="alternate" hreflang="x-default" href="https://kevinnsame.github.io/webanalyse.html"/>
+</url>
 </urlset>
