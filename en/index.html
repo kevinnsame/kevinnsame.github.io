@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kevin Nsamè, digital marketing specialist: SEO, GEO, Google Ads</title>
-<meta name="description" content="Digital marketing specialist, 3 years in B2B: SEO, GEO, Google Ads, GA4. Case studies: +47% leads from Google Ads, #1 on Google for 4 keywords.">
+<meta name="description" content="Digital marketing specialist, 3 years of experience: SEO, GEO, Google Ads, web analytics with GA4 and Tag Manager. Case studies: +47% leads from Google Ads, #1 on Google for 4 keywords.">
 <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
 <meta name="author" content="Kevin Nsamè">
 <link rel="canonical" href="https://kevinnsame.github.io/en/">
@@ -62,7 +62,7 @@
     "Digital Acquisition Specialist",
     "SEO and Google Ads Consultant"
    ],
-   "description": "Digital marketing specialist with 3 years of experience in B2B industrial and tech companies: SEO, GEO, Google Ads, web analytics and content creation.",
+   "description": "Digital marketing specialist with 3 years of experience: SEO, GEO, Google Ads, web analytics (GA4, Tag Manager, Looker Studio) and content creation.",
    "url": "https://kevinnsame.github.io/en/",
    "image": "https://kevinnsame.github.io/photo.jpg",
    "email": "mailto:kevinsame99@gmail.com",
@@ -224,8 +224,22 @@ padding:22px 24px;
 .fact .label{font-size:14px; color:var(--text-soft); margin-top:4px;}
 
 .skills-grid{
-display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;
+display:grid; grid-template-columns:repeat(2, 1fr); gap:20px;
 }
+header.hero{padding:64px 24px 80px;}
+.photo-wrap{width:104px; height:104px; margin-bottom:24px;}
+header.hero h1.hero-claim{font-size:clamp(32px, 5.2vw, 56px); max-width:860px; margin:0 auto 20px;}
+header.hero h1.hero-claim em{font-style:normal; color:var(--accent);}
+.hero-proof{display:flex; justify-content:center; flex-wrap:wrap; gap:0; margin:0 auto 40px; max-width:760px;}
+.hero-proof a{display:block; text-align:left; padding:4px 28px; border-left:1px solid var(--line);}
+.hero-proof a:first-child{border-left:0;}
+.hero-proof b{display:block; font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1.15;}
+.hero-proof span{display:block; font-size:13.5px; color:var(--text-soft); max-width:190px; line-height:1.35;}
+.hero-proof a:hover span{color:var(--accent);}
+.hero-audit{max-width:620px; margin:-12px auto 36px; padding:14px 18px; border:1px solid var(--accent); border-radius:14px; background:var(--accent-soft); text-align:left; font-size:15px; line-height:1.45;}
+.hero-audit a{color:var(--accent); font-weight:600; white-space:nowrap;}
+.hero-audit .ha-spin{display:inline-block; width:10px; height:10px; border-radius:50%; border:2px solid var(--accent); border-right-color:transparent; margin-right:8px; vertical-align:-1px; animation:haspin .9s linear infinite;}
+@keyframes haspin{to{transform:rotate(360deg);}}
 .skill-card{
 background:#fff; border:1px solid var(--line); border-radius:var(--radius);
 padding:28px 26px;
@@ -319,6 +333,9 @@ transition:background .2s;
 .fine{font-size:13px; color:#6e6e73;}
 
 @media (max-width: 720px){
+.hero-proof{flex-direction:column; gap:14px; align-items:center;}
+.hero-proof a{border-left:0; text-align:center; padding:0;}
+.hero-proof span{max-width:none;}
 .about-grid{grid-template-columns:1fr; gap:40px;}
 .skills-grid{grid-template-columns:1fr;}
 .projects-grid{grid-template-columns:1fr;}
@@ -378,12 +395,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="photo-wrap">
 <img src="/photo.jpg" width="480" height="480" alt="Portrait of Kevin Nsamè, digital marketing specialist" fetchpriority="high">
 </div>
-<div class="eyebrow">Digital marketing specialist: SEO, GEO, Google Ads and content</div>
-<h1>Kevin Nsamè</h1>
-<p class="subtitle">SEO, GEO, paid search and content creation. Three years growing the online visibility of B2B industrial and tech companies, and measuring what it brings in.</p>
+<div class="eyebrow">Kevin Nsamè, digital marketing specialist</div>
+<h1 class="hero-claim">+47% more leads from Google Ads, with <em>every conversion measured</em> in GA4</h1>
+<p class="subtitle">I bring in traffic (SEO, GEO, Google Ads), track every form, call and download in GA4 and Tag Manager, and produce the content that converts.</p>
+<div id="hero-audit" class="hero-audit" hidden></div>
+<div class="hero-proof">
+<a href="/en/case-studies/google-ads-castles-technology.html"><b>+47%</b><span>more leads from Google Ads</span></a>
+<a href="/en/case-studies/seo-amada-europe.html"><b>4</b><span>keywords ranked #1 on Google</span></a>
+<a href="/en/web-analytics.html"><b>Live</b><span>the GA4 dashboard of this site</span></a>
+</div>
 <div class="cta-row">
 <a class="btn btn-primary" href="#contact">Contact me</a>
-<a class="btn btn-secondary" href="#experience">See my experience</a>
+<a class="btn btn-secondary" href="#projects">See my results</a>
 </div>
 </header>
 
@@ -396,12 +419,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div>
 <p>I run traffic acquisition and lead generation, content included: SEO and Google Ads campaigns, optimization for AI search engines and results tracking in GA4, Tag Manager and Looker Studio. The visuals, videos and newsletters, I produce myself.</p>
 <p>I am available now and looking for an opportunity as a digital marketing or digital acquisition specialist. I also take on SEO and Google Ads consulting work.</p>
-<p>I am as comfortable with numbers as with creative work: Google Analytics, Tag Manager and Google Ads for performance, Photoshop, Premiere Pro and After Effects for content.</p>
+<p>On the data side, I build the tracking plan in Tag Manager, set up GA4 events (forms, calls, data sheet downloads) and create the Looker Studio dashboards used to make decisions. On the creative side, I work with Photoshop, Illustrator, Premiere Pro and After Effects.</p>
 </div>
 <div class="facts">
 <div class="fact">
 <div class="num">+47%</div>
-<div class="label">more leads in 2 months from Google Ads campaigns (Castles Technology)</div>
+<div class="label">more leads from Google Ads campaigns (Castles Technology)</div>
 </div>
 <div class="fact">
 <div class="num">4</div>
@@ -409,7 +432,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 <div class="fact">
 <div class="num">3 years</div>
-<div class="label">in B2B digital marketing, at AMADA Europe then Castles Technology</div>
+<div class="label">in digital marketing, at AMADA Europe then Castles Technology</div>
+</div>
+<div class="fact">
+<div class="num">GA4 + GTM</div>
+<div class="label">tracking plan, conversion tracking and Looker Studio dashboards (<a href="/en/web-analytics.html" style="color:var(--accent)">see the one for this site</a>)</div>
 </div>
 </div>
 </div>
@@ -451,8 +478,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <li>Google Ads (Search, Display, Shopping, Video, Remarketing)</li>
 <li>Technical and editorial SEO</li>
 <li>GEO: visibility in AI search engines (ChatGPT, Perplexity, AI Overviews)</li>
-<li>Web analytics, tracking and reporting (KPIs, dashboards)</li>
 <li>Deploying AI agents to automate marketing workflows</li>
+</ul>
+</div>
+<div class="skill-card">
+<h3>Web analytics and tracking</h3>
+<ul>
+<li>Tracking plan and GA4 events</li>
+<li>Google Tag Manager: forms, email and phone clicks, downloads</li>
+<li>Looker Studio dashboards and KPI reporting</li>
+<li>Search Console, Matomo, Core Web Vitals audits</li>
 </ul>
 </div>
 <div class="skill-card">
@@ -569,9 +604,18 @@ Your browser does not support video playback.
 <article class="project-card">
 <div class="project-body">
 <div class="project-tag">Castles Technology</div>
-<h3>Google Ads: +47% leads in 2 months</h3>
+<h3>Google Ads: +47% leads</h3>
 <p>Search and remarketing campaigns, with an audit of site performance (Core Web Vitals) and GA4.</p>
 <a class="project-link" href="/en/case-studies/google-ads-castles-technology.html">Read the Google Ads case study</a>
+</div>
+</article>
+
+<article class="project-card">
+<div class="project-body">
+<div class="project-tag">This portfolio</div>
+<h3>Web analytics: a live GA4 dashboard</h3>
+<p>Tracking set up with Tag Manager and GA4 on this site, then a Looker Studio dashboard: audience, use of the audit tool, contact clicks and Google rankings, updated daily.</p>
+<a class="project-link" href="/en/web-analytics.html">See the dashboard</a>
 </div>
 </article>
 
@@ -593,7 +637,7 @@ Your browser does not support video playback.
 <h3>Castles Technology</h3>
 <div class="role">Digital Marketing Specialist</div>
 <ul>
-<li>Planned and managed Google Ads campaigns (Search and remarketing): +47% leads in 2 months (<a href="/en/case-studies/google-ads-castles-technology.html" style="color:var(--accent)">case study</a>)</li>
+<li>Planned and managed Google Ads campaigns (Search and remarketing): +47% leads (<a href="/en/case-studies/google-ads-castles-technology.html" style="color:var(--accent)">case study</a>)</li>
 <li>Technical SEO audit (Core Web Vitals, GA4) and conversion tracking in Google Tag Manager: data sheet downloads, email and phone clicks</li>
 <li>Set up Google Search Console and tracked organic visibility KPIs (rankings, impressions, clicks)</li>
 <li>GEO: optimized content for ChatGPT, Perplexity and AI Overviews</li>
@@ -640,19 +684,6 @@ Your browser does not support video playback.
 <ul>
 <li>Social media: managed the Facebook page</li>
 <li>Created and ran Meta Ads campaigns</li>
-</ul>
-</div>
-</div>
-
-<div class="tl-item">
-<div class="tl-date">Apr 2020 <br>to Sep 2020</div>
-<div class="tl-dot"></div>
-<div class="tl-content">
-<h3>Saham Assurance</h3>
-<div class="role">Insurance Advisor</div>
-<ul>
-<li>Prospecting and client portfolio management</li>
-<li>Set up email sequences for renewal reminders and upselling</li>
 </ul>
 </div>
 </div>
