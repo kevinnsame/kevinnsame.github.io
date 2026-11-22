@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kevin Nsamè, chargé de marketing digital : SEO, GEO, SEA</title>
-<meta name="description" content="Chargé de marketing digital, 3 ans en B2B : SEO, GEO, Google Ads, GA4. Études de cas : +47 % de leads en SEA, 1re position Google sur 4 mots-clés.">
+<meta name="description" content="Chargé de marketing digital, 3 ans d'expérience : SEO, GEO, Google Ads, webanalyse GA4 et Tag Manager. Études de cas : +47 % de leads avec Google Ads, 1re position Google sur 4 mots-clés.">
 <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
 <meta name="author" content="Kevin Nsamè">
 <link rel="canonical" href="https://kevinnsame.github.io/">
@@ -58,7 +58,7 @@
 "givenName": "Kevin",
 "familyName": "Nsamè",
 "jobTitle": ["Chargé de marketing digital", "Chargé d'acquisition digitale", "Consultant SEO et SEA"],
-"description": "Chargé de marketing digital, 3 ans d'expérience en B2B industriel et tech : SEO, GEO, SEA, webanalyse et création de contenu.",
+"description": "Chargé de marketing digital, 3 ans d'expérience : SEO, GEO, SEA, webanalyse (GA4, Tag Manager, Looker Studio) et création de contenu.",
 "url": "https://kevinnsame.github.io/",
 "image": "https://kevinnsame.github.io/photo.jpg",
 "email": "mailto:kevinsame99@gmail.com",
@@ -182,8 +182,22 @@ padding:22px 24px;
 .fact .label{font-size:14px; color:var(--text-soft); margin-top:4px;}
 
 .skills-grid{
-display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;
+display:grid; grid-template-columns:repeat(2, 1fr); gap:20px;
 }
+header.hero{padding:64px 24px 80px;}
+.photo-wrap{width:104px; height:104px; margin-bottom:24px;}
+header.hero h1.hero-claim{font-size:clamp(32px, 5.2vw, 56px); max-width:860px; margin:0 auto 20px;}
+header.hero h1.hero-claim em{font-style:normal; color:var(--accent);}
+.hero-proof{display:flex; justify-content:center; flex-wrap:wrap; gap:0; margin:0 auto 40px; max-width:760px;}
+.hero-proof a{display:block; text-align:left; padding:4px 28px; border-left:1px solid var(--line);}
+.hero-proof a:first-child{border-left:0;}
+.hero-proof b{display:block; font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1.15;}
+.hero-proof span{display:block; font-size:13.5px; color:var(--text-soft); max-width:190px; line-height:1.35;}
+.hero-proof a:hover span{color:var(--accent);}
+.hero-audit{max-width:620px; margin:-12px auto 36px; padding:14px 18px; border:1px solid var(--accent); border-radius:14px; background:var(--accent-soft); text-align:left; font-size:15px; line-height:1.45;}
+.hero-audit a{color:var(--accent); font-weight:600; white-space:nowrap;}
+.hero-audit .ha-spin{display:inline-block; width:10px; height:10px; border-radius:50%; border:2px solid var(--accent); border-right-color:transparent; margin-right:8px; vertical-align:-1px; animation:haspin .9s linear infinite;}
+@keyframes haspin{to{transform:rotate(360deg);}}
 .skill-card{
 background:#fff; border:1px solid var(--line); border-radius:var(--radius);
 padding:28px 26px;
@@ -277,6 +291,9 @@ transition:background .2s;
 .fine{font-size:13px; color:#6e6e73;}
 
 @media (max-width: 720px){
+.hero-proof{flex-direction:column; gap:14px; align-items:center;}
+.hero-proof a{border-left:0; text-align:center; padding:0;}
+.hero-proof span{max-width:none;}
 .about-grid{grid-template-columns:1fr; gap:40px;}
 .skills-grid{grid-template-columns:1fr;}
 .projects-grid{grid-template-columns:1fr;}
@@ -339,12 +356,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="photo-wrap">
 <img src="photo.jpg" width="480" height="480" alt="Portrait de Kevin Nsamè, chargé de marketing digital" fetchpriority="high">
 </div>
-<div class="eyebrow">Chargé de marketing digital SEO, GEO, SEA et contenus</div>
-<h1>Kevin Nsamè</h1>
-<p class="subtitle">SEO, GEO, SEA et création de contenu. Trois ans à travailler la visibilité digitale d'entreprises B2B industrielles et tech, et à mesurer ce qu'elle rapporte.</p>
+<div class="eyebrow">Kevin Nsamè, chargé de marketing digital</div>
+<h1 class="hero-claim">+47 % de leads avec Google Ads, et <em>chaque conversion mesurée</em> dans GA4</h1>
+<p class="subtitle">J'attire le trafic (SEO, GEO, Google Ads), je suis chaque formulaire, appel et téléchargement dans GA4 et Tag Manager, et je produis les contenus qui convertissent.</p>
+<div id="hero-audit" class="hero-audit" hidden></div>
+<div class="hero-proof">
+<a href="etudes-de-cas/sea-castles-technology.html"><b>+47 %</b><span>de leads avec Google Ads</span></a>
+<a href="etudes-de-cas/seo-amada-europe.html"><b>4</b><span>mots-clés en 1re position sur Google</span></a>
+<a href="webanalyse.html"><b>En direct</b><span>le tableau de bord GA4 de ce site</span></a>
+</div>
 <div class="cta-row">
 <a class="btn btn-primary" href="#contact">Me contacter</a>
-<a class="btn btn-secondary" href="#experience">Voir mon parcours</a>
+<a class="btn btn-secondary" href="#projects">Voir mes résultats</a>
 </div>
 </header>
 
@@ -357,12 +380,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div>
 <p>Je pilote l'acquisition de trafic et la génération de leads, contenus compris : campagnes SEO et SEA, optimisation pour les moteurs IA et suivi des résultats dans GA4, Tag Manager et Looker Studio. Les visuels, les vidéos et les newsletters, je les produis moi-même.</p>
 <p>Disponible immédiatement, je cherche une opportunité en tant que chargé de marketing digital ou de chargé d'acquisition digitale. Je prends aussi des missions de consultant SEO et SEA.</p>
-<p>Je suis à l'aise autant avec les chiffres qu'avec la création : Google Analytics, Tag Manager et Ads côté performance, Photoshop, Première Pro et After Effects côté contenu.</p>
+<p>Côté chiffres, je construis le plan de marquage dans Tag Manager, je configure les événements GA4 (formulaires, appels, téléchargements de fiches) et je monte les tableaux de bord Looker Studio qui servent à décider. Côté création, je travaille sur Photoshop, Illustrator, Premiere Pro et After Effects.</p>
 </div>
 <div class="facts">
 <div class="fact">
 <div class="num">+47 %</div>
-<div class="label">de leads en 2 mois grâce aux campagnes SEA (Castles Technology)</div>
+<div class="label">de leads grâce aux campagnes Google Ads (Castles Technology)</div>
 </div>
 <div class="fact">
 <div class="num">4</div>
@@ -370,7 +393,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 <div class="fact">
 <div class="num">3 ans</div>
-<div class="label">en marketing digital B2B, chez AMADA Europe puis Castles Technology</div>
+<div class="label">en marketing digital, chez AMADA Europe puis Castles Technology</div>
+</div>
+<div class="fact">
+<div class="num">GA4 + GTM</div>
+<div class="label">plan de marquage, suivi des conversions et tableaux de bord Looker Studio (<a href="webanalyse.html" style="color:var(--accent)">voir celui de ce site</a>)</div>
 </div>
 </div>
 </div>
@@ -412,8 +439,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <li>SEA Google Ads (Search, Display, Shopping, Vidéo, Remarketing)</li>
 <li>SEO technique et éditorial</li>
 <li>GEO : visibilité dans les moteurs IA (ChatGPT, Perplexity, AI Overviews)</li>
-<li>Webanalyse, tracking et reporting (KPI, tableaux de bord)</li>
 <li>Déploiement d'agents IA pour automatiser des workflows marketing</li>
+</ul>
+</div>
+<div class="skill-card">
+<h3>Webanalyse et tracking</h3>
+<ul>
+<li>Plan de marquage et événements GA4</li>
+<li>Google Tag Manager : formulaires, clics e-mail et téléphone, téléchargements</li>
+<li>Tableaux de bord Looker Studio et reporting des KPI</li>
+<li>Search Console, Matomo, audits Core Web Vitals</li>
 </ul>
 </div>
 <div class="skill-card">
@@ -530,9 +565,18 @@ Votre navigateur ne supporte pas la lecture vidéo.
 <article class="project-card">
 <div class="project-body">
 <div class="project-tag">Castles Technology</div>
-<h3>SEA : +47 % de leads en 2 mois</h3>
+<h3>SEA : +47 % de leads</h3>
 <p>Campagnes SEA (Search et remarketing), avec un audit des performances du site (Core Web Vitals) et de GA4.</p>
 <a class="project-link" href="etudes-de-cas/sea-castles-technology.html">Lire l'étude de cas SEA</a>
+</div>
+</article>
+
+<article class="project-card">
+<div class="project-body">
+<div class="project-tag">Ce portfolio</div>
+<h3>Webanalyse : un tableau de bord GA4 en direct</h3>
+<p>Tracking installé avec Tag Manager et GA4 sur ce site, puis tableau de bord Looker Studio : audience, utilisation de l'outil d'audit, clics de contact et positions Google, mis à jour chaque jour.</p>
+<a class="project-link" href="webanalyse.html">Voir le tableau de bord</a>
 </div>
 </article>
 
@@ -554,7 +598,7 @@ Votre navigateur ne supporte pas la lecture vidéo.
 <h3>Castles Technology</h3>
 <div class="role">Chargé de marketing digital</div>
 <ul>
-<li>Conception et pilotage des campagnes Google Ads (Search et remarketing) : +47 % de leads en 2 mois (<a href="etudes-de-cas/sea-castles-technology.html" style="color:var(--accent)">étude de cas</a>)</li>
+<li>Conception et pilotage des campagnes Google Ads (Search et remarketing) : +47 % de leads (<a href="etudes-de-cas/sea-castles-technology.html" style="color:var(--accent)">étude de cas</a>)</li>
 <li>Audit SEO technique (Core Web Vitals, GA4) et suivi des conversions dans Google Tag Manager : téléchargements de fiches techniques, clics e-mail et téléphone</li>
 <li>Déploiement de Google Search Console et suivi des KPI de visibilité organique (positions, impressions, clics)</li>
 <li>GEO : optimisation des contenus pour ChatGPT, Perplexity et AI Overviews</li>
@@ -601,19 +645,6 @@ Votre navigateur ne supporte pas la lecture vidéo.
 <ul>
 <li>Animation sociale : gestion de la page Facebook</li>
 <li>Création et animation de campagnes publicitaires Meta Ads</li>
-</ul>
-</div>
-</div>
-
-<div class="tl-item">
-<div class="tl-date">Avr. 2020 <br>à Sept. 2020</div>
-<div class="tl-dot"></div>
-<div class="tl-content">
-<h3>Saham Assurance</h3>
-<div class="role">Conseiller en assurance</div>
-<ul>
-<li>Prospection et gestion du portefeuille clients</li>
-<li>Mise en place de séquences e-mails pour le suivi des échéances et la vente additionnelle</li>
 </ul>
 </div>
 </div>
