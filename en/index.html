@@ -230,9 +230,8 @@ header.hero{padding:64px 24px 80px;}
 .photo-wrap{width:104px; height:104px; margin-bottom:24px;}
 header.hero h1.hero-claim{font-size:clamp(32px, 5.2vw, 56px); max-width:860px; margin:0 auto 20px;}
 header.hero h1.hero-claim em{font-style:normal; color:var(--accent);}
-.hero-proof{display:flex; justify-content:center; flex-wrap:wrap; gap:0; margin:0 auto 40px; max-width:760px;}
-.hero-proof a{display:block; text-align:left; padding:4px 28px; border-left:1px solid var(--line);}
-.hero-proof a:first-child{border-left:0;}
+.hero-proof{display:flex; justify-content:center; flex-wrap:wrap; gap:16px 56px; margin:0 auto 40px; max-width:760px;}
+.hero-proof a{display:block; text-align:left;}
 .hero-proof b{display:block; font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1.15;}
 .hero-proof span{display:block; font-size:13.5px; color:var(--text-soft); max-width:190px; line-height:1.35;}
 .hero-proof a:hover span{color:var(--accent);}
@@ -334,7 +333,7 @@ transition:background .2s;
 
 @media (max-width: 720px){
 .hero-proof{flex-direction:column; gap:14px; align-items:center;}
-.hero-proof a{border-left:0; text-align:center; padding:0;}
+.hero-proof a{text-align:center;}
 .hero-proof span{max-width:none;}
 .about-grid{grid-template-columns:1fr; gap:40px;}
 .skills-grid{grid-template-columns:1fr;}
