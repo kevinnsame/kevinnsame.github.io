@@ -6,6 +6,7 @@ var PSI_KEY = "AIzaSyBbuUYGQvWH6eqwA4ANDVMrxtUG6LXl3XI";
 var EN = (document.documentElement.lang || "fr").slice(0,2) === "en";
 var T = EN ? {
   greet: "Prepared for",
+  haRun: "While you read, I'm auditing {d}: SEO, speed and Google positions.", haDone: "Audit of {d}: SEO {s}/100, performance {p}/100.", haSee: "See what I would fix first", haFail: "I tried to audit {d}. See the result",
   focus: "Most relevant for you",
   run: "Run audit", running: "Analysing...",
   steps: ["Loading the page on a simulated mobile phone...","Measuring load speed and Core Web Vitals...","Checking SEO, accessibility and best practices...","Ranking what to fix first..."],
@@ -20,6 +21,7 @@ var T = EN ? {
   sec: "s", noField: "Not enough Chrome traffic for real-user data, lab figures shown."
 } : {
   greet: "Préparé pour",
+  haRun: "Pendant que vous lisez, j'audite {d} : SEO, vitesse et positions Google.", haDone: "Audit de {d} : SEO {s}/100, performance {p}/100.", haSee: "Voir ce que je corrigerais en premier", haFail: "J'ai lancé l'audit de {d}. Voir le résultat",
   focus: "Le plus proche de votre besoin",
   run: "Lancer l'audit", running: "Analyse en cours...",
   steps: ["Chargement de la page sur un mobile simulé...","Mesure de la vitesse et des Core Web Vitals...","Vérification SEO, accessibilité et bonnes pratiques...","Classement des priorités..."],
@@ -42,6 +44,8 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
   var q = new URLSearchParams(location.search);
   var e = (q.get("e") || "").replace(/[<>"]/g,"").replace(/[-_+]/g," ").trim().slice(0,40);
   var p = (q.get("p") || "").toLowerCase();
+  var d = (q.get("d") || "").toLowerCase().replace(/^https?:\/\//,"").replace(/^www\./,"").replace(/[\/?#].*$/,"").replace(/[^a-z0-9.-]/g,"").slice(0,80);
+  try{ if(d && /\./.test(d)) sessionStorage.setItem("kn_d", d); }catch(x){}
   var RELANCE_URL = "https://script.google.com/macros/s/AKfycbzQu_I8WtPbWQ6gwL-NwconMdB5E7SxbSQL7c-omchPy3aGCHW7aj-khMHM77PCX28ppQ/exec";
   var moi = false; try{ moi = localStorage.getItem("kn_moi")==="1"; }catch(x){}
   if(e && RELANCE_URL && !moi && !q.get("t")){
@@ -60,8 +64,9 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     hero.insertBefore(g, hero.querySelector(".eyebrow"));
   }
   if(p){
-    var map = {seo:/seo-amada/, sea:/(sea|google-ads)-castles/, ads:/(sea|google-ads)-castles/, contenu:/videos\//, content:/videos\//};
-    var re = map[p], grid = document.querySelector(".projects-grid");
+    var map = {seo:/seo-amada/, sea:/(sea|google-ads)-castles/, contenu:/videos\//, web:/webanalyse|web-analytics/};
+    var pk = /analy|track|data|mesure/.test(p) ? "web" : /sea|ads|acquisition|traffic|trafic|paid|ppc/.test(p) ? "sea" : /seo|geo|referencement|redact|writer/.test(p) ? "seo" : /contenu|content|communication|video|community|social|graphi|creat|brand/.test(p) ? "contenu" : /marketing|webmarketing|digital/.test(p) ? "sea" : "";
+    var re = map[pk], grid = document.querySelector(".projects-grid");
     if(re && grid){
       var card = [].slice.call(grid.querySelectorAll(".project-card")).filter(function(c){
         var a=c.querySelector(".project-link"); return a && re.test(a.getAttribute("href"));
@@ -274,12 +279,12 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     push({event:"audit_termine", domaine:host, score_perf:Math.round((cats.performance||{score:0}).score*100), score_seo:Math.round((cats.seo||{score:0}).score*100)});
   }
 
-  function run(url){
+  function run(url, auto){
     if(busy) return; busy=true; btn.disabled=true; btn.textContent=T.running;
     panel.innerHTML="";
     var st=el("div","audit-status"), msg=el("div",null,T.steps[0]), bar=el("div","bar");
     bar.appendChild(el("span")); st.appendChild(msg); st.appendChild(bar); panel.appendChild(st);
-    try{ panel.scrollIntoView({block:"nearest", behavior:"smooth"}); }catch(x){}
+    if(!auto){ try{ panel.scrollIntoView({block:"nearest", behavior:"smooth"}); }catch(x){} }
     var i=0, iv=setInterval(function(){ i=Math.min(i+1,T.steps.length-1); msg.textContent=T.steps[i]; },7000);
     var host=""; try{ host=new URL(url).hostname; }catch(e){}
     push({event:"audit_lance", domaine:host});
@@ -315,6 +320,29 @@ function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.classNa
     run(u);
   });
   if(self) self.addEventListener("click",function(){ input.value="kevinnsame.github.io"; run("https://kevinnsame.github.io/"+(EN?"en/":"")); });
+
+  (function(){
+    var d=""; try{ d=sessionStorage.getItem("kn_d")||""; }catch(x){}
+    if(!d) return;
+    var box=document.getElementById("hero-audit");
+    function fill(txt, withLink, linkTxt){
+      if(!box) return; box.innerHTML=""; box.hidden=false;
+      if(!withLink){ box.appendChild(el("span","ha-spin")); }
+      box.appendChild(document.createTextNode(txt+" "));
+      if(withLink){ var a=el("a",null,linkTxt+" \u2192"); a.href="#audit"; box.appendChild(a); }
+    }
+    fill(T.haRun.replace("{d}",d), false);
+    document.addEventListener("kn:audit-psi",function(ev){
+      var data=ev.detail&&ev.detail.data, c=data&&data.lighthouseResult&&data.lighthouseResult.categories;
+      if(c && c.seo){
+        var s=Math.round(c.seo.score*100), pf=c.performance&&c.performance.score!==null?Math.round(c.performance.score*100):"-";
+        fill(T.haDone.replace("{d}",d).replace("{s}",s).replace("{p}",pf), true, T.haSee);
+      } else fill(T.haFail.replace("{d}",d), true, "");
+      push({event:"audit_auto", domaine:d});
+    },{once:true});
+    input.value=d;
+    run("https://"+d+"/", true);
+  })();
 
   [["ask-pplx","perplexity"],["ask-gpt","chatgpt"]].forEach(function(p){ var a=document.getElementById(p[0]); if(a) a.addEventListener("click",function(){ push({event:"geo_test", moteur:p[1]}); }); });
 })();
