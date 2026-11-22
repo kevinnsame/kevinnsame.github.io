@@ -25,8 +25,10 @@ a{color:#0071e3;}
 <input id="e" placeholder="Decathlon" maxlength="40">
 <label for="po">Intitulé du poste</label>
 <input id="po" placeholder="Chargé de marketing digital" maxlength="80">
+<label for="d">Site de l'entreprise (audit lancé automatiquement à l'ouverture)</label>
+<input id="d" placeholder="decathlon.fr" maxlength="80">
 <label for="p">Projet à mettre en avant</label>
-<select id="p"><option value="">Aucun</option><option value="seo">Étude de cas SEO (AMADA)</option><option value="sea">Étude de cas SEA (Castles)</option><option value="contenu">Vidéos</option></select>
+<select id="p"><option value="">Aucun</option><option value="seo">Étude de cas SEO (AMADA)</option><option value="sea">Étude de cas SEA (Castles)</option><option value="contenu">Vidéos</option><option value="webanalyse">Webanalyse</option></select>
 <label for="l">Langue</label>
 <select id="l"><option value="">Français</option><option value="en/">Anglais</option></select>
 <label for="m">E-mail du recruteur (pour la relance)</label>
@@ -46,9 +48,9 @@ try{localStorage.setItem("kn_moi","1");}catch(x){}
 var $=function(i){return document.getElementById(i);};
 var e=$("e"),p=$("p"),l=$("l"),o=$("o"),t=$("t"),k=$("k"),msg=$("msg");
 try{k.value=localStorage.getItem("kn_code")||"";}catch(x){}
-function up(){var q=new URLSearchParams();if(e.value.trim())q.set("e",e.value.trim());if(p.value)q.set("p",p.value);
+function up(){var q=new URLSearchParams();if(e.value.trim())q.set("e",e.value.trim());if(p.value)q.set("p",p.value);var dv=$("d").value.trim().replace(/^https?:\/\//,"").replace(/^www\./,"").replace(/\/.*$/,"");if(dv)q.set("d",dv);
 var u="https://kevinnsame.github.io/"+l.value+(q.toString()?"?"+q.toString():"");o.textContent=u;t.href=u+(u.indexOf("?")>0?"&":"?")+"t=1";}
-[e,p,l].forEach(function(x){x.addEventListener("input",up);});up();
+[e,p,l,$("d")].forEach(function(x){x.addEventListener("input",up);});up();
 function copier(b,txt){navigator.clipboard.writeText(o.textContent).then(function(){var a=b.textContent;b.textContent=txt;setTimeout(function(){b.textContent=a;},1800);});}
 $("c").onclick=function(){copier(this,"Copié");};
 $("r").onclick=function(){
